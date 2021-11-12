@@ -8,6 +8,7 @@ import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import Notifications from "@/pages/Notifications.vue";
 import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
+import Login from "../components/app/Login";
 
 const routes = [
   {
@@ -54,6 +55,10 @@ const routes = [
         component: Notifications,
       },
     ],
+  },
+  {
+    path: "/login",
+    component: Login,
   },
 ];
 
