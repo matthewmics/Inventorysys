@@ -35,7 +35,7 @@ import Chartist from "chartist";
 const router = new VueRouter({
   routes, // short for routes: routes
   linkExactActiveClass: "nav-item active",
-  mode: "history"
+  mode: "history",
 });
 
 Vue.prototype.$Chartist = Chartist;
@@ -55,3 +55,5 @@ new Vue({
     Chartist: Chartist,
   },
 });
+
+export { router };
