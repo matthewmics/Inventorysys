@@ -1,5 +1,7 @@
 import axios from "axios";
 import agent from "../../agent";
+import { getToken, setToken } from "../../helpers";
+import { router } from "../../main";
 
 const state = {
   user: {
@@ -7,28 +9,54 @@ const state = {
     name: "",
     email: "",
   },
-  loginLoading: false,
+  authLoading: false,
 };
 
 const getters = {
   loggedInUser: (state) => state.user,
+  authLoading: (state) => state.authLoading,
 };
 
 const actions = {
   async login({ commit }, request) {
-    commit("setLoadingLoading", true);
+    commit("setAuthLoading", true);
     try {
-      const response = await agent.User.login(request);
+      const { user, token } = await agent.User.login(request);
+      commit("setLoggedInUser", user);
+      setToken(token);
+      router.push("/dashboard");
+    } catch (err) {
+      throw err;
+    } finally {
+      commit("setAuthLoading", false);
+    }
+  },
+  async currentUser({ commit }) {
+    const token = getToken();
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
+    commit("setAuthLoading", true);
+    try {
+      const { user, token } = await agent.User.currentUser();
+      commit("setLoggedInUser", user);
+
+      if (router.currentRoute.path === "/login") {
+        router.push("/dashboard");
+      }
     } catch (err) {
       console.log(err);
-      alert("Invalid email/password");
+    } finally {
+      commit("setAuthLoading", false);
     }
-    commit("setLoadingLoading", false);
   },
 };
 
 const mutations = {
-  setLoadingLoading: (state, isLoading) => (state.loginLoading = isLoading),
+  setAuthLoading: (state, isAuthLoading) => (state.authLoading = isAuthLoading),
+  setLoggedInUser: (state, user) => (state.user = user),
 };
 
 export default {

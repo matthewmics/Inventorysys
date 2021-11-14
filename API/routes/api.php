@@ -34,8 +34,8 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+    Route::get('/auth/me', [AuthController::class, 'me']);
 
     Route::resource('buildings', BuildingController::class);
     Route::get('/buildings/search/{name}', [BuildingController::class, 'search']);
-    
 });
