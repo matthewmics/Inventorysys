@@ -7,9 +7,11 @@
   >
     <div class="logo">
       <a href="#" class="simple-text logo-mini">
-        <div class="logo-img">
+        <!-- <div class="logo-img">
           <img :src="imgLogo" alt="" />
-        </div>
+        </div> -->
+        
+          <md-icon>inventory</md-icon>
       </a>
 
       <a
@@ -47,7 +49,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Vue MD",
+      default: "Inventory System",
     },
     sidebarBackgroundImage: {
       type: String,
