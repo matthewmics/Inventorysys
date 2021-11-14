@@ -33,6 +33,7 @@ const requests = {
 
 const User = {
   login: (formValues) => requests.post("/auth/login", formValues),
+  currentUser: () => requests.get("/auth/me"),
 };
 
 const agent = {
