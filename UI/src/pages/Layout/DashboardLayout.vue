@@ -35,6 +35,17 @@
         <md-icon>notifications</md-icon>
         <p>Notifications</p>
       </sidebar-link>
+      <li class="md-list-item" to="/logout">
+        <a
+          @click="onLogout"
+          class="md-list-item-router md-list-item-container md-button-clean"
+        >
+          <div class="md-list-item-content md-ripple">
+            <i class="md-icon md-icon-font md-theme-default">logout</i>
+            <p>logout</p>
+          </div>
+        </a>
+      </li>
     </side-bar>
 
     <div class="main-panel">
@@ -73,6 +84,11 @@ export default {
       sidebarBackground: "green",
       sidebarBackgroundImage: require("@/assets/img/sidebar-2.jpg"),
     };
+  },
+  methods: {
+    onLogout() {
+      alert("logout");
+    },
   },
 };
 </script>

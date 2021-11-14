@@ -51,10 +51,7 @@
             <li class="md-list-item">
               <a
                 href="#/notifications"
-                class="
-                  md-list-item-router md-list-item-container md-button-clean
-                  dropdown
-                "
+                class="md-list-item-router md-list-item-container md-button-clean dropdown"
               >
                 <div class="md-list-item-content">
                   <drop-down>
@@ -79,10 +76,12 @@
               </a>
             </li>
 
-            <md-list-item href="#/user">
+            <md-list-item >
               <i class="material-icons">person</i>
               <p class="hidden-lg hidden-md">Profile</p>
+              <div>&nbsp;&nbsp;Admin</div>
             </md-list-item>
+
           </md-list>
         </div>
       </div>
