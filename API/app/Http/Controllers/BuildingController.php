@@ -66,6 +66,12 @@ class BuildingController extends Controller
      */
     public function destroy($id)
     {
-        return Building::destroy($id);
+        return response()->noContent();
+    }
+
+
+    public function search($name)
+    {
+        return Building::where('name', 'like', '%' . $name . '%')->get();
     }
 }
