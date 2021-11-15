@@ -2,6 +2,16 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <notifications></notifications>
 
+    <md-dialog-confirm
+      :md-active.sync="logoutDialogActive"
+      md-title="Logout"
+      md-content="Are you sure you want to end your session?"
+      md-confirm-text="Yes"
+      md-cancel-text="Cancel"
+      @md-cancel="onCancel"
+      @md-confirm="onConfirm"
+    />
+
     <side-bar
       :sidebar-item-color="sidebarBackground"
       :sidebar-background-image="sidebarBackgroundImage"
@@ -70,6 +80,7 @@ import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import MobileMenu from "@/pages/Layout/MobileMenu.vue";
 import FixedPlugin from "./Extra/FixedPlugin.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -83,11 +94,19 @@ export default {
     return {
       sidebarBackground: "green",
       sidebarBackgroundImage: require("@/assets/img/sidebar-2.jpg"),
+      logoutDialogActive: false,
     };
   },
   methods: {
+    ...mapActions(["logout"]),
+    onConfirm() {
+      this.logout();
+    },
+    onCancel() {
+      console.log("Cancelled logout");
+    },
     onLogout() {
-      alert("logout");
+      this.logoutDialogActive = true;
     },
   },
 };

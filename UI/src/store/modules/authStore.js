@@ -1,6 +1,6 @@
 import axios from "axios";
 import agent from "../../agent";
-import { getToken, setToken } from "../../helpers";
+import { getToken, setToken, clearToken } from "../../helpers";
 import { router } from "../../main";
 
 const state = {
@@ -50,6 +50,18 @@ const actions = {
       console.log(err);
     } finally {
       commit("setAuthLoading", false);
+    }
+  },
+  async logout({ commit }) {
+    commit("setAuthLoading", true);
+    try {
+      await agent.User.logout();
+      clearToken();
+      window.location.reload();
+    } catch (err) {
+      commit("setAuthLoading", false);
+      alert("Something went wrong while trying to logout!");
+      throw err;
     }
   },
 };

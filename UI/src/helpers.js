@@ -4,4 +4,7 @@ const getToken = () =>
 const setToken = (token) =>
   window.localStorage.setItem("inventorysystem_sanctum_token", token);
 
-export { getToken, setToken };
+const clearToken = () =>
+  window.localStorage.removeItem("inventorysystem_sanctum_token");
+
+export { getToken, setToken, clearToken };
