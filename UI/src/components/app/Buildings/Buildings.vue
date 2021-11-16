@@ -1,16 +1,18 @@
 <template>
   <div class="content">
+    <BuildingsForm @form-close="showForm = false" :show="showForm" />
     <md-progress-bar
       v-if="buildingLoading"
       md-mode="indeterminate"
     ></md-progress-bar>
-    <div v-else>
+    <div v-if="!buildingLoading">
       <md-table md-card>
         <md-table-toolbar>
           <h1 class="md-title">
             Buildings<md-button
               style="position: absolute; right: 10px"
               class="md-raised md-primary"
+              @click="openForm()"
               >Add new building</md-button
             >
           </h1>
@@ -18,8 +20,8 @@
 
         <md-table-row>
           <md-table-head style="width: 50%">Name</md-table-head>
-          <md-table-head style="width: 20%">Created</md-table-head>
-          <md-table-head style="width: 20%">Updated</md-table-head>
+          <md-table-head style="width: 22.5%">Created</md-table-head>
+          <md-table-head style="width: 22.5%">Updated</md-table-head>
           <md-table-head>Actions</md-table-head>
         </md-table-row>
 
@@ -49,12 +51,26 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { dateStringToLocal } from "../../helpers";
+import { dateStringToLocal } from "../../../helpers";
+import BuildingsForm from "./BuildingsForm";
+
 export default {
   name: "Buildings",
+  components: {
+    BuildingsForm,
+  },
+  data() {
+    return {
+      showForm: false,
+    };
+  },
+  emitters: ["form-close"],
   methods: {
     ...mapActions(["fetchBuildingsList"]),
     dateStringToLocal,
+    openForm() {
+      this.showForm = true;
+    },
   },
   computed: mapGetters(["buildingsList", "buildingLoading"]),
   created() {

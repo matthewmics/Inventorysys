@@ -7,9 +7,8 @@ import Typography from "@/pages/Typography.vue";
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import Notifications from "@/pages/Notifications.vue";
-import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
 import Login from "../components/app/Login";
-import Buildings from "../components/app/Buildings";
+import Buildings from "../components/app/Buildings/Buildings.vue";
 
 const routes = [
   {
