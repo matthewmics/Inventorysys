@@ -10,17 +10,13 @@
         <!-- <div class="logo-img">
           <img :src="imgLogo" alt="" />
         </div> -->
-        
-          <md-icon>inventory</md-icon>
+
+        <md-icon>inventory</md-icon>
       </a>
 
-      <a
-        href="https://www.creative-tim.com/product/vue-material-dashboard"
-        target="_blank"
-        class="simple-text logo-normal"
-      >
+      <div style="font-size: 15px" class="simple-text logo-normal">
         {{ title }}
-      </a>
+      </div>
     </div>
     <div class="sidebar-wrapper">
       <slot name="content"></slot>

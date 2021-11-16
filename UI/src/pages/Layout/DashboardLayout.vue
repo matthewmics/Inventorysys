@@ -21,26 +21,37 @@
         <md-icon>dashboard</md-icon>
         <p>Dashboard</p>
       </sidebar-link>
-      <sidebar-link to="/user">
+
+      <sidebar-link to="/buildings">
+        <md-icon>business</md-icon>
+        <p>Buildings</p>
+      </sidebar-link>
+
+      <!-- <sidebar-link to="/user">
         <md-icon>person</md-icon>
         <p>User Profile</p>
-      </sidebar-link>
-      <sidebar-link to="/table">
+      </sidebar-link> -->
+
+      <!-- <sidebar-link to="/table">
         <md-icon>content_paste</md-icon>
         <p>Table list</p>
-      </sidebar-link>
-      <sidebar-link to="/typography">
+      </sidebar-link> -->
+
+      <!-- <sidebar-link to="/typography">
         <md-icon>library_books</md-icon>
         <p>Typography</p>
       </sidebar-link>
+
       <sidebar-link to="/icons">
         <md-icon>bubble_chart</md-icon>
         <p>Icons</p>
-      </sidebar-link>
-      <sidebar-link to="/maps">
+      </sidebar-link> -->
+
+      <!-- <sidebar-link to="/maps">
         <md-icon>location_on</md-icon>
         <p>Maps</p>
-      </sidebar-link>
+      </sidebar-link> -->
+
       <sidebar-link to="/notifications">
         <md-icon>notifications</md-icon>
         <p>Notifications</p>
@@ -60,12 +71,12 @@
 
     <div class="main-panel">
       <top-navbar></top-navbar>
-
+      <!-- 
       <fixed-plugin
         :color.sync="sidebarBackground"
         :image.sync="sidebarBackgroundImage"
       >
-      </fixed-plugin>
+      </fixed-plugin> -->
 
       <dashboard-content> </dashboard-content>
 

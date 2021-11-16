@@ -37,8 +37,17 @@ const User = {
   logout: () => requests.post("/auth/logout"),
 };
 
+const Building = {
+  list: () => requests.get("/buildings"),
+  find: (id) => requests.get(`/buildings/${id}`),
+  delete: (id) => requests.delete(`/buildings/${id}`),
+  update: (id) => requests.put(`/buildings/${id}`),
+  create: (formValues) => requests.put(`/buildings`, formValues),
+};
+
 const agent = {
   User,
+  Building,
 };
 
 export default agent;

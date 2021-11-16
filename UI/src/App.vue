@@ -31,4 +31,7 @@ export default {
   text-align: center;
   min-height: 100vh;
 }
+.clickable {
+  cursor: pointer;
+}
 </style>

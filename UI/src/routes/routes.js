@@ -9,6 +9,7 @@ import Maps from "@/pages/Maps.vue";
 import Notifications from "@/pages/Notifications.vue";
 import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
 import Login from "../components/app/Login";
+import Buildings from "../components/app/Buildings";
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
         path: "user",
         name: "User Profile",
         component: UserProfile,
+      },
+      {
+        path: "buildings",
+        name: "Buildings",
+        component: Buildings,
       },
       {
         path: "table",
