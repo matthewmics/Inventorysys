@@ -1,8 +1,13 @@
 <template>
   <div class="content">
-    <BuildingsForm @form-close="showForm = false" :show="showForm" />
+    <BuildingsForm
+      @on-form-submit="submitForm"
+      @form-close="showForm = false"
+      :show="showForm"
+      :building="buildingSelectedBuildingInForm"
+    />
     <md-progress-bar
-      v-if="buildingLoading"
+      v-if="buildingLoading || buildingFormLoading"
       md-mode="indeterminate"
     ></md-progress-bar>
     <div v-if="!buildingLoading">
@@ -12,7 +17,8 @@
             Buildings<md-button
               style="position: absolute; right: 10px"
               class="md-raised md-primary"
-              @click="openForm()"
+              @click="openForm(null)"
+              :disabled="buildingFormLoading"
               >Add new building</md-button
             >
           </h1>
@@ -35,10 +41,10 @@
           }}</md-table-cell>
           <md-table-cell>
             <div>
-              <md-icon
-                class="clickable"
-                style="margin-right: 15px; color: #43a047"
-                >edit</md-icon
+              <span class="clickable" @click="openForm(building)"
+                ><md-icon style="margin-right: 15px; color: #43a047"
+                  >edit</md-icon
+                ></span
               >
               <md-icon class="clickable" style="color: #e53935">delete</md-icon>
             </div>
@@ -56,25 +62,39 @@ import BuildingsForm from "./BuildingsForm";
 
 export default {
   name: "Buildings",
-  components: {
-    BuildingsForm,
-  },
   data() {
     return {
       showForm: false,
     };
   },
-  emitters: ["form-close"],
+  components: {
+    BuildingsForm,
+  },
+  emitters: ["form-close", "on-submit-form"],
+  computed: mapGetters([
+    "buildingsList",
+    "buildingLoading",
+    "buildingFormLoading",
+    "buildingSelectedBuildingInForm",
+  ]),
   methods: {
-    ...mapActions(["fetchBuildingsList"]),
+    ...mapActions([
+      "fetchBuildingsList",
+      "addNewBuilding",
+      "updateBuilding",
+      "setSelectedBuildingInForm",
+    ]),
     dateStringToLocal,
-    openForm() {
+    openForm(building) {
+      this.setSelectedBuildingInForm(building);
       this.showForm = true;
     },
+    submitForm(formValues) {
+      if (!formValues.hasOwnProperty("id")) this.addNewBuilding(formValues);
+      else this.updateBuilding(formValues);
+    },
   },
-  computed: mapGetters(["buildingsList", "buildingLoading"]),
   created() {
-    console.log("created");
     this.fetchBuildingsList();
   },
 };

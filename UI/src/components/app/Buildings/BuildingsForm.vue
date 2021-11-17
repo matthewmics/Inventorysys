@@ -3,9 +3,10 @@
     :md-active.sync="show"
     :md-close-on-esc="false"
     :md-click-outside-to-close="false"
+    @md-opened="onOpen"
   >
     <md-dialog-title>{{
-      building.id === 0 ? "Add New Building" : "Edit " + building.name
+      !building ? "Add New Building" : "Edit " + building.name
     }}</md-dialog-title>
     <md-dialog-content>
       <form
@@ -23,7 +24,7 @@
             :disabled="sending"
           />
           <span class="md-error" v-if="!$v.form.name.required"
-            >The first name is required</span
+            >Name is required</span
           >
         </md-field>
       </form>
@@ -70,16 +71,30 @@ export default {
         };
       }
     },
+    onOpen() {
+      this.$v.$reset();
+      this.form.name = "";
+
+      if (this.building) {
+        this.form.name = this.building.name;
+      }
+    },
     validateUser() {
       this.$v.$touch();
 
       if (!this.$v.$invalid) {
-        this.$v.$reset();
+        var request = {
+          name: this.form.name,
+        };
+
+        if (this.building) {
+          request = { ...request, id: this.building.id };
+        }
+
+        this.$emit("on-form-submit", request);
+        this.$emit("form-close");
       }
     },
-  },
-  created() {
-    this.$v.$reset();
   },
   props: {
     show: {
@@ -89,10 +104,7 @@ export default {
     building: {
       type: Object,
       default() {
-        return {
-          id: 0,
-          name: "",
-        };
+        return null;
       },
     },
   },
