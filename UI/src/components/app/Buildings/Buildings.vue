@@ -11,17 +11,15 @@
       md-mode="indeterminate"
     ></md-progress-bar>
     <div v-if="!buildingLoading">
+      <md-button
+        class="md-raised md-primary"
+        @click="openForm(null)"
+        :disabled="buildingFormLoading"
+        >Add new building</md-button
+      >
       <md-table md-card>
         <md-table-toolbar>
-          <h1 class="md-title">
-            Buildings<md-button
-              style="position: absolute; right: 10px"
-              class="md-raised md-primary"
-              @click="openForm(null)"
-              :disabled="buildingFormLoading"
-              >Add new building</md-button
-            >
-          </h1>
+          <h1 class="md-title">Buildings</h1>
         </md-table-toolbar>
 
         <md-table-row>
