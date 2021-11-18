@@ -3,6 +3,7 @@ import { getToken } from "./helpers";
 
 axios.defaults.baseURL = process.env.VUE_APP_API_URL + "/api";
 const sleepDuration = process.env.VUE_APP_API_SLEEP_DURATION;
+console.log(sleepDuration);
 
 axios.interceptors.request.use(
   (config) => {
@@ -38,7 +39,7 @@ const User = {
 };
 
 const Building = {
-  list: () => requests.get("/buildings"),
+  list: (page) => requests.get(`/buildings?page=${page}`),
   find: (id) => requests.get(`/buildings/${id}`),
   delete: (id) => requests.delete(`/buildings/${id}`),
   update: (formValues) =>

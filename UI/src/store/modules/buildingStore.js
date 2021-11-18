@@ -17,10 +17,10 @@ const getters = {
 };
 
 const actions = {
-  async fetchBuildingsList({ commit }) {
+  async fetchBuildingsList({ commit }, page) {
     commit("setBuildingLoading", true);
     try {
-      const response = await agent.Building.list();
+      const response = await agent.Building.list(page);
       commit("setBuildingsList", response);
     } catch (err) {
       console.log(err);
@@ -43,8 +43,21 @@ const actions = {
     commit("setBuildingFormLoading", true);
     try {
       const response = await agent.Building.update(formValues);
-      console.log(response);
+
       commit("updateBuildingList", response);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      commit("setBuildingFormLoading", false);
+    }
+  },
+  async deleteBuilding({ commit, state }, id) {
+    commit("setBuildingFormLoading", true);
+    try {
+      await agent.Building.delete(id);
+      const buildingData = state.buildings;
+      buildingData.data = buildingData.data.filter((b) => b.id !== id);
+      commit("setBuildingsList", buildingData);
     } catch (err) {
       console.log(err);
     } finally {
@@ -59,7 +72,7 @@ const actions = {
 const mutations = {
   setBuildingsList: (state, buildingsList) => (state.buildings = buildingsList),
   addToBuildingList: (state, toAddBuilding) =>
-    state.buildings.push(toAddBuilding),
+    state.buildings.data.push(toAddBuilding),
   setSelectedBuildingInForm: (state, building) => {
     state.formSelectedBuilding = building;
   },

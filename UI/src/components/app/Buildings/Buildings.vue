@@ -1,5 +1,20 @@
 <template>
   <div class="content">
+    <md-dialog-confirm
+      :md-active.sync="deleteDialog"
+      md-title="Delete"
+      :md-content="`Are you sure you want to delete <b>${
+        selectedBuilding ? selectedBuilding.name : ''
+      }</b>?`"
+      md-confirm-text="Yes"
+      md-cancel-text="Cancel"
+      @md-cancel="deleteDialog = false"
+      @md-confirm="
+        deleteBuilding(selectedBuilding.id);
+        deleteDialog = false;
+      "
+    />
+
     <BuildingsForm
       @on-form-submit="submitForm"
       @form-close="showForm = false"
@@ -10,11 +25,11 @@
       v-if="buildingLoading || buildingFormLoading"
       md-mode="indeterminate"
     ></md-progress-bar>
-    <div v-if="!buildingLoading">
+    <div>
       <md-button
         class="md-raised md-primary"
         @click="openForm(null)"
-        :disabled="buildingFormLoading"
+        :disabled="buildingFormLoading || buildingLoading"
         >Add new building</md-button
       >
       <md-table md-card>
@@ -29,7 +44,7 @@
           <md-table-head>Actions</md-table-head>
         </md-table-row>
 
-        <md-table-row :key="building.id" v-for="building in buildingsList">
+        <md-table-row :key="building.id" v-for="building in buildingsList.data">
           <md-table-cell>{{ building.name }}</md-table-cell>
           <md-table-cell>{{
             dateStringToLocal(building.created_at)
@@ -44,11 +59,28 @@
                   >edit</md-icon
                 ></span
               >
-              <md-icon class="clickable" style="color: #e53935">delete</md-icon>
+              <span
+                class="clickable"
+                @click="
+                  selectedBuilding = building;
+                  deleteDialog = true;
+                "
+              >
+                <md-icon class="clickable" style="color: #e53935"
+                  >delete</md-icon
+                >
+              </span>
             </div>
           </md-table-cell>
         </md-table-row>
       </md-table>
+
+      <sliding-pagination
+        style="float: right"
+        :current="currentPage"
+        :total="totalPage"
+        @page-change="pageChanged"
+      ></sliding-pagination>
     </div>
   </div>
 </template>
@@ -57,16 +89,22 @@
 import { mapGetters, mapActions } from "vuex";
 import { dateStringToLocal } from "../../../helpers";
 import BuildingsForm from "./BuildingsForm";
+import SlidingPagination from "vue-sliding-pagination";
 
 export default {
   name: "Buildings",
   data() {
     return {
       showForm: false,
+      currentPage: 1,
+      totalPage: 0,
+      deleteDialog: false,
+      selectedBuilding: null,
     };
   },
   components: {
     BuildingsForm,
+    SlidingPagination,
   },
   emitters: ["form-close", "on-submit-form"],
   computed: mapGetters([
@@ -81,7 +119,11 @@ export default {
       "addNewBuilding",
       "updateBuilding",
       "setSelectedBuildingInForm",
+      "deleteBuilding",
     ]),
+    pageChanged(page) {
+      this.loadBuildingList(page);
+    },
     dateStringToLocal,
     openForm(building) {
       this.setSelectedBuildingInForm(building);
@@ -91,9 +133,15 @@ export default {
       if (!formValues.hasOwnProperty("id")) this.addNewBuilding(formValues);
       else this.updateBuilding(formValues);
     },
+    loadBuildingList(page) {
+      this.fetchBuildingsList(page).then(() => {
+        this.currentPage = page;
+        this.totalPage = this.buildingsList.last_page;
+      });
+    },
   },
   created() {
-    this.fetchBuildingsList();
+    this.loadBuildingList(this.currentPage);
   },
 };
 </script>

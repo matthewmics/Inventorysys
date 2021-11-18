@@ -15,7 +15,7 @@ class BuildingController extends Controller
      */
     public function index()
     {
-        return Building::orderBy('id', 'ASC')->get();
+        return Building::orderBy('id', 'ASC')->paginate(10);
     }
 
     /**
@@ -66,6 +66,8 @@ class BuildingController extends Controller
      */
     public function destroy($id)
     {
+        $building = Building::find($id);
+        $building->delete();
         return response()->noContent();
     }
 
