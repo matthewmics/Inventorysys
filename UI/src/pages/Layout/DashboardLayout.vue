@@ -70,7 +70,7 @@
     </side-bar>
 
     <div class="main-panel">
-      <top-navbar></top-navbar>
+      <top-navbar :user="loggedInUser"></top-navbar>
       <!-- 
       <fixed-plugin
         :color.sync="sidebarBackground"
@@ -120,5 +120,6 @@ export default {
       this.logoutDialogActive = true;
     },
   },
+  computed: mapGetters(["loggedInUser"]),
 };
 </script>

@@ -76,12 +76,11 @@
               </a>
             </li>
 
-            <md-list-item >
+            <md-list-item>
               <i class="material-icons">person</i>
               <p class="hidden-lg hidden-md">Profile</p>
-              <div>&nbsp;&nbsp;Admin</div>
+              <div>&nbsp;&nbsp;{{ user ? user.name : '' }}</div>
             </md-list-item>
-
           </md-list>
         </div>
       </div>
@@ -109,6 +108,12 @@ export default {
   methods: {
     toggleSidebar() {
       this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    },
+  },
+  props: {
+    user: {
+      type: Object,
+      default: null,
     },
   },
 };

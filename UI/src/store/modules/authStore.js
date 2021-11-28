@@ -40,7 +40,7 @@ const actions = {
 
     commit("setAuthLoading", true);
     try {
-      const { user, token } = await agent.User.currentUser();
+      const user = await agent.User.currentUser();
       commit("setLoggedInUser", user);
 
       if (router.currentRoute.path === "/login") {
