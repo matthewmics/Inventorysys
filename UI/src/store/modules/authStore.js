@@ -34,7 +34,7 @@ const actions = {
   async currentUser({ commit }) {
     const token = getToken();
     if (!token) {
-      router.push("/login");
+      if (router.currentRoute.path !== "/login") router.push("/login");
       return;
     }
 
