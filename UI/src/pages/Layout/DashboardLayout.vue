@@ -27,6 +27,10 @@
         <p>Buildings</p>
       </sidebar-link>
 
+      <sidebar-link to="/rooms">
+        <md-icon>business</md-icon>
+        <p>Labs &amp; Rooms</p>
+      </sidebar-link>
       <!-- <sidebar-link to="/user">
         <md-icon>person</md-icon>
         <p>User Profile</p>

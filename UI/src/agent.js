@@ -40,16 +40,22 @@ const User = {
 
 const Building = {
   list: (page) => requests.get(`/buildings?page=${page}`),
+  create: (formValues) => requests.post(`/buildings`, formValues),
   find: (id) => requests.get(`/buildings/${id}`),
   delete: (id) => requests.delete(`/buildings/${id}`),
   update: (formValues) =>
     requests.put(`/buildings/${formValues.id}`, formValues),
+};
+
+const Room = {
+  list: (page) => requests.get(`/buildings?page=${page}`),
   create: (formValues) => requests.post(`/buildings`, formValues),
 };
 
 const agent = {
   User,
   Building,
+  Room,
 };
 
 export default agent;
