@@ -45,11 +45,15 @@ const Building = {
   delete: (id) => requests.delete(`/buildings/${id}`),
   update: (formValues) =>
     requests.put(`/buildings/${formValues.id}`, formValues),
+  rooms: (id) => requests.get(`/buildings/${id}/rooms`),
 };
 
 const Room = {
   list: (page) => requests.get(`/rooms?page=${page}`),
+  listUnallocated: () => requests.get(`/rooms/unallocated`),
   create: (formValues) => requests.post(`/rooms`, formValues),
+  allocate: (id, val) => requests.post(`/rooms/${id}/allocate`, val),
+  unallocate: (id) => requests.post(`/rooms/${id}/unallocate`, {}),
 };
 
 const agent = {

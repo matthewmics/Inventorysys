@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RoomController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,4 +46,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/rooms/{id}/allocate', [RoomController::class, 'allocate']);
     Route::get('/rooms/unallocated', [RoomController::class, 'listUnallocated']);
     Route::resource('rooms', RoomController::class);
+
+    Route::resource('inventories', InventoryController::class);
 });
