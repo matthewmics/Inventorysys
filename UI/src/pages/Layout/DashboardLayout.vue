@@ -28,7 +28,7 @@
       </sidebar-link>
 
       <sidebar-link to="/rooms">
-        <md-icon>business</md-icon>
+        <md-icon>meeting_room</md-icon>
         <p>Labs &amp; Rooms</p>
       </sidebar-link>
       <!-- <sidebar-link to="/user">
@@ -56,10 +56,10 @@
         <p>Maps</p>
       </sidebar-link> -->
 
-      <sidebar-link to="/notifications">
+      <!-- <sidebar-link to="/notifications">
         <md-icon>notifications</md-icon>
         <p>Notifications</p>
-      </sidebar-link>
+      </sidebar-link> -->
       <li class="md-list-item" to="/logout">
         <a
           @click="onLogout"

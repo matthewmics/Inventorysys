@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class BuildingController extends Controller
 {
+
+    public function rooms($id)
+    {
+       return Building::find($id)->rooms;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +23,7 @@ class BuildingController extends Controller
     {
         return Building::orderBy('id', 'ASC')->paginate(10);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -43,6 +50,8 @@ class BuildingController extends Controller
     {
         return Building::find($id);
     }
+
+
 
     /**
      * Update the specified resource in storage.

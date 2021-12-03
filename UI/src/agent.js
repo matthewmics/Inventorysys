@@ -48,8 +48,8 @@ const Building = {
 };
 
 const Room = {
-  list: (page) => requests.get(`/buildings?page=${page}`),
-  create: (formValues) => requests.post(`/buildings`, formValues),
+  list: (page) => requests.get(`/rooms?page=${page}`),
+  create: (formValues) => requests.post(`/rooms`, formValues),
 };
 
 const agent = {

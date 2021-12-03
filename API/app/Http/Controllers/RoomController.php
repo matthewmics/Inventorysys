@@ -17,6 +17,29 @@ class RoomController extends Controller
         return Room::orderBy('id', 'ASC')->paginate(10);
     }
 
+    public function allocate(Request $request, $id)
+    {
+        $room = Room::find($id);
+
+        $room->building_id = $request->building_id;
+
+        return $room->save();
+    }
+
+    public function unallocate($id)
+    {
+        $room = Room::find($id);
+
+        $room->building_id = null;
+
+        return $room->save();
+    }
+
+    public function listUnallocated()
+    {
+        return Room::whereNull('building_id')->orderBy('id', 'ASC')->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

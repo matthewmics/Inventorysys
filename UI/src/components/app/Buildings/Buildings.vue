@@ -45,7 +45,14 @@
         </md-table-row>
 
         <md-table-row :key="building.id" v-for="building in buildingsList.data">
-          <md-table-cell>{{ building.name }}</md-table-cell>
+          <md-table-cell
+            ><div
+              class="link"
+              @click="$router.push(`/buildings/${building.id}/rooms`)"
+            >
+              {{ building.name }}
+            </div></md-table-cell
+          >
           <md-table-cell>{{
             dateStringToLocal(building.created_at)
           }}</md-table-cell>

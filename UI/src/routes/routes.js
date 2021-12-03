@@ -7,6 +7,7 @@ import Notifications from "@/pages/Notifications.vue";
 import Login from "../components/app/Login";
 import Buildings from "../components/app/Buildings/Buildings.vue";
 import LabsAndRooms from "../components/app/LabsAndRooms/LabsAndRooms.vue";
+import RoomAllocations from "../components/app/Buildings/RoomAllocations";
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
         path: "buildings",
         name: "Buildings",
         component: Buildings,
+      },
+      {
+        path: "buildings/:id/rooms",
+        name: "Room Allocation",
+        component: RoomAllocations,
       },
       {
         path: "rooms",

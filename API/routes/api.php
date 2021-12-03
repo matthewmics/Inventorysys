@@ -37,8 +37,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
+    Route::get('/buildings/{id}/rooms', [BuildingController::class, 'rooms']);
     Route::resource('buildings', BuildingController::class);
     Route::get('/buildings/search/{name}', [BuildingController::class, 'search']);
 
+    Route::post('/rooms/{id}/unallocate', [RoomController::class, 'unallocate']);
+    Route::post('/rooms/{id}/allocate', [RoomController::class, 'allocate']);
+    Route::get('/rooms/unallocated', [RoomController::class, 'listUnallocated']);
     Route::resource('rooms', RoomController::class);
 });

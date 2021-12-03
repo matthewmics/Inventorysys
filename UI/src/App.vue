@@ -56,4 +56,9 @@ export default {
   a {
   color: white !important;
 }
+
+.link {
+  color: blue;
+  cursor: pointer;
+}
 </style>
