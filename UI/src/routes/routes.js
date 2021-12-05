@@ -9,6 +9,8 @@ import Buildings from "../components/app/Buildings/Buildings.vue";
 import LabsAndRooms from "../components/app/LabsAndRooms/LabsAndRooms.vue";
 import RoomAllocations from "../components/app/Buildings/RoomAllocations";
 
+import Inventories from "../components/app/Inventories/Inventories";
+
 const routes = [
   {
     path: "/",
@@ -39,6 +41,11 @@ const routes = [
         path: "rooms",
         name: "Labs and Rooms",
         component: LabsAndRooms,
+      },
+      {
+        path: "inventories",
+        name: "Inventory",
+        component: Inventories,
       },
       {
         path: "table",

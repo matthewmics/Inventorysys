@@ -31,6 +31,11 @@
         <md-icon>meeting_room</md-icon>
         <p>Labs &amp; Rooms</p>
       </sidebar-link>
+
+      <sidebar-link to="/inventories">
+        <md-icon>warehouse</md-icon>
+        <p>Inventory</p>
+      </sidebar-link>
       <!-- <sidebar-link to="/user">
         <md-icon>person</md-icon>
         <p>User Profile</p>

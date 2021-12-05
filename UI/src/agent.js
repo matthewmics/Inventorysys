@@ -56,10 +56,16 @@ const Room = {
   unallocate: (id) => requests.post(`/rooms/${id}/unallocate`, {}),
 };
 
+const Inventory = {
+  list: (page) => requests.get(`/inventories?page=${page}`),
+  create: (formValues) => requests.post(`/inventories`, formValues),
+};
+
 const agent = {
   User,
   Building,
   Room,
+  Inventory,
 };
 
 export default agent;

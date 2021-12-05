@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Building;
+use App\Models\Inventory;
 
 class Room extends Model
 {
@@ -15,5 +16,10 @@ class Room extends Model
     public function building()
     {
         return $this->belongsTo(Building::class);
+    }
+
+    public function inventories()
+    {
+        return $this->belongsToMany(Inventory::class, 'inventory_room', 'room_id', 'inventory_id');
     }
 }

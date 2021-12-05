@@ -1,13 +1,13 @@
 <template>
   <div class="content">
-    <rooms-form
+    <InventoriesForm
       :show="showForm"
       @form-close="showForm = false"
       @form-submit="onFormSubmit"
-    ></rooms-form>
+    />
 
     <md-progress-bar
-      v-if="roomLoading"
+      v-if="inventoryLoading"
       md-mode="indeterminate"
     ></md-progress-bar>
 
@@ -17,25 +17,32 @@
       >
       <md-table md-card>
         <md-table-toolbar>
-          <h1 class="md-title">Labs &amp; Rooms</h1>
+          <h1 class="md-title">Inventory</h1>
         </md-table-toolbar>
-
         <md-table-row>
           <md-table-head style="width: 20%">Name</md-table-head>
-          <md-table-head style="width: 20%">Type</md-table-head>
-          <md-table-head style="width: 27%">Created</md-table-head>
-          <md-table-head style="width: 27%">Updated</md-table-head>
+          <md-table-head style="width: 15%">Type</md-table-head>
+          <md-table-head style="width: 15%">Qty</md-table-head>
+          <md-table-head style="width: 22.5%">Created</md-table-head>
+          <md-table-head style="width: 22.5%">Updated</md-table-head>
           <md-table-head>Actions</md-table-head>
         </md-table-row>
 
-        <md-table-row :key="room.id" v-for="room in roomPagiData.data">
-          <md-table-cell> {{ room.name }}</md-table-cell>
-          <md-table-cell>{{ room.room_type }}</md-table-cell>
+        <md-table-row
+          v-if="!inventoryPagiData.data || inventoryPagiData.data.length === 0"
+        >
+          <md-table-cell><b>No records</b></md-table-cell>
+        </md-table-row>
+
+        <md-table-row v-for="item in inventoryPagiData.data" :key="item.id">
+          <md-table-cell>{{ item.name }}</md-table-cell>
+          <md-table-cell>{{ item.item_type }}</md-table-cell>
+          <md-table-cell>{{ item.qty }}</md-table-cell>
           <md-table-cell>{{
-            dateStringToLocal(room.created_at)
+            dateStringToLocal(item.created_at)
           }}</md-table-cell>
           <md-table-cell>{{
-            dateStringToLocal(room.created_at)
+            dateStringToLocal(item.updated_at)
           }}</md-table-cell>
           <md-table-cell>
             <div>
@@ -68,36 +75,37 @@
 import { mapGetters, mapActions } from "vuex";
 import SlidingPagination from "vue-sliding-pagination";
 import { dateStringToLocal } from "../../../helpers";
-import RoomsForm from "./RoomsForm";
+import InventoriesForm from "./InventoriesForm";
 
 export default {
   data() {
     return {
+      showForm: false,
       currentPage: 1,
       totalPage: 1,
-      showForm: false,
     };
   },
   components: {
     SlidingPagination,
-    RoomsForm,
+    InventoriesForm,
   },
-  emitters: ["form-close"],
-  computed: mapGetters(["roomPagiData", "roomLoading"]),
+  emitters: ["form-close", "form-submit"],
+  computed: mapGetters(["inventoryPagiData", "inventoryLoading"]),
   methods: {
-    onFormSubmit(request) {
-      this.addNewRoom(request);
+    ...mapActions(["fetchInventoryPagi", "createInventoryItem"]),
+    dateStringToLocal,
+    loadPagi(page) {
+      this.fetchInventoryPagi(page).then(() => {
+        this.currentPage = page;
+        this.totalPage = this.inventoryPagiData.last_page;
+      });
     },
-    ...mapActions(["fetchRoomPagi", "addNewRoom"]),
     pageChanged(page) {
       this.loadPagi(page);
     },
-    dateStringToLocal,
-    loadPagi(page) {
-      this.fetchRoomPagi(page).then(() => {
-        this.currentPage = page;
-        this.totalPage = this.roomPagiData.last_page;
-      });
+    onFormSubmit(req) {
+      // console.log(req);
+      this.createInventoryItem(req);
     },
   },
   created() {
