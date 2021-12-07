@@ -57,7 +57,7 @@ const Room = {
 };
 
 const Inventory = {
-  list: () => requests.get(`/inventories`),
+  list: (page) => requests.get(`/inventories?page=${page}`),
   create: (formValues) => requests.post(`/inventories`, formValues),
 };
 

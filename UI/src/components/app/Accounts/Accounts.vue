@@ -60,7 +60,7 @@
     </div>
 
     <div>
-      <md-button class="md-primary" @click="openForm"
+      <md-button class="md-primary" @click="openForm" :disabled="loading"
         >Add new account</md-button
       >
     </div>
@@ -92,7 +92,10 @@ export default {
     tabChanged(e) {
       this.selectedRole = e;
     },
-    onFormSubmit(e) {},
+    onFormSubmit(e) {
+      this.addNewAccount(e, this.selectedRole);
+      console.log(e);
+    },
     openForm() {
       this.showForm = true;
       // this.$notify({
@@ -118,15 +121,32 @@ export default {
         this.loading = false;
       }
     },
+    async addNewAccount(req, role) {
+      this.loading = true;
+      try {
+        const response = await agent.Account.create(req);
+        switch (role) {
+          case "Custodian":
+            this.custodians = [response, ...this.custodians];
+            break;
+          default:
+            this.admins = [response, ...this.admins];
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 };
 </script>
 
 <style>
 .md-tabs-navigation {
-  background-color: #4caf50 !important;
+  background-color: #e0e0e0 !important;
 }
 .md-tabs-navigation .md-button-content {
-  color: white;
+  color: #616161;
 }
 </style>
