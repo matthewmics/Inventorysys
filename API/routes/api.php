@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InventoryController;
@@ -50,6 +51,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('rooms', RoomController::class);
 
     Route::resource('inventories', InventoryController::class);
+
+    Route::get('/accounts', [AccountController::class, 'index']);
+    Route::post('/accounts', [AccountController::class, 'create']);
 });
 
 
@@ -66,6 +70,16 @@ Route::get('/reseed', function () {
             'name' => 'Admin',
             'email' => 'admin@inventory.com',
             'password' => bcrypt('admin'),
+            'role' => 'Admin',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'id' => 2,
+            'name' => 'Stella Grant',
+            'email' => 'custodian1@inventory.com',
+            'password' => bcrypt('password'),
+            'role' => 'Custodian',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]

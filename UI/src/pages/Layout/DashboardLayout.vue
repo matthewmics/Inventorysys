@@ -22,6 +22,11 @@
         <p>Dashboard</p>
       </sidebar-link>
 
+      <sidebar-link to="/accounts">
+        <md-icon>people</md-icon>
+        <p>Accounts</p>
+      </sidebar-link>
+
       <sidebar-link to="/buildings">
         <md-icon>business</md-icon>
         <p>Buildings</p>

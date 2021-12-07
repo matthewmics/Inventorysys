@@ -14,11 +14,11 @@ class CreateInventoryRoomsTable extends Migration
     public function up()
     {
         Schema::create('inventory_room', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('inventory_id');
             $table->bigInteger('room_id');
-            $table->integer('qty');
+            $table->string('status', 50);
 
-            $table->primary(['inventory_id', 'room_id']);
             $table->foreign('inventory_id')->references('id')->on('inventories');
             $table->foreign('room_id')->references('id')->on('rooms');
         });

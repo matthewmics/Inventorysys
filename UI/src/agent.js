@@ -57,8 +57,13 @@ const Room = {
 };
 
 const Inventory = {
-  list: (page) => requests.get(`/inventories?page=${page}`),
+  list: () => requests.get(`/inventories`),
   create: (formValues) => requests.post(`/inventories`, formValues),
+};
+
+const Account = {
+  list: (page) => requests.get(`/accounts?page=${page}`),
+  create: (formValues) => requests.post(`/accounts`, formValues),
 };
 
 const agent = {
@@ -66,6 +71,7 @@ const agent = {
   Building,
   Room,
   Inventory,
+  Account,
 };
 
 export default agent;

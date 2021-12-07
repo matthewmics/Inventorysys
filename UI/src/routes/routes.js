@@ -10,6 +10,7 @@ import LabsAndRooms from "../components/app/LabsAndRooms/LabsAndRooms.vue";
 import RoomAllocations from "../components/app/Buildings/RoomAllocations";
 
 import Inventories from "../components/app/Inventories/Inventories";
+import Accounts from "../components/app/Accounts/Accounts";
 
 const routes = [
   {
@@ -23,9 +24,9 @@ const routes = [
         component: Dashboard,
       },
       {
-        path: "user",
-        name: "User Profile",
-        component: UserProfile,
+        path: "accounts",
+        name: "Accounts",
+        component: Accounts,
       },
       {
         path: "buildings",
