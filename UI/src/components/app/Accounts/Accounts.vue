@@ -1,8 +1,13 @@
 <template>
   <div class="content">
-    <!-- form placeholder -->
-    <md-tabs>
-      <md-tab id="tab-home" md-label="Admin">
+    <AccountsForm
+      :show="showForm"
+      :role="selectedRole"
+      @form-close="showForm = false"
+      @form-submit="onFormSubmit"
+    />
+    <md-tabs @md-changed="tabChanged">
+      <md-tab id="Admin" md-label="Admin">
         <md-table>
           <md-table-row>
             <md-table-head>Name</md-table-head>
@@ -25,7 +30,7 @@
           </md-table-row>
         </md-table>
       </md-tab>
-      <md-tab id="tab-pages" md-label="Custodian">
+      <md-tab id="Custodian" md-label="Custodian">
         <md-table>
           <md-table-row>
             <md-table-head>Name</md-table-head>
@@ -55,13 +60,16 @@
     </div>
 
     <div>
-      <md-button class="md-primary">Add new account</md-button>
+      <md-button class="md-primary" @click="openForm"
+        >Add new account</md-button
+      >
     </div>
   </div>
 </template>
 
 <script>
 import agent from "../../../agent";
+import AccountsForm from "./AccountsForm";
 import { dateStringToLocal } from "../../../helpers";
 export default {
   data() {
@@ -69,12 +77,33 @@ export default {
       loading: false,
       admins: [],
       custodians: [],
+      showForm: false,
+      selectedRole: "Admin",
     };
   },
+  components: {
+    AccountsForm,
+  },
+  emitters: ["form-close", "form-submit"],
   created() {
     this.fetchAccounts();
   },
   methods: {
+    tabChanged(e) {
+      this.selectedRole = e;
+    },
+    onFormSubmit(e) {},
+    openForm() {
+      this.showForm = true;
+      // this.$notify({
+      //   message:
+      //     "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer.",
+      //   icon: "add_alert",
+      //   horizontalAlign: "center",
+      //   verticalAlign: "top",
+      //   type: "danger",
+      // });
+    },
     dateStringToLocal,
     async fetchAccounts() {
       this.loading = true;
@@ -95,6 +124,9 @@ export default {
 
 <style>
 .md-tabs-navigation {
-  background-color: #999 !important;
+  background-color: #4caf50 !important;
+}
+.md-tabs-navigation .md-button-content {
+  color: white;
 }
 </style>
