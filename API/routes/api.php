@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustodianController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RoomController;
 use Carbon\Carbon;
@@ -40,7 +41,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
-
+    
+    Route::post('/buildings/custodian-allocate', [BuildingController::class, 'custodianAllocate']);
     Route::get('/buildings/{id}/rooms', [BuildingController::class, 'rooms']);
     Route::resource('buildings', BuildingController::class);
     Route::get('/buildings/search/{name}', [BuildingController::class, 'search']);
@@ -50,10 +52,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/rooms/unallocated', [RoomController::class, 'listUnallocated']);
     Route::resource('rooms', RoomController::class);
 
+    Route::post('/inventories/{inventoryId}/allocate-room', [InventoryController::class, 'allocateRoom']);
     Route::resource('inventories', InventoryController::class);
 
     Route::get('/accounts', [AccountController::class, 'index']);
     Route::post('/accounts', [AccountController::class, 'create']);
+
+    Route::get('/custodians/{id}/buildings', [CustodianController::class, 'custodianBuildings']);
 });
 
 
@@ -87,25 +92,10 @@ Route::get('/reseed', function () {
     DB::table('inventories')->insert([
         [
             'id' => 1,
-            'name' => 'Desktop',
+            'name' => 'Desktop1',
             'item_type' => 'PC',
-            'qty' => 5,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ],
-        [
-            'id' => 2,
-            'name' => 'Table',
-            'item_type' => 'Fixture',
-            'qty' => 5,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ],
-        [
-            'id' => 3,
-            'name' => 'Bookcase',
-            'item_type' => 'Fixture',
-            'qty' => 5,
+            'serial_number' => 'a1be3123a',
+            'status' => 'Stock',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]

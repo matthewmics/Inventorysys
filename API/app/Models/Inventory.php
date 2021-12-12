@@ -10,10 +10,10 @@ class Inventory extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'item_type', 'qty'];
+    protected $fillable = ['name', 'item_type', 'status', 'room_Id', 'serial_number'];
 
-    public function rooms()
+    public function room()
     {
-        return $this->belongsToMany(Room::class, 'inventory_room', 'inventory_id', 'room_id');
+        return $this->belongsTo(Room::class);
     }
 }

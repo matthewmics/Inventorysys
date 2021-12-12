@@ -20,6 +20,6 @@ class Room extends Model
 
     public function inventories()
     {
-        return $this->belongsToMany(Inventory::class, 'inventory_room', 'room_id', 'inventory_id');
+        return $this->hasMany(Inventory::class);
     }
 }

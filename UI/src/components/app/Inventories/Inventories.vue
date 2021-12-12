@@ -20,11 +20,11 @@
           <h1 class="md-title">Inventory</h1>
         </md-table-toolbar>
         <md-table-row>
-          <md-table-head style="width: 20%">Name</md-table-head>
+          <md-table-head style="width: 25%">Item</md-table-head>
           <md-table-head style="width: 15%">Type</md-table-head>
-          <md-table-head style="width: 15%">Qty</md-table-head>
-          <md-table-head style="width: 22.5%">Created</md-table-head>
-          <md-table-head style="width: 22.5%">Updated</md-table-head>
+          <md-table-head style="width: 20%">Status</md-table-head>
+          <md-table-head style="width: 20%">Room</md-table-head>
+          <md-table-head style="width: 20%">Created</md-table-head>
           <md-table-head>Actions</md-table-head>
         </md-table-row>
 
@@ -35,15 +35,23 @@
         </md-table-row>
 
         <md-table-row v-for="item in inventoryPagiData.data" :key="item.id">
-          <md-table-cell>{{ item.name }}</md-table-cell>
+          <md-table-cell
+            >{{ item.name }}
+            <div style="font-size: 11px; color: #616161">
+              {{ "SN: " + item.serial_number }}
+            </div></md-table-cell
+          >
           <md-table-cell>{{ item.item_type }}</md-table-cell>
-          <md-table-cell>{{ item.qty }}</md-table-cell>
+          <md-table-cell>{{ item.status }}</md-table-cell>
+          <md-table-cell>{{
+            item.room_id  ? item.room.name : "-"
+          }}</md-table-cell>
           <md-table-cell>{{
             dateStringToLocal(item.created_at)
           }}</md-table-cell>
-          <md-table-cell>{{
+          <!-- <md-table-cell>{{
             dateStringToLocal(item.updated_at)
-          }}</md-table-cell>
+          }}</md-table-cell> -->
           <md-table-cell>
             <div>
               <span class="clickable"

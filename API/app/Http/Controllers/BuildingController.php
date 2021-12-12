@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Building;
+use App\Models\CustodianBuilding;
 use Illuminate\Http\Request;
 
 class BuildingController extends Controller
@@ -11,7 +12,7 @@ class BuildingController extends Controller
 
     public function rooms($id)
     {
-       return Building::find($id)->rooms;
+        return Building::find($id)->rooms;
     }
 
     /**
@@ -24,6 +25,28 @@ class BuildingController extends Controller
         return Building::orderBy('id', 'ASC')->paginate(10);
     }
 
+
+    public function custodianAllocate(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required'
+        ]);
+
+        $user_id = $request->user_id;
+        $building_ids = $request->building_ids;
+
+        $insert_data = [];
+
+        CustodianBuilding::where('user_id', '=', $user_id)->delete();
+
+        foreach ($building_ids as $building_id) {
+            array_push($insert_data, ['user_id' => $user_id, 'building_id' => $building_id]);
+        }
+
+        if (!empty($insert_data)) {
+            CustodianBuilding::insert($insert_data);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.

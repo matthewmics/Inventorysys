@@ -23,8 +23,8 @@
           </md-select>
         </md-field>
         <md-field>
-          <label>Quantity</label>
-          <md-input min="1" v-model="form.qty" type="number"></md-input>
+          <label>Serial Number</label>
+          <md-input v-model="form.serial_number"></md-input>
         </md-field>
       </form>
     </md-dialog-content>
@@ -47,7 +47,7 @@ export default {
       form: {
         name: "",
         item_type: "",
-        qty: "1",
+        serial_number: "",
       },
     };
   },
@@ -61,13 +61,14 @@ export default {
     onOpen() {
       this.form.name = "";
       this.form.item_type = "PC";
-      this.form.qty = "1";
+      this.form.status = "";
     },
     onSubmit(e) {
       const request = {
         name: this.form.name,
         item_type: this.form.item_type,
-        qty: this.form.qty,
+        serial_number: this.form.serial_number,
+        status: "Stock",
       };
       this.$emit("form-submit", request);
 

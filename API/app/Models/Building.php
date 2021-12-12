@@ -16,4 +16,9 @@ class Building extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function custodians()
+    {
+        return $this->belongsToMany(User::class, 'custodian_building', 'user_id', 'building_id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use Illuminate\Http\Request;
+use App\Models\InventoryRoom;
 
 class InventoryController extends Controller
 {
@@ -14,7 +15,20 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        return Inventory::orderBy('id', 'ASC')->paginate(10);
+        return Inventory::with('room')->orderBy('id', 'ASC')->paginate(10);
+    }
+
+    public function allocateRoom(Request $request, $inventoryId)
+    {
+        $roomId = $request->room_id;
+
+        $inventory = Inventory::find($inventoryId);
+
+        $inventory->room_id = $roomId;
+
+        $inventory->save();
+
+        return $inventory;
     }
 
     /**
@@ -28,7 +42,7 @@ class InventoryController extends Controller
         $request->validate([
             'name' => 'required',
             'item_type' => 'required',
-            'qty' => 'required|numeric|min:1'
+            'serial_number' => 'required'
         ]);
 
         return Inventory::create($request->all());
