@@ -6,6 +6,12 @@
       @form-close="showForm = false"
       @form-submit="onFormSubmit"
     />
+    <custodian-buildings
+      :show="showCustodianBuildings"
+      :custodian="selectedCustodian"
+      @custodian-buildings-close="showCustodianBuildings = false"
+      @custodian-buildings-submit="onCustodianBuildingsSubmit"
+    />
     <md-tabs @md-changed="tabChanged">
       <md-tab id="Admin" md-label="Admin">
         <md-table>
@@ -42,14 +48,34 @@
             <md-table-cell colspan="4">No records</md-table-cell>
           </md-table-row>
           <md-table-row v-for="account in custodians" :key="account.id">
-            <md-table-cell>{{ account.name }}</md-table-cell>
+            <md-table-cell>
+              <div
+                class="link"
+                @click="
+                  selectedCustodian = account;
+                  showCustodianBuildings = true;
+                "
+              >
+                {{ account.name }}
+              </div>
+            </md-table-cell>
             <md-table-cell>{{
               dateStringToLocal(account.created_at)
             }}</md-table-cell>
             <md-table-cell>{{
               dateStringToLocal(account.updated_at)
             }}</md-table-cell>
-            <md-table-cell>-</md-table-cell>
+            <md-table-cell>
+              <md-button
+                @click="
+                  selectedCustodian = account;
+                  showCustodianBuildings = true;
+                "
+                class="md-icon-button md-dense md-primary"
+              >
+                <md-icon>apartment</md-icon>
+              </md-button>
+            </md-table-cell>
           </md-table-row>
         </md-table>
       </md-tab>
@@ -70,6 +96,7 @@
 <script>
 import agent from "../../../agent";
 import AccountsForm from "./AccountsForm";
+import CustodianBuildings from "./CustodianBuildings";
 import { dateStringToLocal } from "../../../helpers";
 export default {
   data() {
@@ -79,16 +106,27 @@ export default {
       custodians: [],
       showForm: false,
       selectedRole: "Admin",
+      showCustodianBuildings: false,
+      selectedCustodian: null,
     };
   },
   components: {
     AccountsForm,
+    CustodianBuildings,
   },
-  emitters: ["form-close", "form-submit"],
+  emitters: [
+    "form-close",
+    "form-submit",
+    "custodian-buildings-close",
+    "custodian-buildings-submit",
+  ],
   created() {
     this.fetchAccounts();
   },
   methods: {
+    onCustodianBuildingsSubmit(e) {
+      console.log(e);
+    },
     tabChanged(e) {
       this.selectedRole = e;
     },
@@ -114,7 +152,7 @@ export default {
         const response = await agent.Account.list();
         this.admins = response.filter((a) => a.role === "Admin");
         this.custodians = response.filter((a) => a.role === "Custodian");
-        console.log(response);
+        // console.log(response);
       } catch (err) {
         console.log(err);
       } finally {

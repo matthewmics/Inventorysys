@@ -25,6 +25,11 @@ class BuildingController extends Controller
         return Building::orderBy('id', 'ASC')->paginate(10);
     }
 
+    public function all()
+    {
+        return Building::orderBy('id', 'ASC')->get();
+    }
+
 
     public function custodianAllocate(Request $request)
     {

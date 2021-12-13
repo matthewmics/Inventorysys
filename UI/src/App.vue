@@ -33,6 +33,13 @@ export default {
   text-align: center;
   min-height: 100vh;
 }
+.center-parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100%;
+}
 .clickable {
   cursor: pointer;
 }

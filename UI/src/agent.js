@@ -39,6 +39,7 @@ const User = {
 };
 
 const Building = {
+  listAll: () => requests.get(`/buildings/all`),
   list: (page) => requests.get(`/buildings?page=${page}`),
   create: (formValues) => requests.post(`/buildings`, formValues),
   find: (id) => requests.get(`/buildings/${id}`),
@@ -46,6 +47,8 @@ const Building = {
   update: (formValues) =>
     requests.put(`/buildings/${formValues.id}`, formValues),
   rooms: (id) => requests.get(`/buildings/${id}/rooms`),
+  custodianAllocate: (request) =>
+    requests.post("/buildings/custodian-allocate", request),
 };
 
 const Room = {
@@ -66,12 +69,17 @@ const Account = {
   create: (formValues) => requests.post(`/accounts`, formValues),
 };
 
+const Custodian = {
+  listBuildings: (id) => requests.get(`/custodians/${id}/buildings`),
+};
+
 const agent = {
   User,
   Building,
   Room,
   Inventory,
   Account,
+  Custodian,
 };
 
 export default agent;

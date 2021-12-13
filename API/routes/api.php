@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::post('/buildings/custodian-allocate', [BuildingController::class, 'custodianAllocate']);
     Route::get('/buildings/{id}/rooms', [BuildingController::class, 'rooms']);
+    Route::get('/buildings/all', [BuildingController::class, 'all']);
     Route::resource('buildings', BuildingController::class);
     Route::get('/buildings/search/{name}', [BuildingController::class, 'search']);
 
