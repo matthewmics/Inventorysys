@@ -41,7 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
-    
+
     Route::post('/buildings/custodian-allocate', [BuildingController::class, 'custodianAllocate']);
     Route::get('/buildings/{id}/rooms', [BuildingController::class, 'rooms']);
     Route::get('/buildings/all', [BuildingController::class, 'all']);
@@ -60,11 +60,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/accounts', [AccountController::class, 'create']);
 
     Route::get('/custodians/{id}/buildings', [CustodianController::class, 'custodianBuildings']);
+    Route::get('/custodians/{id}/inventory', [CustodianController::class, 'custodianInventory']);
 });
 
 
 Route::get('/reseed', function () {
 
+    DB::table('custodian_building')->delete();
     DB::table('users')->delete();
     DB::table('inventories')->delete();
     DB::table('rooms')->delete();
@@ -92,10 +94,17 @@ Route::get('/reseed', function () {
     ]);
     DB::table('inventories')->insert([
         [
-            'id' => 1,
             'name' => 'Desktop1',
             'item_type' => 'PC',
-            'serial_number' => 'a1be3123a',
+            'serial_number' => generateRandomString(),
+            'status' => 'Stock',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Desktop2',
+            'item_type' => 'PC',
+            'serial_number' => generateRandomString(),
             'status' => 'Stock',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
@@ -156,3 +165,14 @@ Route::get('/reseed', function () {
 
     return "Database has been reseeded";
 });
+
+
+function generateRandomString($length = 10) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+}

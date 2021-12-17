@@ -28,6 +28,12 @@
           <md-table-head>Actions</md-table-head>
         </md-table-row>
 
+        <md-table-row
+          v-if="!roomPagiData.data || roomPagiData.data.length === 0"
+        >
+          <md-table-cell><b>No records</b></md-table-cell>
+        </md-table-row>
+
         <md-table-row :key="room.id" v-for="room in roomPagiData.data">
           <md-table-cell> {{ room.name }}</md-table-cell>
           <md-table-cell>{{ room.room_type }}</md-table-cell>
