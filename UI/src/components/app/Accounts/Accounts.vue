@@ -18,6 +18,7 @@
         <md-table>
           <md-table-row>
             <md-table-head>Name</md-table-head>
+            <md-table-head>Email</md-table-head>
             <md-table-head>Created At</md-table-head>
             <md-table-head>Updated At</md-table-head>
             <md-table-head>Actions</md-table-head>
@@ -27,6 +28,7 @@
           </md-table-row>
           <md-table-row v-for="account in admins" :key="account.id">
             <md-table-cell>{{ account.name }}</md-table-cell>
+            <md-table-cell>{{ account.email }}</md-table-cell>
             <md-table-cell>{{
               dateStringToLocal(account.created_at)
             }}</md-table-cell>
@@ -43,6 +45,7 @@
         <md-table>
           <md-table-row>
             <md-table-head>Name</md-table-head>
+            <md-table-head>Email</md-table-head>
             <md-table-head>Created At</md-table-head>
             <md-table-head>Updated At</md-table-head>
             <md-table-head>Actions</md-table-head>
@@ -62,6 +65,7 @@
                 {{ account.name }}
               </div>
             </md-table-cell>
+            <md-table-cell>{{ account.email }}</md-table-cell>
             <md-table-cell>{{
               dateStringToLocal(account.created_at)
             }}</md-table-cell>
@@ -88,6 +92,7 @@
         <md-table>
           <md-table-row>
             <md-table-head>Name</md-table-head>
+            <md-table-head>Email</md-table-head>
             <md-table-head>Created At</md-table-head>
             <md-table-head>Updated At</md-table-head>
             <md-table-head>Actions</md-table-head>
@@ -97,6 +102,7 @@
           </md-table-row>
           <md-table-row v-for="account in itsList" :key="account.id">
             <md-table-cell>{{ account.name }}</md-table-cell>
+            <md-table-cell>{{ account.email }}</md-table-cell>
             <md-table-cell>{{
               dateStringToLocal(account.created_at)
             }}</md-table-cell>
@@ -113,6 +119,7 @@
         <md-table>
           <md-table-row>
             <md-table-head>Name</md-table-head>
+            <md-table-head>Email</md-table-head>
             <md-table-head>Created At</md-table-head>
             <md-table-head>Updated At</md-table-head>
             <md-table-head>Actions</md-table-head>
@@ -122,6 +129,7 @@
           </md-table-row>
           <md-table-row v-for="account in ppfoList" :key="account.id">
             <md-table-cell>{{ account.name }}</md-table-cell>
+            <md-table-cell>{{ account.email }}</md-table-cell>
             <md-table-cell>{{
               dateStringToLocal(account.created_at)
             }}</md-table-cell>

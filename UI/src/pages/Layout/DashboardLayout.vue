@@ -22,27 +22,42 @@
         <p>Dashboard</p>
       </sidebar-link>
 
-      <sidebar-link to="/accounts" v-if="loggedInUser.role === 'Admin'">
+      <sidebar-link
+        to="/accounts"
+        v-if="['Admin'].includes(loggedInUser.role)"
+      >
         <md-icon>people</md-icon>
         <p>Accounts</p>
       </sidebar-link>
 
-      <sidebar-link to="/buildings" v-if="loggedInUser.role === 'Admin'">
+      <sidebar-link
+        to="/buildings"
+        v-if="['Admin'].includes(loggedInUser.role)"
+      >
         <md-icon>business</md-icon>
         <p>Buildings</p>
       </sidebar-link>
 
-      <sidebar-link to="/rooms" v-if="loggedInUser.role === 'Admin'">
+      <sidebar-link
+        to="/rooms"
+        v-if="['Admin'].includes(loggedInUser.role)"
+      >
         <md-icon>meeting_room</md-icon>
         <p>Labs &amp; Rooms</p>
       </sidebar-link>
 
-      <sidebar-link to="/inventories" v-if="loggedInUser.role === 'Admin'">
+      <sidebar-link
+        to="/inventories"
+        v-if="['Admin'].includes(loggedInUser.role)"
+      >
         <md-icon>warehouse</md-icon>
         <p>Inventory</p>
       </sidebar-link>
 
-      <sidebar-link to="/inventory" v-if="loggedInUser.role === 'Custodian'">
+      <sidebar-link
+        to="/inventory"
+        v-if="['Custodian'].includes(loggedInUser.role)"
+      >
         <md-icon>warehouse</md-icon>
         <p>Inventory</p>
       </sidebar-link>

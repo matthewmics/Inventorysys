@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/accounts', [AccountController::class, 'create']);
 
     Route::get('/custodians/{id}/buildings', [CustodianController::class, 'custodianBuildings']);
-    Route::get('/custodians/{id}/inventory', [CustodianController::class, 'custodianInventory']);
+    Route::get('/custodian-inventory', [CustodianController::class, 'custodianInventory']);
 });
 
 

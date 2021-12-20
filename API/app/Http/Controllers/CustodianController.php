@@ -15,11 +15,13 @@ class CustodianController extends Controller
         return User::find($id)->buildings;
     }
 
-    public function custodianInventory($id)
+    public function custodianInventory()
     {
-        return Inventory::whereIn(
+        $id = auth()->user()->id;
+
+        return Inventory::with('room')->whereIn(
             'room_id',
-            Room::select('room_id')->whereIn('building_id', CustodianBuilding::select('building_id')->where('user_id', $id))
+            Room::select('id')->whereIn('building_id', CustodianBuilding::select('building_id')->where('user_id', $id))
         )
             ->orWhereNull('room_id')
             ->orderBy('room_id', 'ASC')
