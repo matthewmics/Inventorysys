@@ -15,16 +15,19 @@
           <label for="role">Role</label>
           <md-input id="role" name="role" v-model="form.role" disabled />
         </md-field> -->
-        <md-field>
+        <md-field :class="getValidationClass('name')">
           <label for="name">Name</label>
           <md-input id="name" name="name" v-model="form.name" />
+          <span class="md-error" v-if="!$v.form.name.required">
+            Name is required
+          </span>
         </md-field>
         <md-field>
           <label for="email">Email</label>
           <md-input id="email" name="email" v-model="form.email" />
         </md-field>
 
-        <md-field>
+        <md-field :class="getValidationClass('password')">
           <label for="password">Password</label>
           <md-input
             type="password"
@@ -32,6 +35,9 @@
             name="password"
             v-model="form.password"
           />
+          <span class="md-error" v-if="!$v.form.password.required">
+            Password is required
+          </span>
         </md-field>
       </form>
     </md-dialog-content>
@@ -46,7 +52,20 @@
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 export default {
+  mixins: [validationMixin],
+  validations: {
+    form: {
+      name: {
+        required,
+      },
+      password: {
+        required,
+      },
+    },
+  },
   data() {
     return {
       form: {
@@ -68,6 +87,15 @@ export default {
     },
   },
   methods: {
+    getValidationClass(fieldName) {
+      const field = this.$v.form[fieldName];
+
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty,
+        };
+      }
+    },
     onOpen() {
       this.form.name = "";
       this.form.email = "";
@@ -75,6 +103,9 @@ export default {
       this.form.role = this.role;
     },
     onSubmit(e) {
+      this.$v.$touch();
+
+      if (this.$v.$invalid) return;
       const request = {
         name: this.form.name,
         role: this.form.role,

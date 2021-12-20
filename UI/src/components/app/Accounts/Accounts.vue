@@ -13,6 +13,7 @@
       @custodian-buildings-submit="onCustodianBuildingsSubmit"
     />
     <md-tabs @md-changed="tabChanged">
+      <!-- ADMIN -->
       <md-tab id="Admin" md-label="Admin">
         <md-table>
           <md-table-row>
@@ -36,6 +37,8 @@
           </md-table-row>
         </md-table>
       </md-tab>
+
+      <!-- CUSTODIAN -->
       <md-tab id="Custodian" md-label="Custodian">
         <md-table>
           <md-table-row>
@@ -79,6 +82,56 @@
           </md-table-row>
         </md-table>
       </md-tab>
+
+      <!-- ITS -->
+      <md-tab id="ITS" md-label="ITS">
+        <md-table>
+          <md-table-row>
+            <md-table-head>Name</md-table-head>
+            <md-table-head>Created At</md-table-head>
+            <md-table-head>Updated At</md-table-head>
+            <md-table-head>Actions</md-table-head>
+          </md-table-row>
+          <md-table-row v-if="itsList.length === 0">
+            <md-table-cell colspan="4">No records</md-table-cell>
+          </md-table-row>
+          <md-table-row v-for="account in itsList" :key="account.id">
+            <md-table-cell>{{ account.name }}</md-table-cell>
+            <md-table-cell>{{
+              dateStringToLocal(account.created_at)
+            }}</md-table-cell>
+            <md-table-cell>{{
+              dateStringToLocal(account.updated_at)
+            }}</md-table-cell>
+            <md-table-cell>-</md-table-cell>
+          </md-table-row>
+        </md-table>
+      </md-tab>
+
+      <!-- PPFO -->
+      <md-tab id="PPFO" md-label="PPFO">
+        <md-table>
+          <md-table-row>
+            <md-table-head>Name</md-table-head>
+            <md-table-head>Created At</md-table-head>
+            <md-table-head>Updated At</md-table-head>
+            <md-table-head>Actions</md-table-head>
+          </md-table-row>
+          <md-table-row v-if="ppfoList.length === 0">
+            <md-table-cell colspan="4">No records</md-table-cell>
+          </md-table-row>
+          <md-table-row v-for="account in ppfoList" :key="account.id">
+            <md-table-cell>{{ account.name }}</md-table-cell>
+            <md-table-cell>{{
+              dateStringToLocal(account.created_at)
+            }}</md-table-cell>
+            <md-table-cell>{{
+              dateStringToLocal(account.updated_at)
+            }}</md-table-cell>
+            <md-table-cell>-</md-table-cell>
+          </md-table-row>
+        </md-table>
+      </md-tab>
     </md-tabs>
 
     <div>
@@ -104,6 +157,8 @@ export default {
       loading: false,
       admins: [],
       custodians: [],
+      itsList: [],
+      ppfoList: [],
       showForm: false,
       selectedRole: "Admin",
       showCustodianBuildings: false,
@@ -152,6 +207,8 @@ export default {
         const response = await agent.Account.list();
         this.admins = response.filter((a) => a.role === "Admin");
         this.custodians = response.filter((a) => a.role === "Custodian");
+        this.ppfoList = response.filter((a) => a.role === "PPFO");
+        this.itsList = response.filter((a) => a.role === "ITS");
         // console.log(response);
       } catch (err) {
         console.log(err);
@@ -166,6 +223,12 @@ export default {
         switch (role) {
           case "Custodian":
             this.custodians = [response, ...this.custodians];
+            break;
+          case "ITS":
+            this.itsList = [response, ...this.itsList];
+            break;
+          case "PPFO":
+            this.ppfoList = [response, ...this.ppfoList];
             break;
           default:
             this.admins = [response, ...this.admins];

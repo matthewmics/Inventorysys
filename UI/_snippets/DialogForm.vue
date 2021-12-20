@@ -22,9 +22,9 @@
             v-model="form.name"
             :disabled="sending"
           />
-          <span class="md-error" v-if="!$v.form.name.required"
-            >Name is requiredafasdf</span
-          >
+          <span class="md-error" v-if="!$v.form.name.required">
+            Name is required
+          </span>
         </md-field>
       </form>
     </md-dialog-content>
@@ -70,7 +70,6 @@ export default {
     onOpen() {
       this.$v.$reset();
       this.form.name = "";
-
     },
     validateUser() {
       this.$v.$touch();

@@ -14,7 +14,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return Room::orderBy('id', 'ASC')->paginate(10);
+        return Room::with('building')->orderBy('id', 'ASC')->paginate(10);
     }
 
     public function getAll()

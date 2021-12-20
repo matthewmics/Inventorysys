@@ -19,8 +19,9 @@
         <md-table-row>
           <md-table-head style="width: 20%">Name</md-table-head>
           <md-table-head style="width: 20%">Type</md-table-head>
-          <md-table-head style="width: 27%">Created</md-table-head>
-          <md-table-head style="width: 27%">Updated</md-table-head>
+          <md-table-head style="width: 20%">Building</md-table-head>
+          <md-table-head style="width: 15%">Created</md-table-head>
+          <md-table-head style="width: 15%">Updated</md-table-head>
           <md-table-head>Actions</md-table-head>
         </md-table-row>
 
@@ -35,6 +36,9 @@
         <md-table-row :key="room.id" v-for="room in roomPagiData.data">
           <md-table-cell> {{ room.name }}</md-table-cell>
           <md-table-cell>{{ room.room_type }}</md-table-cell>
+          <md-table-cell>
+            {{ room.building_id ? room.building.name : "-" }}
+          </md-table-cell>
           <md-table-cell>{{
             dateStringToLocal(room.created_at)
           }}</md-table-cell>
@@ -42,7 +46,7 @@
             dateStringToLocal(room.created_at)
           }}</md-table-cell>
           <md-table-cell>
-            <div>
+            <!-- <div>
               <span class="clickable"
                 ><md-icon style="margin-right: 15px; color: #43a047"
                   >edit</md-icon
@@ -53,7 +57,8 @@
                   >delete</md-icon
                 >
               </span>
-            </div>
+            </div> -->
+            -
           </md-table-cell>
         </md-table-row>
 

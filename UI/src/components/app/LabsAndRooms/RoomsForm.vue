@@ -11,9 +11,12 @@
 
     <md-dialog-content>
       <form id="roomForm" @submit.prevent="onSubmit">
-        <md-field>
+        <md-field :class="getValidationClass('name')">
           <label for="name">Name</label>
           <md-input id="name" name="name" v-model="form.name" />
+          <span class="md-error" v-if="!$v.form.name.required">
+            Name is required
+          </span>
         </md-field>
         <md-field>
           <label for="type">Type</label>
@@ -36,7 +39,10 @@
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
 export default {
+  mixins: [validationMixin],
   data() {
     return {
       form: {
@@ -45,6 +51,13 @@ export default {
       },
     };
   },
+  validations: {
+    form: {
+      name: {
+        required,
+      },
+    },
+  },
   props: {
     show: {
       type: Boolean,
@@ -52,7 +65,20 @@ export default {
     },
   },
   methods: {
+    getValidationClass(fieldName) {
+      const field = this.$v.form[fieldName];
+
+      if (field) {
+        return {
+          "md-invalid": field.$invalid && field.$dirty,
+        };
+      }
+    },
     onSubmit(e) {
+      this.$v.$touch();
+
+      if (this.$v.$invalid) return;
+
       const request = {
         name: this.form.name,
         room_type: this.form.room_type,
