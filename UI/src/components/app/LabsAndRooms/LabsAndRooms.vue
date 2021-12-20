@@ -4,17 +4,13 @@
       :show="showForm"
       @form-close="showForm = false"
       @form-submit="onFormSubmit"
-    ></rooms-form>
-
-    <md-progress-bar
-      v-if="roomLoading"
-      md-mode="indeterminate"
-    ></md-progress-bar>
+    >
+    </rooms-form>
 
     <div>
       <md-button @click="showForm = true" class="md-raised md-primary"
-        >Add new</md-button
-      >
+        >Add new
+      </md-button>
       <md-table md-card>
         <md-table-toolbar>
           <h1 class="md-title">Labs &amp; Rooms</h1>
@@ -31,7 +27,9 @@
         <md-table-row
           v-if="!roomPagiData.data || roomPagiData.data.length === 0"
         >
-          <md-table-cell><b>No records</b></md-table-cell>
+          <md-table-cell>
+            <b>No records</b>
+          </md-table-cell>
         </md-table-row>
 
         <md-table-row :key="room.id" v-for="room in roomPagiData.data">
@@ -57,6 +55,13 @@
               </span>
             </div>
           </md-table-cell>
+        </md-table-row>
+
+        <md-table-row>
+          <td colspan="100%">
+            <md-progress-bar v-if="roomLoading" md-mode="indeterminate">
+            </md-progress-bar>
+          </td>
         </md-table-row>
       </md-table>
 

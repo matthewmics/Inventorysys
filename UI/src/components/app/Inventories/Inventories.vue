@@ -6,10 +6,12 @@
       @form-submit="onFormSubmit"
     />
 
-    <md-progress-bar
-      v-if="inventoryLoading"
-      md-mode="indeterminate"
-    ></md-progress-bar>
+    <InventoryAssignRoom
+      :show="showAssignRoom"
+      :inventoryItem="selectedItem"
+      @form-close="showAssignRoom = false"
+      @form-submit="onAssignRoomSubmit"
+    />
 
     <div>
       <md-button @click="showForm = true" class="md-raised md-primary"
@@ -43,29 +45,36 @@
           >
           <md-table-cell>{{ item.item_type }}</md-table-cell>
           <md-table-cell>{{ item.status }}</md-table-cell>
-          <md-table-cell>{{
+          <md-table-cell>
+            <!-- {{
             item.room_id  ? item.room.name : "-"
-          }}</md-table-cell>
+          }} -->
+            <md-button
+              @click="
+                selectedItem = item;
+                showAssignRoom = true;
+              "
+              v-if="!item.room_id"
+              class="md-icon-button md-dense"
+            >
+              <md-icon>add</md-icon>
+            </md-button>
+            <span v-else>{{ item.room.name }}</span>
+          </md-table-cell>
           <md-table-cell>{{
             dateStringToLocal(item.created_at)
           }}</md-table-cell>
           <!-- <md-table-cell>{{
             dateStringToLocal(item.updated_at)
           }}</md-table-cell> -->
-          <md-table-cell>
-            <div>
-              <span class="clickable"
-                ><md-icon style="margin-right: 15px; color: #43a047"
-                  >edit</md-icon
-                ></span
-              >
-              <span class="clickable">
-                <md-icon class="clickable" style="color: #e53935"
-                  >delete</md-icon
-                >
-              </span>
-            </div>
-          </md-table-cell>
+          <md-table-cell> - </md-table-cell>
+        </md-table-row>
+
+        <md-table-row>
+          <td colspan="100%">
+            <md-progress-bar v-if="inventoryLoading" md-mode="indeterminate">
+            </md-progress-bar>
+          </td>
         </md-table-row>
       </md-table>
 
@@ -84,6 +93,7 @@ import { mapGetters, mapActions } from "vuex";
 import SlidingPagination from "vue-sliding-pagination";
 import { dateStringToLocal } from "../../../helpers";
 import InventoriesForm from "./InventoriesForm";
+import InventoryAssignRoom from "./InventoryAssignRoom";
 
 export default {
   data() {
@@ -91,16 +101,31 @@ export default {
       showForm: false,
       currentPage: 1,
       totalPage: 1,
+      showAssignRoom: false,
+      selectedItem: {},
     };
   },
   components: {
     SlidingPagination,
     InventoriesForm,
+    InventoryAssignRoom,
   },
   emitters: ["form-close", "form-submit"],
   computed: mapGetters(["inventoryPagiData", "inventoryLoading"]),
   methods: {
-    ...mapActions(["fetchInventoryPagi", "createInventoryItem"]),
+    onAssignRoomSubmit(e) {
+      this.assignInventoryItemRoom({
+        id: this.selectedItem.id,
+        req: e,
+      }).then(() => {
+        this.loadPagi(this.currentPage);
+      });
+    },
+    ...mapActions([
+      "fetchInventoryPagi",
+      "createInventoryItem",
+      "assignInventoryItemRoom",
+    ]),
     dateStringToLocal,
     loadPagi(page) {
       this.fetchInventoryPagi(page).then(() => {

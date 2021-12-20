@@ -48,9 +48,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('buildings', BuildingController::class);
     Route::get('/buildings/search/{name}', [BuildingController::class, 'search']);
 
+
     Route::post('/rooms/{id}/unallocate', [RoomController::class, 'unallocate']);
     Route::post('/rooms/{id}/allocate', [RoomController::class, 'allocate']);
     Route::get('/rooms/unallocated', [RoomController::class, 'listUnallocated']);
+    Route::get('/rooms/all', [RoomController::class, 'getAll']);
     Route::resource('rooms', RoomController::class);
 
     Route::post('/inventories/{inventoryId}/allocate-room', [InventoryController::class, 'allocateRoom']);
@@ -108,35 +110,47 @@ Route::get('/reseed', function () {
             'status' => 'Stock',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Chair',
+            'item_type' => 'Fixture',
+            'serial_number' => generateRandomString(),
+            'status' => 'Stock',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Chair',
+            'item_type' => 'Fixture',
+            'serial_number' => generateRandomString(),
+            'status' => 'Stock',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]
     ]);
 
     DB::table('rooms')->insert([
         [
-            'id' => 1,
             'name' => 'Room 101',
             'room_type' => 'Room',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ],
         [
-            'id' => 2,
             'name' => 'Room 102',
             'room_type' => 'Room',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ],
         [
-            'id' => 3,
             'name' => 'Lab 201',
-            'item_type' => 'Lab',
+            'room_type' => 'Lab',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ],
         [
-            'id' => 4,
             'name' => 'Lab 202',
-            'item_type' => 'Lab',
+            'room_type' => 'Lab',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]

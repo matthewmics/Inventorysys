@@ -19,6 +19,7 @@ const actions = {
       const response = await agent.Inventory.list(page);
       commit("setInventoryPagiData", response);
     } catch (err) {
+      console.log(err);
     } finally {
       commit("setInventoryLoading", false);
     }
@@ -29,6 +30,17 @@ const actions = {
       const response = await agent.Inventory.create(req);
       commit("addNewInventoryItem", response);
     } catch (err) {
+      console.log(err);
+    } finally {
+      commit("setInventoryLoading", false);
+    }
+  },
+  async assignInventoryItemRoom({ commit }, {id, req}) {
+    commit("setInventoryLoading", true);
+    try {
+      await agent.Inventory.allocateRoom(id, req);
+    } catch (err) {
+      console.log(err);
     } finally {
       commit("setInventoryLoading", false);
     }

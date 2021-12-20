@@ -21,10 +21,7 @@
       :show="showForm"
       :building="buildingSelectedBuildingInForm"
     />
-    <md-progress-bar
-      v-if="buildingLoading || buildingFormLoading"
-      md-mode="indeterminate"
-    ></md-progress-bar>
+
     <div>
       <md-button
         class="md-raised md-primary"
@@ -37,7 +34,6 @@
           <h1 class="md-title">Buildings</h1>
         </md-table-toolbar>
 
-
         <md-table-row>
           <md-table-head style="width: 50%">Name</md-table-head>
           <md-table-head style="width: 22.5%">Created</md-table-head>
@@ -45,7 +41,7 @@
           <md-table-head>Actions</md-table-head>
         </md-table-row>
 
-         <md-table-row
+        <md-table-row
           v-if="!buildingsList.data || buildingsList.data.length === 0"
         >
           <md-table-cell><b>No records</b></md-table-cell>
@@ -86,6 +82,12 @@
               </span>
             </div>
           </md-table-cell>
+        </md-table-row>
+
+        <md-table-row v-if="buildingLoading || buildingFormLoading">
+          <td colspan="100%">
+            <md-progress-bar md-mode="indeterminate"></md-progress-bar>
+          </td>
         </md-table-row>
       </md-table>
 

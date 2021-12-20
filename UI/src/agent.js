@@ -52,6 +52,7 @@ const Building = {
 };
 
 const Room = {
+  listAll: () => requests.get(`/rooms/all`),
   list: (page) => requests.get(`/rooms?page=${page}`),
   listUnallocated: () => requests.get(`/rooms/unallocated`),
   create: (formValues) => requests.post(`/rooms`, formValues),
@@ -62,6 +63,8 @@ const Room = {
 const Inventory = {
   list: (page) => requests.get(`/inventories?page=${page}`),
   create: (formValues) => requests.post(`/inventories`, formValues),
+  allocateRoom: (id, req) =>
+    requests.post(`/inventories/${id}/allocate-room`, req),
 };
 
 const Account = {

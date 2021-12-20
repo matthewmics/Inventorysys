@@ -17,6 +17,11 @@ class RoomController extends Controller
         return Room::orderBy('id', 'ASC')->paginate(10);
     }
 
+    public function getAll()
+    {
+        return Room::orderBy('id', 'ASC')->get();
+    }
+
     public function allocate(Request $request, $id)
     {
         $room = Room::find($id);
