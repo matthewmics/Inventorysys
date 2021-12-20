@@ -68,4 +68,8 @@ export default {
   color: blue;
   cursor: pointer;
 }
+
+.md-table{
+  min-height: 370px;
+}
 </style>

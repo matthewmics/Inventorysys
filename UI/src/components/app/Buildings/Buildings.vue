@@ -63,7 +63,7 @@
             dateStringToLocal(building.updated_at)
           }}</md-table-cell>
           <md-table-cell>
-            <div>
+            <!-- <div>
               <span class="clickable" @click="openForm(building)"
                 ><md-icon style="margin-right: 15px; color: #43a047"
                   >edit</md-icon
@@ -80,7 +80,7 @@
                   >delete</md-icon
                 >
               </span>
-            </div>
+            </div> --> -
           </md-table-cell>
         </md-table-row>
 

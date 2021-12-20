@@ -22,22 +22,27 @@
         <p>Dashboard</p>
       </sidebar-link>
 
-      <sidebar-link to="/accounts">
+      <sidebar-link to="/accounts" v-if="loggedInUser.role === 'Admin'">
         <md-icon>people</md-icon>
         <p>Accounts</p>
       </sidebar-link>
 
-      <sidebar-link to="/buildings">
+      <sidebar-link to="/buildings" v-if="loggedInUser.role === 'Admin'">
         <md-icon>business</md-icon>
         <p>Buildings</p>
       </sidebar-link>
 
-      <sidebar-link to="/rooms">
+      <sidebar-link to="/rooms" v-if="loggedInUser.role === 'Admin'">
         <md-icon>meeting_room</md-icon>
         <p>Labs &amp; Rooms</p>
       </sidebar-link>
 
-      <sidebar-link to="/inventories">
+      <sidebar-link to="/inventories" v-if="loggedInUser.role === 'Admin'">
+        <md-icon>warehouse</md-icon>
+        <p>Inventory</p>
+      </sidebar-link>
+
+      <sidebar-link to="/inventory" v-if="loggedInUser.role === 'Custodian'">
         <md-icon>warehouse</md-icon>
         <p>Inventory</p>
       </sidebar-link>

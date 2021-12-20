@@ -8,6 +8,7 @@ const state = {
     id: 0,
     name: "",
     email: "",
+    role: "",
   },
   authLoading: false,
 };
