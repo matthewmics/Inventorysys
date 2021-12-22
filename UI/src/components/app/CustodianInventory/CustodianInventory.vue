@@ -1,5 +1,12 @@
 <template>
   <div class="content">
+    <CustodianInventoryRequestTransfer
+      :show="showRequestTransfer"
+      @form-close="showRequestTransfer = false"
+      @form-submit="requestTransferSubmit"
+      :item="selectedItem"
+    />
+
     <div>
       <md-table md-card>
         <md-table-toolbar>
@@ -32,10 +39,27 @@
             <!-- {{
             item.room_id  ? item.room.name : "-"
           }} -->
-            <span v-if="!item.room_id"></span>
+            <span v-if="!item.room_id">-</span>
             <span v-else>{{ item.room.name }}</span>
           </md-table-cell>
-          <md-table-cell> - </md-table-cell>
+          <md-table-cell>
+            <span
+              style="text-align: left"
+              v-if="item.transfer_status === 'Pending'"
+              >Transfer requested</span
+            >
+            <md-button
+              v-else
+              class="md-icon-button md-dense md-primary"
+              @click="
+                selectedItem = item;
+                showRequestTransfer = true;
+              "
+            >
+              <md-icon>import_export</md-icon>
+              <md-tooltip md-direction="top">Request Transfer</md-tooltip>
+            </md-button>
+          </md-table-cell>
         </md-table-row>
 
         <md-table-row>
@@ -61,6 +85,7 @@
 import SlidingPagination from "vue-sliding-pagination";
 import { dateStringToLocal } from "../../../helpers";
 import agent from "../../../agent";
+import CustodianInventoryRequestTransfer from "./CustodianInventoryRequestTransfer";
 export default {
   data() {
     return {
@@ -69,12 +94,24 @@ export default {
 
       inventoryItems: {},
       loading: false,
+
+      showRequestTransfer: false,
+
+      selectedItem: null,
     };
   },
+  emitters: ["form-close", "form-submit"],
   components: {
     SlidingPagination,
+    CustodianInventoryRequestTransfer,
   },
   methods: {
+    async requestTransferSubmit(e) {
+      this.loading = true;
+      await agent.ItemTransfer.create(e);
+      this.loadPagination(this.currentPage);
+      this.loading = false;
+    },
     pageChanged(e) {
       this.loadPagination(page);
     },

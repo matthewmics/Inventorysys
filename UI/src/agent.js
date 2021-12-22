@@ -75,6 +75,11 @@ const Account = {
 const Custodian = {
   listBuildings: (id) => requests.get(`/custodians/${id}/buildings`),
   listInventory: () => requests.get(`/custodian-inventory`),
+  listRooms: () => requests.get(`/custodian-rooms`),
+};
+
+const ItemTransfer = {
+  create: (req) => requests.post(`/item-transfer/create`, req),
 };
 
 const agent = {
@@ -84,6 +89,7 @@ const agent = {
   Inventory,
   Account,
   Custodian,
+  ItemTransfer,
 };
 
 export default agent;

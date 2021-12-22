@@ -5,6 +5,7 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustodianController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ItemTransferController;
 use App\Http\Controllers\RoomController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -48,7 +49,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('buildings', BuildingController::class);
     Route::get('/buildings/search/{name}', [BuildingController::class, 'search']);
 
-
     Route::post('/rooms/{id}/unallocate', [RoomController::class, 'unallocate']);
     Route::post('/rooms/{id}/allocate', [RoomController::class, 'allocate']);
     Route::get('/rooms/unallocated', [RoomController::class, 'listUnallocated']);
@@ -63,6 +63,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('/custodians/{id}/buildings', [CustodianController::class, 'custodianBuildings']);
     Route::get('/custodian-inventory', [CustodianController::class, 'custodianInventory']);
+    Route::get('/custodian-rooms', [CustodianController::class, 'custodianRooms']);
+
+    Route::post('/item-transfer/create', [ItemTransferController::class, 'create']);
 });
 
 
@@ -74,6 +77,8 @@ Route::get('/reseed', function () {
     DB::table('rooms')->delete();
     DB::table('buildings')->delete();
 
+
+    // USER ID MUST NOT BE THE SAME, JUST INCREMENT BY 1
     DB::table('users')->insert([
         [
             'id' => 1,
@@ -94,6 +99,9 @@ Route::get('/reseed', function () {
             'updated_at' => Carbon::now()
         ]
     ]);
+
+
+
     DB::table('inventories')->insert([
         [
             'name' => 'Desktop1',
