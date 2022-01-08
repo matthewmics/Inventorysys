@@ -91,7 +91,7 @@ export default {
 
       this.loading = true;
       try {
-        const response = await agent.Custodian.listRooms();
+        const response = await agent.Custodian.listRooms(this.item.room_id);
         this.rooms = response;
       } catch (err) {
         console.log(err);

@@ -12,6 +12,8 @@ import RoomAllocations from "../components/app/Buildings/RoomAllocations";
 import Inventories from "../components/app/Inventories/Inventories";
 import CustodianInventory from "../components/app/CustodianInventory/CustodianInventory";
 import Accounts from "../components/app/Accounts/Accounts";
+import TransferRequest from "../components/app/TransferRequest/TransferRequest";
+import TransferHistory from "../components/app/TransferRequest/TransferHistory";
 
 const routes = [
   {
@@ -23,6 +25,17 @@ const routes = [
         path: "dashboard",
         name: "Dashboard",
         component: Dashboard,
+      },
+      {
+        path: "transfer-request",
+        name: "Transfer Request",
+        component: TransferRequest,
+      },
+
+      {
+        path: "transfer-history",
+        name: "Transfer history",
+        component: TransferHistory,
       },
       {
         path: "accounts",

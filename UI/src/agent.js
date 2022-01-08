@@ -75,11 +75,15 @@ const Account = {
 const Custodian = {
   listBuildings: (id) => requests.get(`/custodians/${id}/buildings`),
   listInventory: () => requests.get(`/custodian-inventory`),
-  listRooms: () => requests.get(`/custodian-rooms`),
+  listRooms: (roomID) => requests.get(`/custodian-rooms?room_id=${roomID}`),
 };
 
 const ItemTransfer = {
   create: (req) => requests.post(`/item-transfer/create`, req),
+  list: () => requests.get(`/item-transfers`),
+  accept: (id) => requests.post(`/item-transfers/${id}/accept`, {}),
+  decline: (id) => requests.post(`/item-transfers/${id}/decline`, {}),
+  history: (page) => requests.get(`/transfer-history?page=${page}`),
 };
 
 const agent = {

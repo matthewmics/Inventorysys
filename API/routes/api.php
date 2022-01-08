@@ -66,6 +66,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/custodian-rooms', [CustodianController::class, 'custodianRooms']);
 
     Route::post('/item-transfer/create', [ItemTransferController::class, 'create']);
+    Route::get('/item-transfers', [ItemTransferController::class, 'transfersList']);
+    Route::get('/transfer-history', [ItemTransferController::class, 'transferHistory']);
+    Route::post('/item-transfers/{id}/accept', [ItemTransferController::class, 'acceptTransfer']);
+    Route::post('/item-transfers/{id}/decline', [ItemTransferController::class, 'declineTransfer']);
 });
 
 
@@ -81,20 +85,34 @@ Route::get('/reseed', function () {
     // USER ID MUST NOT BE THE SAME, JUST INCREMENT BY 1
     DB::table('users')->insert([
         [
-            'id' => 1,
-            'name' => 'Admin',
+            'name' => 'Admin User',
             'email' => 'admin@inventory.com',
-            'password' => bcrypt('admin'),
+            'password' => bcrypt('password'),
             'role' => 'Admin',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ],
         [
-            'id' => 2,
             'name' => 'Stella Grant',
             'email' => 'custodian1@inventory.com',
             'password' => bcrypt('password'),
             'role' => 'Custodian',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Mike Miller',
+            'email' => 'ppfo1@inventory.com',
+            'password' => bcrypt('password'),
+            'role' => 'PPFO',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Phillip Williams',
+            'email' => 'its1@inventory.com',
+            'password' => bcrypt('password'),
+            'role' => 'ITS',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]
@@ -189,7 +207,8 @@ Route::get('/reseed', function () {
 });
 
 
-function generateRandomString($length = 10) {
+function generateRandomString($length = 10)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomString = '';

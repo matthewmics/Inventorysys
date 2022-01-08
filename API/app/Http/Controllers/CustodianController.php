@@ -38,10 +38,13 @@ class CustodianController extends Controller
         return $result;
     }
 
-    public function custodianRooms()
+    public function custodianRooms(Request $request)
     {
+        $room_id = $request->input('room_id');
         $id = auth()->user()->id;
 
-        return Room::whereIn('building_id', CustodianBuilding::select('building_id')->where('user_id', $id))->get();
+        return Room::whereIn('building_id', CustodianBuilding::select('building_id')->where('user_id', $id))
+            ->where('id', '<>', $room_id)
+            ->get();
     }
 }

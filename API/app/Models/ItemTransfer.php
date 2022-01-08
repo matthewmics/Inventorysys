@@ -5,9 +5,28 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Room;
+use App\Models\User;
+use App\Models\Inventory;
+
 class ItemTransfer extends Model
 {
     use HasFactory;
 
     protected $fillable = ['room_id', 'user_id', 'inventory_id', 'status', 'item_type'];
+
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function inventory_item()
+    {
+        return $this->belongsTo(Inventory::class, 'inventory_id');
+    }
 }

@@ -22,10 +22,17 @@
         <p>Dashboard</p>
       </sidebar-link>
 
-      <sidebar-link
-        to="/accounts"
-        v-if="['Admin'].includes(loggedInUser.role)"
-      >
+      <sidebar-link to="/transfer-request" v-if="['PPFO','ITS'].includes(loggedInUser.role)">
+        <md-icon>grading</md-icon>
+        <p>Transfer Requests</p>
+      </sidebar-link>
+      
+      <sidebar-link to="/transfer-history" v-if="['PPFO','ITS'].includes(loggedInUser.role)">
+        <md-icon>history</md-icon>
+        <p>History</p>
+      </sidebar-link>
+
+      <sidebar-link to="/accounts" v-if="['Admin'].includes(loggedInUser.role)">
         <md-icon>people</md-icon>
         <p>Accounts</p>
       </sidebar-link>
@@ -38,10 +45,7 @@
         <p>Buildings</p>
       </sidebar-link>
 
-      <sidebar-link
-        to="/rooms"
-        v-if="['Admin'].includes(loggedInUser.role)"
-      >
+      <sidebar-link to="/rooms" v-if="['Admin'].includes(loggedInUser.role)">
         <md-icon>meeting_room</md-icon>
         <p>Labs &amp; Rooms</p>
       </sidebar-link>
