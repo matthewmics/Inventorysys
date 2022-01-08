@@ -41,7 +41,7 @@
       </md-tab>
 
       <!-- CUSTODIAN -->
-      <md-tab id="Custodian" md-label="Custodian">
+      <md-tab id="Custodian" md-label="Department">
         <md-table>
           <md-table-row>
             <md-table-head>Name</md-table-head>
