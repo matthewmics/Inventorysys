@@ -64,7 +64,7 @@ const routes = [
       },
       {
         path: "inventory",
-        name: "Inventory",
+        name: "Department Inventory",
         component: CustodianInventory,
       },
       {

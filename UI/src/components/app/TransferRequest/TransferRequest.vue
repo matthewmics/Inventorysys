@@ -35,7 +35,9 @@
 
       <md-table-row v-for="row in transferList" :key="row.id">
         <md-table-cell>{{ row.user.name }}</md-table-cell>
-        <md-table-cell>{{ row.inventory_item.room.name }}</md-table-cell>
+        <md-table-cell>{{
+          row.inventory_item.room ? row.inventory_item.room.name : "Inventory"
+        }}</md-table-cell>
         <md-table-cell>{{ row.room.name }}</md-table-cell>
         <md-table-cell>{{ dateStringToLocal(row.created_at) }}</md-table-cell>
         <md-table-cell>
