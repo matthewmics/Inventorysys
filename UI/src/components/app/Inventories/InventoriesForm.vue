@@ -101,7 +101,7 @@ export default {
         name: this.form.name,
         item_type: this.form.item_type,
         serial_number: this.form.serial_number,
-        status: "Stock",
+        status: "Working",
       };
       this.$emit("form-submit", request);
 

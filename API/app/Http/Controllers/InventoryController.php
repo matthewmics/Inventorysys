@@ -45,6 +45,8 @@ class InventoryController extends Controller
             'serial_number' => 'required'
         ]);
 
+        $request->status = 'Working';
+
         return Inventory::create($request->all());
     }
 
