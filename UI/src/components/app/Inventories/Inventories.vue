@@ -49,12 +49,15 @@
         </md-table-row>
 
         <md-table-row v-for="item in inventoryPagiData.data" :key="item.id">
-          <md-table-cell
-            >{{ item.name }}
+          <md-table-cell>
+            {{ item.name }}
+            <div style="font-size: 11px; color: #616161">
+              {{ "BRAND: " + item.brand }}
+            </div>
             <div style="font-size: 11px; color: #616161">
               {{ "SN: " + item.serial_number }}
-            </div></md-table-cell
-          >
+            </div>
+          </md-table-cell>
           <md-table-cell>{{ item.item_type }}</md-table-cell>
           <md-table-cell>{{ item.status }}</md-table-cell>
           <md-table-cell>

@@ -18,11 +18,25 @@
             Name is required
           </span>
         </md-field>
+          <md-field :class="getValidationClass('brand')">
+          <label for="brand">Brand</label>
+          <md-input id="brand" name="brand" v-model="form.brand" />
+          <span class="md-error" v-if="!$v.form.name.required">
+            Name is required
+          </span>
+        </md-field>
         <md-field>
           <label for="item_type">Type</label>
           <md-select v-model="form.item_type" name="item_type" id="item_type">
             <md-option value="PC">PC</md-option>
             <md-option value="Fixture">Fixture</md-option>
+          </md-select>
+        </md-field>
+         <md-field>
+          <label for="item_type">Status</label>
+          <md-select v-model="form.status">
+            <md-option value="Working">Working</md-option>
+            <md-option value="Not Working">Not Working</md-option>
           </md-select>
         </md-field>
         <md-field :class="getValidationClass('serial_number')">
@@ -60,6 +74,9 @@ export default {
       serial_number: {
         required,
       },
+      brand: {
+        required,
+      },
     },
   },
   data() {
@@ -67,6 +84,8 @@ export default {
       form: {
         name: "",
         item_type: "",
+        brand: "",
+        status: "",
         serial_number: "",
       },
     };
@@ -90,7 +109,9 @@ export default {
     onOpen() {
       this.form.name = "";
       this.form.item_type = "PC";
-      this.form.status = "";
+      this.form.status = "Working";
+      this.form.brand = "";
+      this.form.serial_number = "";
     },
     onSubmit(e) {
       this.$v.$touch();
@@ -101,7 +122,8 @@ export default {
         name: this.form.name,
         item_type: this.form.item_type,
         serial_number: this.form.serial_number,
-        status: "Working",
+        status: this.form.status,
+        brand: this.form.brand,
       };
       this.$emit("form-submit", request);
 
