@@ -1,5 +1,17 @@
 <template>
   <div class="content">
+    <md-dialog-confirm
+      :md-active.sync="deleteDialog"
+      md-title="Delete"
+      :md-content="`Are you sure you want to delete <b>${
+        selectedItem ? selectedItem.name : ''
+      }</b>?`"
+      md-confirm-text="Yes"
+      md-cancel-text="Cancel"
+      @md-cancel="deleteDialog = false"
+      @md-confirm="onDeleteItem()"
+    />
+
     <rooms-form
       :show="showForm"
       @form-close="showForm = false"
@@ -46,25 +58,28 @@
             dateStringToLocal(room.created_at)
           }}</md-table-cell>
           <md-table-cell>
-            <!-- <div>
-              <span class="clickable"
-                ><md-icon style="margin-right: 15px; color: #43a047"
-                  >edit</md-icon
-                ></span
+            <div>
+              <span
+                class="clickable"
+                @click="
+                  selectedItem = room;
+                  deleteDialog = true;
+                "
               >
-              <span class="clickable">
                 <md-icon class="clickable" style="color: #e53935"
-                  >delete</md-icon
-                >
+                  >delete
+                </md-icon>
               </span>
-            </div> -->
-            -
+            </div>
           </md-table-cell>
         </md-table-row>
 
         <md-table-row>
           <td colspan="100%">
-            <md-progress-bar v-if="roomLoading" md-mode="indeterminate">
+            <md-progress-bar
+              v-if="roomLoading || loading"
+              md-mode="indeterminate"
+            >
             </md-progress-bar>
           </td>
         </md-table-row>
@@ -85,6 +100,7 @@ import { mapGetters, mapActions } from "vuex";
 import SlidingPagination from "vue-sliding-pagination";
 import { dateStringToLocal } from "../../../helpers";
 import RoomsForm from "./RoomsForm";
+import agent from "../../../agent";
 
 export default {
   data() {
@@ -92,6 +108,10 @@ export default {
       currentPage: 1,
       totalPage: 1,
       showForm: false,
+
+      selectedItem: {},
+      deleteDialog: false,
+      loading: false,
     };
   },
   components: {
@@ -101,6 +121,18 @@ export default {
   emitters: ["form-close"],
   computed: mapGetters(["roomPagiData", "roomLoading"]),
   methods: {
+    async onDeleteItem() {
+      this.loading = true;
+      try {
+        await agent.Room.delete(this.selectedItem.id);
+
+        this.loadPagi(this.currentPage);
+      } catch (err) {
+        alert("Something went wrong while deleting " + this.selectedItem.name);
+      } finally {
+        this.loading = false;
+      }
+    },
     onFormSubmit(request) {
       this.addNewRoom(request);
     },

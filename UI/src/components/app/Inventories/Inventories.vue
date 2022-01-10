@@ -1,5 +1,17 @@
 <template>
   <div class="content">
+    <md-dialog-confirm
+      :md-active.sync="deleteDialog"
+      md-title="Delete"
+      :md-content="`Are you sure you want to delete <b>${
+        selectedItem ? selectedItem.name : ''
+      }</b>?`"
+      md-confirm-text="Yes"
+      md-cancel-text="Cancel"
+      @md-cancel="deleteDialog = false"
+      @md-confirm="onDeleteItem()"
+    />
+
     <InventoriesForm
       :show="showForm"
       @form-close="showForm = false"
@@ -67,12 +79,29 @@
           <!-- <md-table-cell>{{
             dateStringToLocal(item.updated_at)
           }}</md-table-cell> -->
-          <md-table-cell> - </md-table-cell>
+          <md-table-cell>
+            <div>
+              <span
+                class="clickable"
+                @click="
+                  selectedItem = item;
+                  deleteDialog = true;
+                "
+              >
+                <md-icon class="clickable" style="color: #e53935"
+                  >delete
+                </md-icon>
+              </span>
+            </div>
+          </md-table-cell>
         </md-table-row>
 
         <md-table-row>
           <td colspan="100%">
-            <md-progress-bar v-if="inventoryLoading" md-mode="indeterminate">
+            <md-progress-bar
+              v-if="inventoryLoading || loading"
+              md-mode="indeterminate"
+            >
             </md-progress-bar>
           </td>
         </md-table-row>
@@ -94,6 +123,7 @@ import SlidingPagination from "vue-sliding-pagination";
 import { dateStringToLocal } from "../../../helpers";
 import InventoriesForm from "./InventoriesForm";
 import InventoryAssignRoom from "./InventoryAssignRoom";
+import agent from "../../../agent";
 
 export default {
   data() {
@@ -103,6 +133,8 @@ export default {
       totalPage: 1,
       showAssignRoom: false,
       selectedItem: {},
+      loading: false,
+      deleteDialog: false,
     };
   },
   components: {
@@ -113,6 +145,18 @@ export default {
   emitters: ["form-close", "form-submit"],
   computed: mapGetters(["inventoryPagiData", "inventoryLoading"]),
   methods: {
+    async onDeleteItem() {
+      this.loading = true;
+      try {
+        await agent.Inventory.delete(this.selectedItem.id);
+
+        this.loadPagi(this.currentPage);
+      } catch (err) {
+        alert("Something went wrong while deleting " + this.selectedItem.name);
+      } finally {
+        this.loading = false;
+      }
+    },
     onAssignRoomSubmit(e) {
       this.assignInventoryItemRoom({
         id: this.selectedItem.id,
