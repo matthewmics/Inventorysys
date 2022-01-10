@@ -75,11 +75,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::get('/reseed', function () {
 
+    DB::table('transfer_histories')->delete();
+    DB::table('item_transfers')->delete();
     DB::table('custodian_building')->delete();
     DB::table('users')->delete();
     DB::table('inventories')->delete();
     DB::table('rooms')->delete();
     DB::table('buildings')->delete();
+
 
 
     // USER ID MUST NOT BE THE SAME, JUST INCREMENT BY 1
@@ -91,117 +94,114 @@ Route::get('/reseed', function () {
             'role' => 'Admin',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Stella Grant',
+            'email' => 'custodian1@inventory.com',
+            'password' => bcrypt('password'),
+            'role' => 'Custodian',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Mike Miller',
+            'email' => 'ppfo1@inventory.com',
+            'password' => bcrypt('password'),
+            'role' => 'PPFO',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Phillip Williams',
+            'email' => 'its1@inventory.com',
+            'password' => bcrypt('password'),
+            'role' => 'ITS',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]
-        // [
-        //     'name' => 'Stella Grant',
-        //     'email' => 'custodian1@inventory.com',
-        //     'password' => bcrypt('password'),
-        //     'role' => 'Custodian',
-        //     'created_at' => Carbon::now(),
-        //     'updated_at' => Carbon::now()
-        // ],
-        // [
-        //     'name' => 'Mike Miller',
-        //     'email' => 'ppfo1@inventory.com',
-        //     'password' => bcrypt('password'),
-        //     'role' => 'PPFO',
-        //     'created_at' => Carbon::now(),
-        //     'updated_at' => Carbon::now()
-        // ],
-        // [
-        //     'name' => 'Phillip Williams',
-        //     'email' => 'its1@inventory.com',
-        //     'password' => bcrypt('password'),
-        //     'role' => 'ITS',
-        //     'created_at' => Carbon::now(),
-        //     'updated_at' => Carbon::now()
-        // ]
     ]);
 
 
 
-    // DB::table('inventories')->insert([
-    //     [
-    //         'name' => 'Desktop1',
-    //         'item_type' => 'PC',
-    //         'serial_number' => generateRandomString(),
-    //         'status' => 'Stock',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'name' => 'Desktop2',
-    //         'item_type' => 'PC',
-    //         'serial_number' => generateRandomString(),
-    //         'status' => 'Stock',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'name' => 'Chair',
-    //         'item_type' => 'Fixture',
-    //         'serial_number' => generateRandomString(),
-    //         'status' => 'Stock',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'name' => 'Chair',
-    //         'item_type' => 'Fixture',
-    //         'serial_number' => generateRandomString(),
-    //         'status' => 'Stock',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ]
-    // ]);
+    DB::table('inventories')->insert([
+        [
+            'name' => 'Desktop1',
+            'item_type' => 'PC',
+            'serial_number' => generateRandomString(),
+            'status' => 'Stock',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Desktop2',
+            'item_type' => 'PC',
+            'serial_number' => generateRandomString(),
+            'status' => 'Stock',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Chair',
+            'item_type' => 'Fixture',
+            'serial_number' => generateRandomString(),
+            'status' => 'Stock',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Chair',
+            'item_type' => 'Fixture',
+            'serial_number' => generateRandomString(),
+            'status' => 'Stock',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]
+    ]);
 
-    // DB::table('rooms')->insert([
-    //     [
-    //         'name' => 'Room 101',
-    //         'room_type' => 'Room',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'name' => 'Room 102',
-    //         'room_type' => 'Room',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'name' => 'Lab 201',
-    //         'room_type' => 'Lab',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'name' => 'Lab 202',
-    //         'room_type' => 'Lab',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ]
-    // ]);
+    DB::table('rooms')->insert([
+        [
+            'name' => 'Room 101',
+            'room_type' => 'Room',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Room 102',
+            'room_type' => 'Room',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Lab 201',
+            'room_type' => 'Lab',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Lab 202',
+            'room_type' => 'Lab',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]
+    ]);
 
-    // DB::table('buildings')->insert([
-    //     [
-    //         'id' => 1,
-    //         'name' => 'Building 1',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'id' => 2,
-    //         'name' => 'Building 2',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ],
-    //     [
-    //         'id' => 3,
-    //         'name' => 'Building 3',
-    //         'created_at' => Carbon::now(),
-    //         'updated_at' => Carbon::now()
-    //     ]
-    // ]);
+    DB::table('buildings')->insert([
+        [
+            'name' => 'Building 1',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Building 2',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ],
+        [
+            'name' => 'Building 3',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]
+    ]);
 
     return "Database has been reseeded";
 });

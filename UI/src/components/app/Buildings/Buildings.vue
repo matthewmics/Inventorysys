@@ -9,10 +9,7 @@
       md-confirm-text="Yes"
       md-cancel-text="Cancel"
       @md-cancel="deleteDialog = false"
-      @md-confirm="
-        deleteBuilding(selectedBuilding.id);
-        deleteDialog = false;
-      "
+      @md-confirm="onDeleteBuilding(selectedBuilding.id)"
     />
 
     <BuildingsForm
@@ -63,7 +60,7 @@
             dateStringToLocal(building.updated_at)
           }}</md-table-cell>
           <md-table-cell>
-            <!-- <div>
+            <div>
               <span class="clickable" @click="openForm(building)"
                 ><md-icon style="margin-right: 15px; color: #43a047"
                   >edit</md-icon
@@ -80,7 +77,7 @@
                   >delete</md-icon
                 >
               </span>
-            </div> --> -
+            </div>
           </md-table-cell>
         </md-table-row>
 
@@ -137,6 +134,16 @@ export default {
       "setSelectedBuildingInForm",
       "deleteBuilding",
     ]),
+    onDeleteBuilding(id) {
+      try {
+        deleteBuilding(id);
+      } catch (err) {
+        alert(
+          "Something went wrong while deleting " + this.selectedBuilding.name
+        );
+      }
+      deleteDialog = false;
+    },
     pageChanged(page) {
       this.loadBuildingList(page);
     },

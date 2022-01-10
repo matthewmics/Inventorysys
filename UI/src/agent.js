@@ -58,6 +58,7 @@ const Room = {
   create: (formValues) => requests.post(`/rooms`, formValues),
   allocate: (id, val) => requests.post(`/rooms/${id}/allocate`, val),
   unallocate: (id) => requests.post(`/rooms/${id}/unallocate`, {}),
+  delete: (id) => requests.delete(`/rooms/${id}`),
 };
 
 const Inventory = {
@@ -65,6 +66,7 @@ const Inventory = {
   create: (formValues) => requests.post(`/inventories`, formValues),
   allocateRoom: (id, req) =>
     requests.post(`/inventories/${id}/allocate-room`, req),
+  delete: (id) => requests.delete(`/inventories/${id}`),
 };
 
 const Account = {
