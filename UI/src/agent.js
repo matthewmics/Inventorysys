@@ -76,7 +76,7 @@ const Account = {
 
 const Custodian = {
   listBuildings: (id) => requests.get(`/custodians/${id}/buildings`),
-  listInventory: () => requests.get(`/custodian-inventory`),
+  listInventory: (page) => requests.get(`/custodian-inventory?page=${page}`),
   listRooms: (roomID) => requests.get(`/custodian-rooms?room_id=${roomID}`),
 };
 

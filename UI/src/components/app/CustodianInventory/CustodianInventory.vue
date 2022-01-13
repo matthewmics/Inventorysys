@@ -118,7 +118,7 @@ export default {
     async loadInventory(page) {
       this.loading = true;
       try {
-        const response = await agent.Custodian.listInventory();
+        const response = await agent.Custodian.listInventory(page);
         this.inventoryItems = response;
       } catch (err) {
         console.log(err);
