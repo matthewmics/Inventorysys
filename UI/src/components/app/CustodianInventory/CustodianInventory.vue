@@ -113,7 +113,7 @@ export default {
       this.loading = false;
     },
     pageChanged(e) {
-      this.loadPagination(page);
+      this.loadPagination(e);
     },
     async loadInventory(page) {
       this.loading = true;
