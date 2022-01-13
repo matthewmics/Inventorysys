@@ -136,13 +136,13 @@ export default {
     ]),
     onDeleteBuilding(id) {
       try {
-        deleteBuilding(id);
+        this.deleteBuilding(id);
       } catch (err) {
         alert(
           "Something went wrong while deleting " + this.selectedBuilding.name
         );
       }
-      deleteDialog = false;
+      this.deleteDialog = false;
     },
     pageChanged(page) {
       this.loadBuildingList(page);
