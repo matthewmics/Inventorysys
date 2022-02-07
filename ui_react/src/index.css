@@ -11,3 +11,25 @@
 body {
   background-color: #fafafa !important;
 }
+
+.page-header-title {
+  font-weight: 900;
+  font-size: 17px;
+  font-family: "Verdana";
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.float-r {
+  float: right;
+}
+
+div.disp-ib {
+  display: inline-block;
+}
+
+.clearfix {
+  overflow: auto;
+}

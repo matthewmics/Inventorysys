@@ -1,8 +1,10 @@
 import React, { Fragment } from "react";
 
 import { Dropdown, Icon, Menu, Label } from "semantic-ui-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import { history } from "../..";
+import { DashboardContent } from "./DashboardContent";
+import { UserComponent } from "../Users/UserComponent";
 
 export const DashboardLayout = () => {
   return (
@@ -24,7 +26,12 @@ export const DashboardLayout = () => {
       <Menu
         inverted
         vertical
-        style={{ height: "100vh", position: "absolute", margin: "0", top: "0" }}
+        style={{
+          height: "100vh",
+          position: "fixed",
+          margin: "0",
+          top: "0",
+        }}
       >
         <Menu.Item>
           <h4>Inventory System</h4>
@@ -75,7 +82,15 @@ export const DashboardLayout = () => {
         </Menu.Item>
       </Menu>
 
-      <div style={{ marginLeft: "16rem" }}>Content goes here.</div>
+      <div style={{ marginLeft: "16rem", paddingRight: "1em" }}>
+        <Switch>
+          <Route path="/dashboard" component={DashboardContent} />
+          <Route path="/users" component={UserComponent} />
+          <Route path="/">
+            <Redirect to="/dashboard" />
+          </Route>
+        </Switch>
+      </div>
     </Fragment>
   );
 };
