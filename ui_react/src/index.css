@@ -1,0 +1,13 @@
+.link-active {
+  font-weight: bold;
+  color: white !important;
+}
+
+.link-active .icon,
+.link-active span {
+  color: white !important;
+}
+
+body {
+  background-color: #fafafa !important;
+}
