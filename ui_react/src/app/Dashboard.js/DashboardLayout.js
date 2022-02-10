@@ -5,11 +5,14 @@ import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import { history } from "../..";
 import { DashboardContent } from "./DashboardContent";
 import { UserComponent } from "../Users/UserComponent";
+import { BuildingComponent } from "../Buildings/BuildingComponent";
+import { RoomComponent } from "../Rooms/RoomComponent";
+import { InventoryContent } from "../Inventory/InventoryContent";
 
 export const DashboardLayout = () => {
   return (
     <Fragment>
-      <Menu inverted style={{}}>
+      <Menu inverted style={{ marginTop: "0px" }}>
         <Menu.Menu position="right">
           <Dropdown item text="Admin User">
             <Dropdown.Menu>
@@ -31,6 +34,7 @@ export const DashboardLayout = () => {
           position: "fixed",
           margin: "0",
           top: "0",
+          overflowY: "auto",
         }}
       >
         <Menu.Item>
@@ -86,6 +90,9 @@ export const DashboardLayout = () => {
         <Switch>
           <Route path="/dashboard" component={DashboardContent} />
           <Route path="/users" component={UserComponent} />
+          <Route path="/buildings" component={BuildingComponent} />
+          <Route path="/rooms" component={RoomComponent} />
+          <Route path="/inventory" component={InventoryContent} />
           <Route path="/">
             <Redirect to="/dashboard" />
           </Route>

@@ -18,8 +18,9 @@ class CreateUsers extends Migration
         DB::table('users')->insert([
             [
                 'id' => 1,
-                'name' => 'Admin',
+                'name' => 'Admin User',
                 'email' => 'admin@localhost.com',
+                'role' => 'admin',
                 'password' => bcrypt('password'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()

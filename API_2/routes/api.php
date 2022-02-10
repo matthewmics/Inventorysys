@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\RfidController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -41,24 +43,12 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
+    Route::post('users/{id}/change-password', [UserController::class, 'changePassword']);
+    Route::post('users', [UserController::class, 'create']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
     Route::get('/users', [UserController::class, 'list']);
     Route::get('/users/{id}', [UserController::class, 'find']);
 
+    Route::resource('buildings', BuildingController::class);
+    Route::resource('rooms', RoomController::class);
 });
-
-
-// Route::get('/reseed', function () {
-//     DB::table('users')->delete();
-//     DB::table('users')->insert([
-//         [
-//             'id' => 1,
-//             'name' => 'Admin',
-//             'email' => 'admin@localhost.com',
-//             'password' => bcrypt('admin'),
-//             'created_at' => Carbon::now(),
-//             'updated_at' => Carbon::now()
-//         ]
-//     ]);
-
-//     return 'Database has been reseeded';
-// });

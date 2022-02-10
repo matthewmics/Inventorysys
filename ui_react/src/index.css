@@ -33,3 +33,16 @@ div.disp-ib {
 .clearfix {
   overflow: auto;
 }
+
+.cellcenterparent{
+  width: 100%;
+  height: 100%;
+  display: table;
+  position: fixed;
+}
+
+.cellcentercontent{
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}

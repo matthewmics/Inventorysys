@@ -14,13 +14,12 @@ import {
   Select,
 } from "semantic-ui-react";
 import agent from "../../agent";
+import { dateStringToLocal } from "../../helpers";
 import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
 import { roleOptions } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
 
-export const UserComponent = () => {
-  const { user } = useSelector((state) => state.auth);
-
+export const BuildingComponent = () => {
   const columns = [
     {
       name: "Name",
@@ -28,28 +27,25 @@ export const UserComponent = () => {
       sortable: true,
     },
     {
-      name: "Role",
-      selector: (row) => row.role,
+      name: "Date Created",
+      selector: (row) => row.created_at,
       sortable: true,
     },
     {
       name: "Actions",
       selector: (row) => row.actions,
-      grow: true,
+      right: true,
     },
   ];
 
   const formDefaultValue = {
     name: "",
-    email: "",
-    role: "department",
-    password: "",
-    password_confirmation: "",
+    id: 0,
   };
 
-  const [archiveUser, setArchiveUser] = useState({
+  const [archive, setArchive] = useState({
     loading: false,
-    user: null,
+    data: null,
     open: false,
   });
 
@@ -62,29 +58,45 @@ export const UserComponent = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  const loadUsers = async () => {
+  const loadBuildings = async () => {
     setLoading(true);
-    let response = await agent.User.list();
+    let response = await agent.Building.list();
     response = response.map((a) => {
       return {
         ...a,
+        created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
-            {user.id !== a.id && (
-              <Popup
-                content="Archive User"
-                trigger={
-                  <Button
-                    icon="archive"
-                    circular
-                    size="tiny"
-                    onClick={() => {
-                      setArchiveUser({ user: a, loading: false, open: true });
-                    }}
-                  />
-                }
-              />
-            )}
+            <Popup
+              content="Edit Building"
+              trigger={
+                <Button
+                  icon="pencil"
+                  circular
+                  size="tiny"
+                  onClick={() => {
+                    setFormValue({
+                      id: a.id,
+                      name: a.name,
+                    });
+                    setModalFormOpen(true);
+                  }}
+                />
+              }
+            />
+            <Popup
+              content="Archive Building"
+              trigger={
+                <Button
+                  icon="archive"
+                  circular
+                  size="tiny"
+                  onClick={() => {
+                    setArchive({ ...archive, open: true, data: a });
+                  }}
+                />
+              }
+            />
           </>
         ),
       };
@@ -94,14 +106,26 @@ export const UserComponent = () => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    loadBuildings();
+  }, []);
+
   const onFormSubmit = async () => {
     setFormErrors(null);
     setFormLoading(true);
     try {
-      await agent.User.create({ ...formValue });
-      loadUsers();
-      setModalFormOpen(false);
-      toast.success("User created successfully");
+      const { id, ...req } = formValue;
+      if (formValue.id === 0) {
+        await agent.Building.create({ ...req });
+        toast.success("Building created successfully");
+        loadBuildings();
+        setModalFormOpen(false);
+      } else {
+        await agent.Building.update({ ...req }, formValue.id);
+        toast.success("Building updated successfully");
+        loadBuildings();
+        setModalFormOpen(false);
+      }
     } catch (err) {
       setFormErrors(err.data.errors);
     } finally {
@@ -109,52 +133,50 @@ export const UserComponent = () => {
     }
   };
 
-  const onArchiveUser = async () => {
-    setArchiveUser({ ...archiveUser, loading: true });
-    await agent.User.delete(archiveUser.user.id);
-    setArchiveUser({ ...archiveUser, loading: false, open: false });
-    loadUsers();
-    toast.success("Successfully archived " + archiveUser.user.name);
+  const onArchive = async () => {
+    setArchive({ ...archive, loading: true });
+    await agent.Building.delete(archive.data.id);
+    toast.success("Building archived successfully");
+    setArchive({ ...archive, loading: false, open: false });
+    loadBuildings();
   };
 
   const handleTextInputChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
-
   return (
     <>
       {/* MODAL ARCHIVE */}
-      <Modal size="tiny" open={archiveUser.open} closeOnDimmerClick={false}>
+      <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
         <Modal.Header>Confirm archive</Modal.Header>
         <Modal.Content>
-          Are you sure you want to archive {archiveUser.user?.name} ?
+          Are you sure you want to archive {archive.data?.name} ?
         </Modal.Content>
         <Modal.Actions>
           <Button
             negative
-            loading={archiveUser.loading}
-            disabled={archiveUser.loading}
-            onClick={() => setArchiveUser({ ...archiveUser, open: false })}
+            loading={archive.loading}
+            disabled={archive.loading}
+            onClick={() => setArchive({ ...archive, open: false })}
           >
             Cancel
           </Button>
           <Button
-            loading={archiveUser.loading}
-            disabled={archiveUser.loading}
+            loading={archive.loading}
+            disabled={archive.loading}
             positive
-            onClick={() => onArchiveUser()}
+            onClick={() => onArchive()}
           >
             Yes
           </Button>
         </Modal.Actions>
       </Modal>
-      {/* MODAL CREATE */}
+      {/* MODAL FORM */}
       <Modal size="tiny" open={modalFormOpen} closeOnDimmerClick={false}>
-        <Modal.Header>Create new account</Modal.Header>
+        <Modal.Header>
+          {formValue.id === 0 ? "Create new building" : `Edit building`}
+        </Modal.Header>
         <Modal.Content>
           {formErrors && <ErrorMessage errors={formErrors} />}
           <Form>
@@ -163,46 +185,7 @@ export const UserComponent = () => {
               <input
                 name="name"
                 value={formValue.name}
-                placeholder="Fullname"
-                onChange={handleTextInputChange}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Email</label>
-              <input
-                name="email"
-                value={formValue.email}
-                placeholder="Email"
-                onChange={handleTextInputChange}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Role</label>
-              <Select
-                onChange={(e, data) => {
-                  setFormValue({ ...formValue, role: data.value });
-                }}
-                value={formValue.role}
-                options={roleOptions}
-              ></Select>
-            </Form.Field>
-            <Form.Field>
-              <label>Password</label>
-              <input
-                name="password"
-                value={formValue.password}
-                type="password"
-                placeholder="Password"
-                onChange={handleTextInputChange}
-              />
-            </Form.Field>
-            <Form.Field>
-              <label>Password Confirmation</label>
-              <input
-                name="password_confirmation"
-                value={formValue.password_confirmation}
-                type="password"
-                placeholder="Password Confirmation"
+                placeholder="Building name"
                 onChange={handleTextInputChange}
               />
             </Form.Field>
@@ -227,10 +210,9 @@ export const UserComponent = () => {
         </Modal.Actions>
       </Modal>
 
-      {/* AFTER MODAL */}
       <div>
         <div className="page-header-title">
-          USERS <Loader active={loading} inline size="tiny" />
+          BUILDINGS <Loader active={loading} inline size="tiny" />
         </div>
         <hr></hr>
       </div>
@@ -254,7 +236,7 @@ export const UserComponent = () => {
               setModalFormOpen(true);
             }}
           >
-            <Icon name="add" /> Create User
+            <Icon name="add" /> Create Building
           </Button>
         </div>
       </div>

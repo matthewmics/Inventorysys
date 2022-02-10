@@ -41,12 +41,32 @@ const User = {
   login: (formValues) => requests.post("/auth/login", formValues),
   currentUser: () => requests.get("/auth/me"),
   logout: () => requests.post("/auth/logout"),
-  list: (page) => requests.get(`/users?page=${page}`),
+  list: () => requests.get(`/users`),
   find: (id) => requests.get(`/users/${id}`),
+  changePassword: (id, request) =>
+    requests.post(`/users/${id}/change-password`, request),
+  create: (request) => requests.post(`/users`, request),
+  delete: (id) => requests.delete(`/users/${id}`),
+};
+
+const Building = {
+  list: () => requests.get("/buildings"),
+  create: (request) => requests.post("/buildings", request),
+  update: (request, id) => requests.put(`/buildings/${id}`, request),
+  delete: (id) => requests.delete(`/buildings/${id}`),
+};
+
+const Room = {
+  list: () => requests.get("/rooms"),
+  create: (request) => requests.post("/rooms", request),
+  update: (request, id) => requests.put(`/rooms/${id}`, request),
+  delete: (id) => requests.delete(`/rooms/${id}`),
 };
 
 const agent = {
   User,
+  Building,
+  Room
 };
 
 export default agent;
