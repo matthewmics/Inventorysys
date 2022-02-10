@@ -8,4 +8,11 @@ export const roleOptions = [
 export const roomTypeOptions = [
   { value: "room", text: "Room" },
   { value: "lab", text: "Lab" },
-]
+];
+
+export const itemTypeOptions = [
+  { value: "PC", text: "PC" },
+  { value: "Fixture", text: "Fixture" },
+  { value: "Electrical", text: "Electrical" },
+  { value: "Toiletry", text: "Toiletry" },
+];

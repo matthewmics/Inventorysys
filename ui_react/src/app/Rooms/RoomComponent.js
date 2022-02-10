@@ -54,6 +54,10 @@ export const RoomComponent = () => {
       right: true,
     },
   ];
+  
+  const handleTextInputChange = (e) => {
+    setFormValue({ ...formValue, [e.target.name]: e.target.value });
+  };
 
   const formDefaultValue = {
     name: "",
@@ -158,7 +162,7 @@ export const RoomComponent = () => {
         loadRooms();
         setModalFormOpen(false);
       } else {
-        await agent.Room.update({ ...req }, formValue.id);
+        await agent.Room.update(req, formValue.id);
         toast.success("Room updated successfully");
         loadRooms();
         setModalFormOpen(false);
@@ -178,9 +182,6 @@ export const RoomComponent = () => {
     loadRooms();
   };
 
-  const handleTextInputChange = (e) => {
-    setFormValue({ ...formValue, [e.target.name]: e.target.value });
-  };
 
   useEffect(() => {
     loadRooms();

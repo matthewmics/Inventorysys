@@ -63,10 +63,18 @@ const Room = {
   delete: (id) => requests.delete(`/rooms/${id}`),
 };
 
+const Inventory = {
+  parentList: () => requests.get("/inventory/parents"),
+  parentCreate: (request) => requests.post("/inventory/parents", request),
+  parentUpdate: (request, id) => requests.put(`/inventory/parents/${id}`, request),
+  parentDelete: (id) => requests.delete(`/inventory/parents/${id}`),
+};
+
 const agent = {
   User,
   Building,
-  Room
+  Room,
+  Inventory,
 };
 
 export default agent;

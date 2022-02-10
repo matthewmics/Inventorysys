@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Models\InventoryParentItem;
+use App\Models\InventoryItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -51,4 +54,13 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
 
     Route::resource('buildings', BuildingController::class);
     Route::resource('rooms', RoomController::class);
+
+    Route::get('/inventory/parents', [InventoryController::class, 'getItemParents']);
+    Route::post('/inventory/parents', [InventoryController::class, 'createItemParent']);
+    Route::get('/inventory/parents/{id}', [InventoryController::class, 'getItems']);
+    Route::put('/inventory/parents/{id}', [InventoryController::class, 'updateItemParent']);
+    Route::delete('/inventory/parents/{id}', [InventoryController::class, 'deleteItemParent']);
+
+    Route::post('/inventory/items', [InventoryController::class, 'createItem']);
+
 });

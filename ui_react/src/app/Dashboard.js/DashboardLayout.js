@@ -8,13 +8,16 @@ import { UserComponent } from "../Users/UserComponent";
 import { BuildingComponent } from "../Buildings/BuildingComponent";
 import { RoomComponent } from "../Rooms/RoomComponent";
 import { InventoryContent } from "../Inventory/InventoryContent";
+import { useSelector } from "react-redux";
 
 export const DashboardLayout = () => {
+  const { user } = useSelector((state) => state.auth);
+
   return (
     <Fragment>
       <Menu inverted style={{ marginTop: "0px" }}>
         <Menu.Menu position="right">
-          <Dropdown item text="Admin User">
+          <Dropdown item text={user.name}>
             <Dropdown.Menu>
               <Dropdown.Item>
                 {" "}
@@ -39,8 +42,15 @@ export const DashboardLayout = () => {
       >
         <Menu.Item>
           <h4>Inventory System</h4>
-          <Label style={{ float: "initial", margin: "0" }} size="small">
-            Admin
+          <Label
+            style={{
+              float: "initial",
+              margin: "0",
+              textTransform: "capitalize",
+            }}
+            size="small"
+          >
+            {user.role}
           </Label>
         </Menu.Item>
 
