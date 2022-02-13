@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SeedController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\TransferRequestController;
 use App\Http\Controllers\UserController;
 use App\Models\InventoryParentItem;
 use App\Models\InventoryItem;
@@ -53,14 +56,36 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::get('/users/{id}', [UserController::class, 'find']);
 
     Route::resource('buildings', BuildingController::class);
+
+    Route::get('/rooms/{room_id}/item-parents', [RoomController::class, 'getItemParents'])
+        ->where(['room_id' => '[0-9]']);
+
+    Route::get('/rooms/{room_id}/parents/{inventory_parent_item_id}/items', [RoomController::class, 'getItems'])
+        ->where(['room_id' => '[0-9]', 'inventory_parent_item_id' => '[0-9]']);
     Route::resource('rooms', RoomController::class);
 
     Route::get('/inventory/parents', [InventoryController::class, 'getItemParents']);
+    Route::get('/inventory/parents-available', [InventoryController::class, 'getAvailableItemParents']);
     Route::post('/inventory/parents', [InventoryController::class, 'createItemParent']);
     Route::get('/inventory/parents/{id}', [InventoryController::class, 'getItems']);
+    Route::get('/inventory/parents/{id}/instance', [InventoryController::class, 'findItemParent']);
+    Route::get('/inventory/parents/{id}/items-available', [InventoryController::class, 'getAvailableItems']);
     Route::put('/inventory/parents/{id}', [InventoryController::class, 'updateItemParent']);
     Route::delete('/inventory/parents/{id}', [InventoryController::class, 'deleteItemParent']);
 
     Route::post('/inventory/items', [InventoryController::class, 'createItem']);
+    Route::get('/inventory/items/{id}', [InventoryController::class, 'findItem']);
+    Route::put('/inventory/items/{id}', [InventoryController::class, 'updateItem']);
+    Route::delete('/inventory/items/{id}', [InventoryController::class, 'deleteItem']);
 
+    Route::post('/departments/{user_id}/set-buildings', [DepartmentController::class, 'setBuildings']);
+    Route::get('/departments/{user_id}', [DepartmentController::class, 'getBuildings'])
+        ->where(['user_id' => '[0-9]']);
+    Route::get('/departments', [DepartmentController::class, 'getRooms']);
+
+    Route::post('/transfers', [TransferRequestController::class, 'requestTransfer']);
+    Route::get('/transfers', [TransferRequestController::class, 'getRequests']);
 });
+
+
+Route::get('/seeds', [SeedController::class, 'seed']);

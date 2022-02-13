@@ -12,11 +12,29 @@ class InventoryController extends Controller
     public function getItemParents()
     {
         $parentItems = InventoryParentItem::with(['inventory_items:inventory_parent_item_id,id'])
-            ->orderBy('created_at')->get();
+            ->orderBy('id')->get();
 
         return $parentItems;
     }
 
+    public function getAvailableItemParents()
+    {
+        $parentItems = InventoryParentItem::with(['inventory_items' => function ($query) {
+            $query->select('id', 'inventory_parent_item_id')->whereNull('room_id');
+        }])
+            ->orderBy('id')->get();
+
+        return $parentItems;
+    }
+
+    public function getAvailableItems($inventory_parent_item_id)
+    {
+        return InventoryItem::with('room')->orderBy('created_at')
+            ->where('inventory_parent_item_id', $inventory_parent_item_id)
+            ->whereNull('room_id')
+            ->orderBy('id')
+            ->get();
+    }
 
     public function createItemParent(Request $request)
     {
@@ -26,6 +44,11 @@ class InventoryController extends Controller
         ]);
 
         return InventoryParentItem::create($request->all());
+    }
+
+    public function findItemParent($id)
+    {
+        return InventoryParentItem::find($id);
     }
 
     public function updateItemParent(Request $request, $id)
@@ -53,24 +76,53 @@ class InventoryController extends Controller
     }
 
 
+    //--
 
+    public function findItem($id)
+    {
+        return InventoryItem::find($id);
+    }
 
 
     public function getItems($id)
     {
-        return InventoryItem::orderBy('created_at')
+        return InventoryItem::with('room')->orderBy('created_at')
             ->where('inventory_parent_item_id', $id)
+            ->orderBy('id')
             ->get();
     }
 
     public function createItem(Request $request)
     {
         $request->validate([
-            'serial_number' => 'required|unique:inventory_items,serial_number',
+            'serial_number' => 'required',
             'brand' => 'required',
             'inventory_parent_item_id' => 'required'
         ]);
 
         return InventoryItem::create($request->all());
+    }
+
+    public function updateItem(Request $request, $id)
+    {
+
+        $request->validate([
+            'serial_number' => 'required',
+            'brand' => 'required'
+        ]);
+
+        $item = InventoryItem::find($id);
+        $item->update($request->all());
+
+        return $item;
+    }
+
+
+    public function deleteItem($id)
+    {
+
+        $item = InventoryItem::find($id);
+        $item->delete();
+        return response()->noContent();
     }
 }

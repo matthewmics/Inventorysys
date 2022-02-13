@@ -101,7 +101,7 @@ export const RoomComponent = () => {
     response = response.map((a) => {
       return {
         ...a,
-        building: a.building ? a.building.name : "-",
+        building: a.building ? a.building.name : "---",
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
@@ -234,6 +234,7 @@ export const RoomComponent = () => {
             <Form.Field>
               <label>Type</label>
               <Select
+                disabled={formValue.id !== 0}
                 options={roomTypeOptions}
                 value={formValue.room_type}
                 onChange={(undefined, data) => {

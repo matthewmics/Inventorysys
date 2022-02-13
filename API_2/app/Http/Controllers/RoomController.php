@@ -3,11 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Building;
+use App\Models\InventoryItem;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use App\Models\InventoryParentItem;
 
 class RoomController extends Controller
 {
+
+
+    public function getItemParents($room_id)
+    {
+        $parentItems = InventoryParentItem::with(['inventory_items' => function ($query) use ($room_id) {
+            $query->select('id', 'inventory_parent_item_id')->where('room_id', $room_id);
+        }])
+            ->orderBy('id')->get();
+
+        return $parentItems;
+    }
+
+    public function getItems($room_id, $inventory_parent_item_id)
+    {
+        return InventoryItem::with(['room', 'transfer_requests' => function ($query) {
+            $query->where('status','pending');
+         }])
+            ->where('room_id', $room_id)
+            ->where('inventory_parent_item_id', $inventory_parent_item_id)
+            ->orderBy('id')
+            ->get();
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +41,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        return Room::with('building')->orderBy('created_at')->get();
+        return Room::with('building')->orderBy('id')->get();
     }
 
     /**
@@ -42,7 +68,7 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        return Room::with('building')->find($id);
+        return Room::with(['building'])->find($id);
     }
 
     /**

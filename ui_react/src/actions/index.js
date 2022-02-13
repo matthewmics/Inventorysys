@@ -2,8 +2,7 @@ import { history } from "..";
 import agent from "../agent";
 import { clearToken, getToken, setToken } from "../helpers";
 
-
-export const authSignOut = async(dispatch) => {
+export const authSignOut = async (dispatch) => {
   dispatch({
     type: "SET_LOADING",
     value: true,
@@ -12,7 +11,7 @@ export const authSignOut = async(dispatch) => {
   await agent.User.logout();
   clearToken();
   window.location.reload();
-}
+};
 
 export const getCurrentUser = async (dispatch, location) => {
   dispatch({

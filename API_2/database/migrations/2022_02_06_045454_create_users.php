@@ -17,7 +17,6 @@ class CreateUsers extends Migration
     {
         DB::table('users')->insert([
             [
-                'id' => 1,
                 'name' => 'Admin User',
                 'email' => 'admin@localhost.com',
                 'role' => 'admin',

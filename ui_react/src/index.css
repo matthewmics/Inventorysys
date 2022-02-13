@@ -34,15 +34,20 @@ div.disp-ib {
   overflow: auto;
 }
 
-.cellcenterparent{
+.cellcenterparent {
   width: 100%;
   height: 100%;
   display: table;
   position: fixed;
 }
 
-.cellcentercontent{
+.cellcentercontent {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
+}
+
+.link {
+  cursor: pointer;
+  color: #2196f3;
 }

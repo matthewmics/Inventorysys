@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "./helpers";
 
-export const apiUrl = "http://127.0.0.1:5000";
+export const apiUrl = "http://192.168.0.17:5000";
 
 axios.defaults.baseURL = apiUrl + "/api";
 const sleepDuration = 0;
@@ -61,13 +61,37 @@ const Room = {
   create: (request) => requests.post("/rooms", request),
   update: (request, id) => requests.put(`/rooms/${id}`, request),
   delete: (id) => requests.delete(`/rooms/${id}`),
+  itemParents: (id) => requests.get(`/rooms/${id}/item-parents`),
+  items: (id, parentId) =>
+    requests.get(`/rooms/${id}/parents/${parentId}/items`),
 };
 
 const Inventory = {
   parentList: () => requests.get("/inventory/parents"),
+  parentListAvailable: () => requests.get("/inventory/parents-available"),
+  parentInstance: (id) => requests.get(`/inventory/parents/${id}/instance`),
+  parentAvailableItems: (id) =>
+    requests.get(`/inventory/parents/${id}/items-available`),
   parentCreate: (request) => requests.post("/inventory/parents", request),
-  parentUpdate: (request, id) => requests.put(`/inventory/parents/${id}`, request),
+  parentUpdate: (request, id) =>
+    requests.put(`/inventory/parents/${id}`, request),
   parentDelete: (id) => requests.delete(`/inventory/parents/${id}`),
+  parentItemItems: (id) => requests.get(`/inventory/parents/${id}`),
+  itemCreate: (request) => requests.post(`/inventory/items`, request),
+  itemUpdate: (request, id) => requests.put(`/inventory/items/${id}`, request),
+  itemDelete: (id) => requests.delete(`/inventory/items/${id}`),
+};
+
+const Department = {
+  getBuildings: (id) => requests.get(`/departments/${id}`),
+  setBuildings: (req, id) =>
+    requests.post(`/departments/${id}/set-buildings`, req),
+  current: () => requests.get("/departments"),
+};
+
+const TransferRequest = {
+  itemTransfer: (req) => requests.post(`/transfers`, req),
+  list: () => requests.get(`/transfers`),
 };
 
 const agent = {
@@ -75,6 +99,8 @@ const agent = {
   Building,
   Room,
   Inventory,
+  Department,
+  TransferRequest,
 };
 
 export default agent;

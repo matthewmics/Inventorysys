@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Student;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
+use App\Models\Building;
 
 class User extends Authenticatable
 {
@@ -46,4 +47,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function buildings()
+    {
+        return $this->belongsToMany(Building::class, 'department_building', 'user_id', 'building_id');
+    }
 }

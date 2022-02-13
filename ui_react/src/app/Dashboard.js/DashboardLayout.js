@@ -8,10 +8,17 @@ import { UserComponent } from "../Users/UserComponent";
 import { BuildingComponent } from "../Buildings/BuildingComponent";
 import { RoomComponent } from "../Rooms/RoomComponent";
 import { InventoryContent } from "../Inventory/InventoryContent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { authSignOut } from "../../actions";
+import { InventoryItemContent } from "../Inventory/InventoryItemContent";
+import { InventoryItemComponent } from "../Inventory/InventoryItemComponent";
+import { InventoryComponent } from "../Inventory/InventoryComponent";
+import { DepartmentInventoryItemContent } from "../Inventory/Department/DepartmentInventoryItemContent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
 
   return (
     <Fragment>
@@ -19,7 +26,11 @@ export const DashboardLayout = () => {
         <Menu.Menu position="right">
           <Dropdown item text={user.name}>
             <Dropdown.Menu>
-              <Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => {
+                  authSignOut(dispatch);
+                }}
+              >
                 {" "}
                 <Icon name="sign-out" />
                 Logout
@@ -57,41 +68,45 @@ export const DashboardLayout = () => {
         <NavLink to="/dashboard" activeClassName="link-active">
           <Menu.Item>
             <Icon name="grid layout" />
-            <span style={{ color: "rgba(255,255,255, .65)" }}>
-              DashboardLayout
-            </span>
+            <span style={{ color: "rgba(255,255,255, .65)" }}>Dashboard</span>
           </Menu.Item>
         </NavLink>
 
         <Menu.Item>
           <Menu.Menu>
-            <Menu.Item>
-              <NavLink to="/users" activeClassName="link-active">
-                <Icon name="users" />
-                Users
-              </NavLink>
-            </Menu.Item>
+            {["admin"].includes(user.role) && (
+              <>
+                <Menu.Item>
+                  <NavLink to="/users" activeClassName="link-active">
+                    <Icon name="users" />
+                    Users
+                  </NavLink>
+                </Menu.Item>
 
-            <Menu.Item>
-              <NavLink to="/buildings" activeClassName="link-active">
-                <Icon name="building" />
-                Buildings
-              </NavLink>
-            </Menu.Item>
+                <Menu.Item>
+                  <NavLink to="/buildings" activeClassName="link-active">
+                    <Icon name="building" />
+                    Buildings
+                  </NavLink>
+                </Menu.Item>
 
-            <Menu.Item>
-              <NavLink to="/rooms" activeClassName="link-active">
-                <Icon name="home" />
-                Rooms
-              </NavLink>
-            </Menu.Item>
+                <Menu.Item>
+                  <NavLink to="/rooms" activeClassName="link-active">
+                    <Icon name="home" />
+                    Rooms
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
 
-            <Menu.Item>
-              <NavLink to="/inventory" activeClassName="link-active">
-                <Icon name="box" />
-                Inventory
-              </NavLink>
-            </Menu.Item>
+            {["admin", "department"].includes(user.role) && (
+              <Menu.Item>
+                <NavLink to="/inventory" activeClassName="link-active">
+                  <Icon name="box" />
+                  Inventory
+                </NavLink>
+              </Menu.Item>
+            )}
           </Menu.Menu>
         </Menu.Item>
       </Menu>
@@ -102,7 +117,12 @@ export const DashboardLayout = () => {
           <Route path="/users" component={UserComponent} />
           <Route path="/buildings" component={BuildingComponent} />
           <Route path="/rooms" component={RoomComponent} />
-          <Route path="/inventory" component={InventoryContent} />
+          <Route
+            path="/inventory/:id/rooms/:roomID"
+            component={DepartmentInventoryItemContent}
+          />
+          <Route path="/inventory/:id" component={InventoryItemComponent} />
+          <Route path="/inventory" component={InventoryComponent} />
           <Route path="/">
             <Redirect to="/dashboard" />
           </Route>

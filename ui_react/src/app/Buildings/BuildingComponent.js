@@ -49,6 +49,7 @@ export const BuildingComponent = () => {
     open: false,
   });
 
+
   const [formLoading, setFormLoading] = useState(false);
   const [formErrors, setFormErrors] = useState(null);
   const [formValue, setFormValue] = useState(formDefaultValue);

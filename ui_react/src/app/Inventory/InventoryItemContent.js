@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -24,21 +25,25 @@ import {
 } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
 
-export const InventoryContent = () => {
+export const InventoryItemContent = () => {
+  const { id: parentId } = useParams();
+
+  const [roomOptions, setRoomOptions] = useState([]);
+
   const columns = [
     {
-      name: "Name",
-      selector: (row) => row.name,
+      name: "Serial / Asset No.",
+      selector: (row) => row.serial_number,
       sortable: true,
     },
     {
-      name: "Item type",
-      selector: (row) => row.item_type,
+      name: "Room",
+      selector: (row) => row.room,
       sortable: true,
     },
     {
-      name: "Qty",
-      selector: (row) => row.qty,
+      name: "Brand",
+      selector: (row) => row.brand,
       sortable: true,
     },
     {
@@ -53,13 +58,19 @@ export const InventoryContent = () => {
     },
   ];
 
+  const [itemParent, setItemParent] = useState({
+    data: null,
+    loading: false,
+  });
+
   const handleTextInputChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
 
   const formDefaultValue = {
-    name: "",
-    item_type: "PC",
+    serial_number: "",
+    brand: "",
+    room_id: 0,
     id: 0,
   };
 
@@ -78,30 +89,35 @@ export const InventoryContent = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  const loadParentItems = async () => {
+  const loadData = async () => {
     setLoading(true);
 
-    let response = await agent.Inventory.parentList();
+    let roomResponse = await agent.Room.list();
+
+    setRoomOptions([
+      {
+        value: 0,
+        text: "---",
+      },
+      ...roomResponse.map((a) => {
+        return {
+          value: a.id,
+          text: a.name,
+        };
+      }),
+    ]);
+
+    setItemParent(await agent.Inventory.parentInstance(parentId));
+
+    let response = await agent.Inventory.parentItemItems(parentId);
+
     response = response.map((a) => {
       return {
         ...a,
-        qty: a.inventory_items.length,
+        room: a.room ? a.room.name : "---",
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
-            <Popup
-              content="View items"
-              trigger={
-                <Button
-                  icon="eye"
-                  circular
-                  size="tiny"
-                  onClick={() => {
-                    history.push("/inventory/" + a.id);
-                  }}
-                />
-              }
-            />
             <Popup
               content="Edit Item"
               trigger={
@@ -112,8 +128,9 @@ export const InventoryContent = () => {
                   onClick={() => {
                     setFormValue({
                       id: a.id,
-                      name: a.name,
-                      item_type: a.item_type,
+                      serial_number: a.serial_number,
+                      brand: a.brand,
+                      room_id: a.room ? a.room.id : 0,
                     });
                     setModalFormOpen(true);
                   }}
@@ -138,8 +155,8 @@ export const InventoryContent = () => {
       };
     });
 
-    setDataTemp(response);
     setData(response);
+    setDataTemp(response);
     setLoading(false);
   };
 
@@ -147,17 +164,23 @@ export const InventoryContent = () => {
     setFormErrors(null);
     setFormLoading(true);
     try {
-      let { id, ...req } = formValue;
-
+      let { id, room_id, ...req } = formValue;
+      req = {
+        ...req,
+        room_id: formValue.room_id === 0 ? null : formValue.room_id,
+      };
       if (formValue.id === 0) {
-        await agent.Inventory.parentCreate(req);
+        await agent.Inventory.itemCreate({
+          ...req,
+          inventory_parent_item_id: parentId,
+        });
         toast.success("Item created successfully");
-        loadParentItems();
+        loadData();
         setModalFormOpen(false);
       } else {
-        await agent.Inventory.parentUpdate(req, formValue.id);
+        await agent.Inventory.itemUpdate(req, formValue.id);
         toast.success("Item updated successfully");
-        loadParentItems();
+        loadData();
         setModalFormOpen(false);
       }
     } catch (err) {
@@ -169,18 +192,43 @@ export const InventoryContent = () => {
 
   const onArchive = async () => {
     setArchive({ ...archive, loading: true });
-    await agent.Inventory.parentDelete(archive.data.id);
+    await agent.Inventory.itemDelete(archive.data.id);
     toast.success("Item archived successfully");
     setArchive({ ...archive, loading: false, open: false });
-    loadParentItems();
+    loadData();
   };
 
   useEffect(() => {
-    loadParentItems();
+    loadData();
   }, []);
 
   return (
     <>
+      {/* MODAL ARCHIVE */}
+      <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
+        <Modal.Header>Confirm archive</Modal.Header>
+        <Modal.Content>
+          Are you sure you want to archive {archive.data?.name} ?
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            negative
+            loading={archive.loading}
+            disabled={archive.loading}
+            onClick={() => setArchive({ ...archive, open: false })}
+          >
+            Cancel
+          </Button>
+          <Button
+            loading={archive.loading}
+            disabled={archive.loading}
+            positive
+            onClick={() => onArchive()}
+          >
+            Yes
+          </Button>
+        </Modal.Actions>
+      </Modal>
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
         <Modal.Header>Confirm archive</Modal.Header>
@@ -215,23 +263,33 @@ export const InventoryContent = () => {
           {formErrors && <ErrorMessage errors={formErrors} />}
           <Form>
             <Form.Field>
-              <label>Name</label>
+              <label>Serial / Asset Number</label>
               <input
-                name="name"
-                value={formValue.name}
-                placeholder="Item name"
+                name="serial_number"
+                value={formValue.serial_number}
+                placeholder="Serial / Asset No."
                 onChange={handleTextInputChange}
               />
             </Form.Field>
             <Form.Field>
-              <label>Type</label>
+              <label>Brand</label>
+              <input
+                name="brand"
+                value={formValue.brand}
+                placeholder="Brand"
+                onChange={handleTextInputChange}
+              />
+            </Form.Field>
+            <Form.Field>
+              <label>Room</label>
               <Select
-                options={itemTypeOptions}
-                value={formValue.item_type}
+                search
+                options={roomOptions}
+                value={formValue.room_id}
                 onChange={(e, data) => {
                   setFormValue({
                     ...formValue,
-                    item_type: data.value,
+                    room_id: data.value,
                   });
                 }}
               />
@@ -258,7 +316,17 @@ export const InventoryContent = () => {
       </Modal>
       <div>
         <div className="page-header-title">
-          INVENTORY <Loader active={loading} inline size="tiny" />
+          <span
+            className="link"
+            onClick={() => {
+              history.push("/inventory");
+            }}
+          >
+            INVENTORY{" "}
+          </span>
+          <Icon name="arrow right" />
+          {!loading && <>{itemParent ? itemParent.name : "..."}</>}
+          <Loader active={loading} inline size="tiny" />
         </div>
         <hr></hr>
       </div>
@@ -267,7 +335,11 @@ export const InventoryContent = () => {
           <DelayedSearchInput
             onSearch={(val) => {
               setData(
-                dataTemp.filter((a) => a.name.toLowerCase().includes(val))
+                dataTemp.filter(
+                  (a) =>
+                    a.serial_number.toLowerCase().includes(val) ||
+                    a.brand.toLowerCase().includes(val)
+                )
               );
             }}
           />
