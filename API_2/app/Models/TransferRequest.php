@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\InventoryItem;
 use App\Models\Room;
 use App\Models\User;
+use App\Models\FileStorage;
 
 class TransferRequest extends Model
 {
@@ -15,6 +16,7 @@ class TransferRequest extends Model
     use HasFactory;
 
     protected $fillable = [
+        'file_storage_id',
         'requestor_user_id',
         'current_room_id',
         'destination_room_id',
@@ -23,27 +25,29 @@ class TransferRequest extends Model
         'status'
     ];
 
+
+    public function file_storage()
+    {
+        return $this->belongsTo(FileStorage::class, 'file_storage_id');
+    }
+
     public function item()
     {
         return $this->belongsTo(InventoryItem::class, 'item_id');
     }
-    
+
     public function requestor()
     {
         return $this->belongsTo(User::class, 'requestor_user_id');
     }
 
-    
     public function current_room()
     {
         return $this->belongsTo(Room::class, 'current_room_id');
     }
 
-    
     public function destination_room()
     {
         return $this->belongsTo(Room::class, 'destination_room_id');
     }
-
-    
 }

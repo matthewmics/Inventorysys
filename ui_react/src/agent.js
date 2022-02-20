@@ -1,7 +1,6 @@
 import axios from "axios";
+import { apiUrl } from "./environment";
 import { getToken } from "./helpers";
-
-export const apiUrl = "http://192.168.0.17:5000";
 
 axios.defaults.baseURL = apiUrl + "/api";
 const sleepDuration = 0;
@@ -90,8 +89,19 @@ const Department = {
 };
 
 const TransferRequest = {
-  itemTransfer: (req) => requests.post(`/transfers`, req),
+  itemTransfer: (req, file) => {
+    const formData = new FormData();
+    Object.entries(req).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    formData.append("file", file);
+    return requests.post(`/transfers`, formData);
+  },
   list: () => requests.get(`/transfers`),
+};
+
+const FileStorage = {
+  get: (id) => requests.get(`/file-storages/${id}`),
 };
 
 const agent = {
@@ -101,6 +111,7 @@ const agent = {
   Inventory,
   Department,
   TransferRequest,
+  FileStorage,
 };
 
 export default agent;

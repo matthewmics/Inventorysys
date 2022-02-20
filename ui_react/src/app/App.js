@@ -1,9 +1,10 @@
 import "../semantic-ui-css/semantic.min.css";
+import "../index.css";
 
 import React, { Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getCurrentUser } from "../actions";
-import { DashboardLayout } from "./Dashboard.js/DashboardLayout";
+import { DashboardLayout } from "./Dashboard/DashboardLayout";
 import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import { ToastContainer } from "react-toastify";
 

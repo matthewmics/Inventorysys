@@ -29,7 +29,10 @@ class InventoryController extends Controller
 
     public function getAvailableItems($inventory_parent_item_id)
     {
-        return InventoryItem::with('room')->orderBy('created_at')
+        return InventoryItem::with(['room', 'transfer_requests' => function ($query) {
+            $query->whereNotIn('status', ['completed', 'rejected']);
+        }])
+            ->orderBy('created_at')
             ->where('inventory_parent_item_id', $inventory_parent_item_id)
             ->whereNull('room_id')
             ->orderBy('id')

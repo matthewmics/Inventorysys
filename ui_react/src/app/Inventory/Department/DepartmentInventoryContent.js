@@ -159,7 +159,8 @@ export const DepartmentInventoryContent = () => {
             }}
           />
         </div>
-        <div className="float-r disp-ib"></div>
+        <div className="float-r disp-ib">
+        </div>
       </div>
       <DataTable columns={columns} data={data} pagination />
     </>

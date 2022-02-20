@@ -25,8 +25,8 @@ class RoomController extends Controller
     public function getItems($room_id, $inventory_parent_item_id)
     {
         return InventoryItem::with(['room', 'transfer_requests' => function ($query) {
-            $query->where('status','pending');
-         }])
+            $query->whereNotIn('status', ['completed', 'rejected']);
+        }])
             ->where('room_id', $room_id)
             ->where('inventory_parent_item_id', $inventory_parent_item_id)
             ->orderBy('id')

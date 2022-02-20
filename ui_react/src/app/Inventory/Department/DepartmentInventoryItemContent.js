@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useParams } from "react-router-dom";
 import {
@@ -17,9 +17,13 @@ import agent from "../../../agent";
 import { dateStringToLocal } from "../../../helpers";
 import { ErrorMessage } from "../../Commons/ErrorMessage";
 import { toast } from "react-toastify";
+import { downloadBase64File } from "../../../libs/download";
+import { transferRepairForm } from "../../../form-files";
 
 export const DepartmentInventoryItemContent = () => {
   const { id: parentId, roomID } = useParams();
+
+  const inputFile = useRef(null);
 
   const [rooms, setRooms] = useState([]);
 
@@ -38,6 +42,10 @@ export const DepartmentInventoryItemContent = () => {
   });
 
   const onTransferRequestSubmit = async () => {
+    // console.log(inputFile.current.files[0]);
+
+    const file = inputFile.current.files.length > 0 ? inputFile.current.files[0] : '';
+
     setTransferRequestModal({
       ...transferRequestModal,
       loading: true,
@@ -48,20 +56,21 @@ export const DepartmentInventoryItemContent = () => {
     const req = {
       destination_room_id:
         transferRequestValue.destination_room_id === 0
-          ? null
+          ? ''
           : transferRequestValue.destination_room_id,
       item_id: transferRequestValue.item.id,
       details: transferRequestValue.details,
     };
 
     try {
-      await agent.TransferRequest.itemTransfer(req);
+      await agent.TransferRequest.itemTransfer(req, file);
       toast.success("Transfer request successfully submitted");
       setTransferRequestModal({
         ...transferRequestModal,
         loading: false,
         open: false,
       });
+      loadData();
     } catch (err) {
       setTransferRequestErrors(err.data.errors);
       setTransferRequestModal({
@@ -145,6 +154,7 @@ export const DepartmentInventoryItemContent = () => {
               content="Request Transfer"
               trigger={
                 <Button
+                  disabled={a.transfer_requests.length > 0}
                   icon="dolly"
                   circular
                   size="tiny"
@@ -186,7 +196,8 @@ export const DepartmentInventoryItemContent = () => {
         closeOnDimmerClick={false}
       >
         <Modal.Header>
-          Transfer Request | {transferRequestValue.item?.serial_number}
+          Transfer Request |{" "}
+          {itemParent?.name + " - " + transferRequestValue.item?.serial_number}
         </Modal.Header>
         <Modal.Content>
           {transferRequestErrors && (
@@ -229,6 +240,10 @@ export const DepartmentInventoryItemContent = () => {
                   });
                 }}
               ></textarea>
+            </Form.Field>
+            <Form.Field>
+              <label>File attachment</label>
+              <input type="file" ref={inputFile} />
             </Form.Field>
           </Form>
         </Modal.Content>
@@ -283,7 +298,20 @@ export const DepartmentInventoryItemContent = () => {
             }}
           />
         </div>
-        <div className="float-r disp-ib"></div>
+        <div className="float-r disp-ib">
+          
+        <Button
+            size="small"
+            icon
+            labelPosition="left"
+            onClick={() => {
+              downloadBase64File(transferRepairForm, "request_form.docx");
+            }}
+          >
+            <Icon name="cloud download" />
+            Download Request Form
+          </Button>
+        </div>
       </div>
       <DataTable columns={columns} data={data} pagination />
     </>

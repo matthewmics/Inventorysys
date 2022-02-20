@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-import { Dropdown, Icon, Menu, Label } from "semantic-ui-react";
+import { Dropdown, Icon, Menu, Label, Modal, Button } from "semantic-ui-react";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
 import { history } from "../..";
 import { DashboardContent } from "./DashboardContent";
@@ -17,13 +17,65 @@ import { DepartmentInventoryItemContent } from "../Inventory/Department/Departme
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
+  const modal = useSelector((state) => state.modal);
 
   const dispatch = useDispatch();
 
   return (
     <Fragment>
+      {/* MODAL */}
+      <Modal closeOnDimmerClick={false} open={modal.open}>
+        <Modal.Header>{modal.title}</Modal.Header>
+        <Modal.Content>{modal.content}</Modal.Content>
+        <Modal.Actions>
+          <Button
+            negative
+            loading={modal.loading}
+            disabled={modal.loading}
+            onClick={modal.onCancel}
+          >
+            Cancel
+          </Button>
+          <Button
+            positive
+            loading={modal.loading}
+            disabled={modal.loading}
+            onClick={() => modal.onConfirm}
+          >
+            OK
+          </Button>
+        </Modal.Actions>
+      </Modal>
+
+      {/* TOP MENU BAR */}
       <Menu inverted style={{ marginTop: "0px" }}>
         <Menu.Menu position="right">
+          <Menu.Item>
+            <Label color="green" size="small">
+              0
+            </Label>
+          </Menu.Item>
+
+          <Dropdown item icon="bell" direction="left">
+            <Dropdown.Menu>
+              <Dropdown.Header>Notifications</Dropdown.Header>
+              <Dropdown.Item
+                style={{
+                  maxWidth: "500px",
+                  width: "max-content",
+                  whiteSpace: "normal",
+                }}
+                className="notification-unread"
+                onClick={() => {
+                  console.log("notif1");
+                }}
+              >
+                Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem
+                IpsumLorem IpsumLorem IpsumLorem Ipsum
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+
           <Dropdown item text={user.name}>
             <Dropdown.Menu>
               <Dropdown.Item
