@@ -104,6 +104,22 @@ const FileStorage = {
   get: (id) => requests.get(`/file-storages/${id}`),
 };
 
+const Workers = {
+  listTransferRequests: () => requests.get(`/workers/transfer-requests`),
+  rejectTransferRequest: (req) =>
+    requests.post(`/workers/reject-transfer-request`, req),
+  workOnTransferRequest: (req) =>
+    requests.post(`/workers/workon-transfer-request`, req),
+  completeTransferRequest: (req) =>
+    requests.post(`/workers/complete-transfer-request`, req),
+};
+
+const Notification = {
+  get: () => requests.get(`/notifications`),
+  read: (id) => requests.post(`/notifications/${id}/read`),
+  readAll: (id) => requests.post(`/notifications/read-all`),
+};
+
 const agent = {
   User,
   Building,
@@ -112,6 +128,8 @@ const agent = {
   Department,
   TransferRequest,
   FileStorage,
+  Workers,
+  Notification,
 };
 
 export default agent;

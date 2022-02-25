@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddFileStorageToTransferRequest extends Migration
+class AddColumnsToRequestTransfers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,13 @@ class AddFileStorageToTransferRequest extends Migration
     public function up()
     {
         Schema::table('transfer_requests', function (Blueprint $table) {
-            $table->foreignId('file_storage_id')
+            $table->foreignId('handler_user_id')
                 ->nullable()
-                ->constrained('file_storages')
+                ->constrained('users')
                 ->onDelete('cascade');
+
+            $table->text('rejection_details')->nullable();
+            $table->string('item_type', 100)->default('PC');
         });
     }
 
@@ -29,7 +32,7 @@ class AddFileStorageToTransferRequest extends Migration
     public function down()
     {
         Schema::table('transfer_requests', function (Blueprint $table) {
-            $table->dropColumn('file_storage_id');
+            $table->dropColumn(['handler_user_id', 'rejection_details', 'item_type']);
         });
     }
 }

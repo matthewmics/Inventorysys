@@ -16,12 +16,15 @@ class TransferRequest extends Model
     use HasFactory;
 
     protected $fillable = [
+        'handler_user_id',
+        'rejection_details',
         'file_storage_id',
         'requestor_user_id',
         'current_room_id',
         'destination_room_id',
         'item_id',
         'details',
+        'item_type',
         'status'
     ];
 
@@ -39,6 +42,11 @@ class TransferRequest extends Model
     public function requestor()
     {
         return $this->belongsTo(User::class, 'requestor_user_id');
+    }
+    
+    public function handler()
+    {
+        return $this->belongsTo(User::class, 'handler_user_id');
     }
 
     public function current_room()

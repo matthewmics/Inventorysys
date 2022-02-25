@@ -9,6 +9,7 @@ import { Dimmer, Loader, Segment } from "semantic-ui-react";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.min.css";
+import { NotificationComponent } from "./Notification/NotificationComponent";
 
 export const App = () => {
   const { loading, user } = useSelector((state) => state.auth);
@@ -29,7 +30,10 @@ export const App = () => {
           style={{ marginTop: "2.5em" }}
         />
       ) : (
-        <DashboardLayout></DashboardLayout>
+        <>
+          <DashboardLayout></DashboardLayout>
+          <NotificationComponent />
+        </>
       )}
     </Fragment>
   );

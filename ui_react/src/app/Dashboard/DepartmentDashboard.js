@@ -3,6 +3,7 @@ import { Button, Icon, Label, Loader, Popup, Table } from "semantic-ui-react";
 import agent from "../../agent";
 import { dateStringToLocal } from "../../helpers";
 import { downloadBase64File } from "../../libs/download";
+import { LabelTransferStatus } from "../Commons/LabelTransferStatus";
 
 export const DepartmentDashboard = () => {
   const [loading, setLoading] = useState(false);
@@ -78,7 +79,7 @@ export const DepartmentDashboard = () => {
                   <Table.Cell>{t.destination_room.name}</Table.Cell>
                   <Table.Cell>{dateStringToLocal(t.created_at)}</Table.Cell>
                   <Table.Cell>
-                    <Label>{t.status}</Label>
+                    <LabelTransferStatus status={t.status}></LabelTransferStatus>
                   </Table.Cell>
                   <Table.Cell style={{ float: "right" }}>
                     <Popup

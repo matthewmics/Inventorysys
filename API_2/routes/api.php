@@ -5,6 +5,8 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FileStorageController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ITSPPFOController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SeedController;
@@ -88,6 +90,15 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::get('/transfers', [TransferRequestController::class, 'getRequests']);
 
     Route::get('/file-storages/{id}', [FileStorageController::class, 'show']);
+
+    Route::get('/workers/transfer-requests', [ITSPPFOController::class, 'listTransferRequests']);
+    Route::post('/workers/reject-transfer-request', [ITSPPFOController::class, 'rejectRequest']);
+    Route::post('/workers/workon-transfer-request', [ITSPPFOController::class, 'workOnRequest']);
+    Route::post('/workers/complete-transfer-request', [ITSPPFOController::class, 'finishRequest']);
+
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'read']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll']);
 });
 
 

@@ -1,12 +1,17 @@
-const openModal = (dispatch, title, content, onConfirm, onCancel) => {
+const openModal = (dispatch, title, content) => {
   dispatch({
     type: "OPEN_MODAL",
     title,
-    content,
-    onCancel,
-    onConfirm,
+    content
   });
 };
+
+const setErrors = (dispatch, value) => {
+  dispatch({
+    type: "SET_MODAL_ERRORS",
+    value: value
+  })
+}
 
 const closeModal = (dispatch) => {
   dispatch({
@@ -21,5 +26,5 @@ const setLoading = (dispatch, value) => {
   });
 };
 
-const modalActions = { openModal };
+const modalActions = { openModal, closeModal, setLoading, setErrors };
 export default modalActions;

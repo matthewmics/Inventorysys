@@ -14,9 +14,12 @@ import { InventoryItemContent } from "../Inventory/InventoryItemContent";
 import { InventoryItemComponent } from "../Inventory/InventoryItemComponent";
 import { InventoryComponent } from "../Inventory/InventoryComponent";
 import { DepartmentInventoryItemContent } from "../Inventory/Department/DepartmentInventoryItemContent";
+import { TransferRequestComponent } from "../Workers/TransferRequest/TransferRequestComponent";
+import { ErrorMessage } from "../Commons/ErrorMessage";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
+  const { notifications } = useSelector((state) => state.notification);
   const modal = useSelector((state) => state.modal);
 
   const dispatch = useDispatch();
@@ -24,27 +27,14 @@ export const DashboardLayout = () => {
   return (
     <Fragment>
       {/* MODAL */}
-      <Modal closeOnDimmerClick={false} open={modal.open}>
+      <Modal size="tiny" closeOnDimmerClick={false} open={modal.open}>
         <Modal.Header>{modal.title}</Modal.Header>
-        <Modal.Content>{modal.content}</Modal.Content>
-        <Modal.Actions>
-          <Button
-            negative
-            loading={modal.loading}
-            disabled={modal.loading}
-            onClick={modal.onCancel}
-          >
-            Cancel
-          </Button>
-          <Button
-            positive
-            loading={modal.loading}
-            disabled={modal.loading}
-            onClick={() => modal.onConfirm}
-          >
-            OK
-          </Button>
-        </Modal.Actions>
+        {modal.errorMessages && (
+          <Modal.Content style={{ paddingBottom: "0px" }}>
+            <ErrorMessage errors={modal.errorMessages} />
+          </Modal.Content>
+        )}
+        {modal.content}
       </Modal>
 
       {/* TOP MENU BAR */}
@@ -52,27 +42,51 @@ export const DashboardLayout = () => {
         <Menu.Menu position="right">
           <Menu.Item>
             <Label color="green" size="small">
-              0
+              {notifications.length}
             </Label>
           </Menu.Item>
 
           <Dropdown item icon="bell" direction="left">
             <Dropdown.Menu>
-              <Dropdown.Header>Notifications</Dropdown.Header>
-              <Dropdown.Item
-                style={{
-                  maxWidth: "500px",
-                  width: "max-content",
-                  whiteSpace: "normal",
-                }}
-                className="notification-unread"
-                onClick={() => {
-                  console.log("notif1");
-                }}
-              >
-                Lorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem
-                IpsumLorem IpsumLorem IpsumLorem Ipsum
-              </Dropdown.Item>
+              {notifications.length === 0 ? (
+                <Dropdown.Header>No notifications to display.</Dropdown.Header>
+              ) : (
+                <Dropdown.Header>
+                  <div style={{ overflow: "auto", verticalAlign: "middle" }}>
+                    <span style={{ lineHeight: "30px", fontSize: "14px" }}>
+                      Notifications{" "}
+                    </span>
+                    <span style={{ float: "right" }}>
+                      <Button size="mini" color="blue">
+                        Mark All as Read
+                      </Button>
+                    </span>
+                  </div>
+                </Dropdown.Header>
+              )}
+              {notifications.map((notif, index) => (
+                <Dropdown.Item
+                  key={index}
+                  className="notification-unread"
+                  onClick={() => {
+                    console.log("notif1");
+                  }}
+                >
+                  <div
+                    style={{
+                      maxWidth: "700px",
+                      width: "max-content",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      padding: "5px",
+                      fontSize: "12px",
+                      backgroundColor:"#f5f5f5"
+                    }}
+                    dangerouslySetInnerHTML={{ __html: notif.message }}
+                  ></div>
+                </Dropdown.Item>
+              ))}
             </Dropdown.Menu>
           </Dropdown>
 
@@ -113,7 +127,7 @@ export const DashboardLayout = () => {
             }}
             size="small"
           >
-            {user.role}
+            {user.role.toUpperCase()}
           </Label>
         </Menu.Item>
 
@@ -159,6 +173,15 @@ export const DashboardLayout = () => {
                 </NavLink>
               </Menu.Item>
             )}
+
+            {["admin", "its", "ppfo"].includes(user.role) && (
+              <Menu.Item>
+                <NavLink to="/transfer-requests" activeClassName="link-active">
+                  <Icon name="dolly flatbed" />
+                  Transfer Requests
+                </NavLink>
+              </Menu.Item>
+            )}
           </Menu.Menu>
         </Menu.Item>
       </Menu>
@@ -175,6 +198,12 @@ export const DashboardLayout = () => {
           />
           <Route path="/inventory/:id" component={InventoryItemComponent} />
           <Route path="/inventory" component={InventoryComponent} />
+
+          <Route
+            path="/transfer-requests"
+            component={TransferRequestComponent}
+          />
+
           <Route path="/">
             <Redirect to="/dashboard" />
           </Route>

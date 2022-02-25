@@ -56,3 +56,9 @@ div.notification-unread {
   background-color: yellow !important;
   font-weight: bold;
 }
+
+.text-bold {
+  font-weight: bold !important;
+  border-bottom: 3px solid blue;
+}
+

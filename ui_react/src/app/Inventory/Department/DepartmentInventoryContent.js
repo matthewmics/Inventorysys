@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Button, Icon, Loader, Menu, Popup } from "semantic-ui-react";
+import { Button, Icon, Loader, Menu, Popup, Segment } from "semantic-ui-react";
 import { history } from "../../..";
 import agent from "../../../agent";
 import { dateStringToLocal } from "../../../helpers";
@@ -119,10 +119,23 @@ export const DepartmentInventoryContent = () => {
       </div>
 
       <Menu style={{ overflowX: "auto" }}>
+        <Menu.Item
+          disabled={loading}
+          onClick={() => {
+            setSelectedRoomID(0);
+            loadInventory(0);
+          }}
+          className={0 === selectedRoomID ? "text-bold" : ""}
+          active={0 === selectedRoomID}
+        >
+          <Icon name="box" />
+          Available Items
+        </Menu.Item>
         {rooms.map((room) => {
           return (
             <Menu.Item
               active={room.id === selectedRoomID}
+              className={room.id === selectedRoomID ? "text-bold" : ""}
               onClick={() => {
                 setSelectedRoomID(room.id);
                 loadInventory(room.id);
@@ -130,24 +143,13 @@ export const DepartmentInventoryContent = () => {
               key={room.id}
               disabled={loading}
             >
+              <Icon name="cube" />
               {room.name}
             </Menu.Item>
           );
         })}
 
-        <Menu.Menu position="right">
-          <Menu.Item
-            disabled={loading}
-            onClick={() => {
-              setSelectedRoomID(0);
-              loadInventory(0);
-            }}
-            active={0 === selectedRoomID}
-          >
-            <Icon name="box" />
-            Available Items
-          </Menu.Item>
-        </Menu.Menu>
+        <Menu.Menu position="right"></Menu.Menu>
       </Menu>
       <div className="mb-10 clearfix">
         <div className="disp-ib">
@@ -159,10 +161,16 @@ export const DepartmentInventoryContent = () => {
             }}
           />
         </div>
-        <div className="float-r disp-ib">
-        </div>
+        <div className="float-r disp-ib"></div>
       </div>
-      <DataTable columns={columns} data={data} pagination />
+      
+      
+      <DataTable
+          columns={columns}
+          data={data}
+          progressPending={loading}
+          pagination
+        />
     </>
   );
 };
