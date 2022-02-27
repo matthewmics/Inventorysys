@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Room;
 use App\Models\Building;
+use App\Models\DepartmentBuilding;
 use App\Models\InventoryParentItem;
 use App\Models\InventoryItem;
 use Carbon\Carbon;
@@ -59,22 +60,46 @@ class SeedController extends Controller
             ]
         ]);
 
+        DepartmentBuilding::insert([
+            [
+                'user_id' => 2,
+                'building_id' => 1,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'user_id' => 2,
+                'building_id' => 2,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'user_id' => 2,
+                'building_id' => 3,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        ]);
+
         Room::insert([
             [
                 'name' => 'Room-A',
                 'room_type' => 'room',
+                'building_id' => 1, 
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'name' => 'Room-B',
                 'room_type' => 'room',
+                'building_id' => 2, 
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
             [
                 'name' => 'Lab-A',
                 'room_type' => 'lab',
+                'building_id' => 3, 
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
@@ -107,6 +132,7 @@ class SeedController extends Controller
                 'serial_number' => '6988606763',
                 'inventory_parent_item_id' => 1,
                 'brand' => 'Brand-A',
+                'room_id' => 1,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -114,6 +140,7 @@ class SeedController extends Controller
                 'serial_number' => '9671308195',
                 'inventory_parent_item_id' => 1,
                 'brand' => 'Brand-A',
+                'room_id' => 2,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ],
@@ -121,6 +148,7 @@ class SeedController extends Controller
                 'serial_number' => '8526093502',
                 'inventory_parent_item_id' => 1,
                 'brand' => 'Brand-A',
+                'room_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
             ]
@@ -154,6 +182,7 @@ class SeedController extends Controller
             [
                 'serial_number' => '9014579132',
                 'inventory_parent_item_id' => 3,
+                'room_id' => 1,
                 'brand' => 'Brand-B',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -161,6 +190,7 @@ class SeedController extends Controller
             [
                 'serial_number' => '2374982187',
                 'inventory_parent_item_id' => 3,
+                'room_id' => 1,
                 'brand' => 'Brand-B',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()
@@ -168,6 +198,7 @@ class SeedController extends Controller
             [
                 'serial_number' => '2823771691',
                 'inventory_parent_item_id' => 3,
+                'room_id' => 2,
                 'brand' => 'Brand-B',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()

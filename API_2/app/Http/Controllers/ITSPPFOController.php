@@ -46,17 +46,17 @@ class ITSPPFOController extends Controller
 
         $request_id = $request['transfer_request_id'];
 
-        $request = TransferRequest::with(['item', 'item.inventory_parent_item'])->find($request_id);
+        $requestTransfer = TransferRequest::with(['item', 'item.inventory_parent_item'])->find($request_id);
 
-        $request->status = 'rejected';
-        $request->handler_user_id = $handler_id;
-        $request->rejection_details = $request['rejection_details'];
+        $requestTransfer->status = 'rejected';
+        $requestTransfer->handler_user_id = $handler_id;
+        $requestTransfer->rejection_details = $request['rejection_details'];
 
-        $request->save();
+        $requestTransfer->save();
 
         Notification::create([
-            'user_id' => $request->requestor_user_id,
-            'message' => "Your request to transfer a <b>" . $request->item->inventory_parent_item->name . "</b> has been rejected"
+            'user_id' => $requestTransfer->requestor_user_id,
+            'message' => "Your request to transfer a <b>" . $requestTransfer->item->inventory_parent_item->name . "</b> has been rejected"
         ]);
 
         return $request;

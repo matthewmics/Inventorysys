@@ -5,7 +5,7 @@ import { Button, Form, Modal } from "semantic-ui-react";
 import modalActions from "../../../actions/modalActions";
 import agent from "../../../agent";
 
-export const TransferRequestRejectForm = ({transferRequestId, onConfirm}) => {
+export const TransferRequestRejectForm = ({ transferRequestId, onConfirm }) => {
   const dispatch = useDispatch();
   const modal = useSelector((state) => state.modal);
 
@@ -47,22 +47,22 @@ export const TransferRequestRejectForm = ({transferRequestId, onConfirm}) => {
           loading={modal.loading}
           disabled={modal.loading}
           onClick={async () => {
-              modalActions.setErrors(dispatch, null);
-              modalActions.setLoading(dispatch, true);
+            modalActions.setErrors(dispatch, null);
+            modalActions.setLoading(dispatch, true);
 
-              try{
-                await agent.Workers.rejectTransferRequest({
-                    transfer_request_id: transferRequestId,
-                    rejection_details: textAreaDetails
-                });
+            try {
+              await agent.Workers.rejectTransferRequest({
+                transfer_request_id: transferRequestId,
+                rejection_details: textAreaDetails,
+              });
 
-                onConfirm();
-                toast.success('Transfer request has been rejected');
-                modalActions.closeModal(dispatch);
-              }catch(err){
-                  modalActions.setErrors(dispatch, err.data.errors);
-                  modalActions.setLoading(dispatch, false);
-              }
+              onConfirm();
+              toast.success("Transfer request has been rejected");
+              modalActions.closeModal(dispatch);
+            } catch (err) {
+              modalActions.setErrors(dispatch, err.data.errors);
+              modalActions.setLoading(dispatch, false);
+            }
           }}
         >
           OK

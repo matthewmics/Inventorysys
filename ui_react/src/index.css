@@ -62,3 +62,11 @@ div.notification-unread {
   border-bottom: 3px solid blue;
 }
 
+.bg-gradient-1 {
+  background: radial-gradient(circle, rgba(187,222,251,1) 0%, rgba(227,242,253,1) 100%) !important;
+}
+
+.dashboard-segment {
+  height: 300px;
+  overflow-y: auto;
+}

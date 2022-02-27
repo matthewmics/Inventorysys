@@ -19,8 +19,13 @@ import { ErrorMessage } from "../../Commons/ErrorMessage";
 import { toast } from "react-toastify";
 import { downloadBase64File } from "../../../libs/download";
 import { transferRepairForm } from "../../../form-files";
+import { PopupButton } from "../../Commons/PopupButton";
+import { useDispatch } from "react-redux";
 
 export const DepartmentInventoryItemContent = () => {
+
+  const dispatch = useDispatch();
+
   const { id: parentId, roomID } = useParams();
 
   const inputFile = useRef(null);
@@ -44,7 +49,8 @@ export const DepartmentInventoryItemContent = () => {
   const onTransferRequestSubmit = async () => {
     // console.log(inputFile.current.files[0]);
 
-    const file = inputFile.current.files.length > 0 ? inputFile.current.files[0] : '';
+    const file =
+      inputFile.current.files.length > 0 ? inputFile.current.files[0] : "";
 
     setTransferRequestModal({
       ...transferRequestModal,
@@ -56,7 +62,7 @@ export const DepartmentInventoryItemContent = () => {
     const req = {
       destination_room_id:
         transferRequestValue.destination_room_id === 0
-          ? ''
+          ? ""
           : transferRequestValue.destination_room_id,
       item_id: transferRequestValue.item.id,
       details: transferRequestValue.details,
@@ -150,28 +156,27 @@ export const DepartmentInventoryItemContent = () => {
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
-            <Popup
+            <PopupButton
               content="Request Transfer"
-              trigger={
-                <Button
-                  disabled={a.transfer_requests.length > 0}
-                  icon="dolly"
-                  circular
-                  size="tiny"
-                  onClick={() => {
-                    setTransferRequestErrors(null);
-                    setTransferRequestValue({
-                      item: a,
-                      details: "",
-                      destination_room_id: 0,
-                    });
-                    setTransferRequestModal({
-                      ...transferRequestModal,
-                      open: true,
-                    });
-                  }}
-                />
-              }
+              iconName="dolly"
+              onClick={() => {
+                setTransferRequestErrors(null);
+                setTransferRequestValue({
+                  item: a,
+                  details: "",
+                  destination_room_id: 0,
+                });
+                setTransferRequestModal({
+                  ...transferRequestModal,
+                  open: true,
+                });
+              }}
+            />
+
+            <PopupButton
+              content="Repair Request"
+              iconName="wrench"
+              onClick={() => {}}
             />
           </>
         ),
@@ -299,8 +304,7 @@ export const DepartmentInventoryItemContent = () => {
           />
         </div>
         <div className="float-r disp-ib">
-          
-        <Button
+          <Button
             size="small"
             icon
             labelPosition="left"
@@ -313,7 +317,13 @@ export const DepartmentInventoryItemContent = () => {
           </Button>
         </div>
       </div>
-      <DataTable columns={columns} data={data} pagination />
+      <DataTable
+        columns={columns}
+        data={data}
+        pagination
+        striped
+        progressPending={loading}
+      />
     </>
   );
 };

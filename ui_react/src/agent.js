@@ -117,7 +117,7 @@ const Workers = {
 const Notification = {
   get: () => requests.get(`/notifications`),
   read: (id) => requests.post(`/notifications/${id}/read`),
-  readAll: (id) => requests.post(`/notifications/read-all`),
+  readAll: () => requests.post(`/notifications/read-all`),
 };
 
 const agent = {

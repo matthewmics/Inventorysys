@@ -15,9 +15,28 @@ class TransferRequestController extends Controller
 
     public function getRequests()
     {
-        return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item'])
+
+        $role = auth()->user()->role;
+
+        if ($role === 'department') {
+            return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item', 'handler'])
+                ->orderBy('created_at', 'desc')
+                ->where('requestor_user_id', auth()->user()->id)
+                ->get();
+        } else if ($role === 'its') {
+            return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item', 'handler'])
+                ->where('item_type', 'PC')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else if ($role === 'ppfo') {
+            return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item', 'handler'])
+                ->where('item_type', '<>', 'PC')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item', 'handler'])
             ->orderBy('created_at', 'desc')
-            ->where('requestor_user_id', auth()->user()->id)
             ->get();
     }
 
@@ -69,14 +88,14 @@ class TransferRequestController extends Controller
         $room_destination_name = $room_destination->name;
         $item_to_transfer_name = $item->inventory_parent_item->name;
 
-        foreach($notified_users as $notified_user) {
+        foreach ($notified_users as $notified_user) {
             array_push($notifications_to_insert, [
                 'user_id' => $notified_user->id,
                 'message' => "<b>$requestor_name</b> has requested to transfer a <b>$item_to_transfer_name</b> to <b>$room_destination_name</b>",
                 "created_at" =>  \Carbon\Carbon::now('UTC'),
-                "updated_at" => \Carbon\Carbon::now('UTC'), 
+                "updated_at" => \Carbon\Carbon::now('UTC'),
             ]);
-        }        
+        }
 
         Notification::insert($notifications_to_insert);
 

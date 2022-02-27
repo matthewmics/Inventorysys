@@ -16,6 +16,9 @@ import { InventoryComponent } from "../Inventory/InventoryComponent";
 import { DepartmentInventoryItemContent } from "../Inventory/Department/DepartmentInventoryItemContent";
 import { TransferRequestComponent } from "../Workers/TransferRequest/TransferRequestComponent";
 import { ErrorMessage } from "../Commons/ErrorMessage";
+import notificationActions from "../../actions/notificationActions";
+import modalActions from "../../actions/modalActions";
+import { MessageModal } from "../Commons/MessageModal";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -57,7 +60,14 @@ export const DashboardLayout = () => {
                       Notifications{" "}
                     </span>
                     <span style={{ float: "right" }}>
-                      <Button size="mini" color="blue">
+                      <Button
+                        basic
+                        size="mini"
+                        color="blue"
+                        onClick={() => {
+                          notificationActions.readAll(dispatch);
+                        }}
+                      >
                         Mark All as Read
                       </Button>
                     </span>
@@ -69,7 +79,16 @@ export const DashboardLayout = () => {
                   key={index}
                   className="notification-unread"
                   onClick={() => {
-                    console.log("notif1");
+                    modalActions.openModal(
+                      dispatch,
+                      "Notification",
+                      <MessageModal message={notif.message} />
+                    );
+                    notificationActions.read(
+                      dispatch,
+                      [...notifications],
+                      notif.id
+                    );
                   }}
                 >
                   <div
@@ -81,7 +100,7 @@ export const DashboardLayout = () => {
                       textOverflow: "ellipsis",
                       padding: "5px",
                       fontSize: "12px",
-                      backgroundColor:"#f5f5f5"
+                      backgroundColor: "#f5f5f5",
                     }}
                     dangerouslySetInnerHTML={{ __html: notif.message }}
                   ></div>

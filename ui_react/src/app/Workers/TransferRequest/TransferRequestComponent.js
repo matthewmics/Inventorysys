@@ -95,54 +95,55 @@ export const TransferRequestComponent = () => {
         to: a.destination_room.name,
         actions: (
           <div style={{ textOverflow: "clip", overflow: "auto" }}>
-
-            {a.status !== 'in progress' ? 
-            <PopupButton
-              content="Work on request"
-              iconName="dolly"
-              color="yellow"
-              onClick={() => {
-                modalActions.openModal(
-                  dispatch,
-                  "Transfer Request",
-                  <ConfirmationModal
-                    content="Work on this request?"
-                    onSubmit={async () => {
-                      modalActions.setLoading(dispatch, true);
-                      await agent.Workers.workOnTransferRequest({
-                        transfer_request_id: a.id,
-                      });
-                      loadData();
-                      toast.success("Transfer request now in progress");
-                      modalActions.closeModal(dispatch);
-                    }}
-                  />
-                );
-              }}
-            /> : 
-            <PopupButton
-              content="Complete request"
-              iconName="check"
-              color="green"
-              onClick={() => {
-                modalActions.openModal(
-                  dispatch,
-                  "Complete Request",
-                  <ConfirmationModal
-                    content="Is this request completed?"
-                    onSubmit={async () => {
-                      modalActions.setLoading(dispatch, true);
-                      await agent.Workers.completeTransferRequest({
-                        transfer_request_id: a.id,
-                      });
-                      loadData();
-                      toast.success("Transfer request completed");
-                      modalActions.closeModal(dispatch);
-                    }}
-                  />
-                );
-              }}
-            />}
+            {a.status !== "in progress" ? (
+              <PopupButton
+                content="Work on request"
+                iconName="dolly"
+                color="yellow"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Transfer Request",
+                    <ConfirmationModal
+                      content="Work on this request?"
+                      onSubmit={async () => {
+                        modalActions.setLoading(dispatch, true);
+                        await agent.Workers.workOnTransferRequest({
+                          transfer_request_id: a.id,
+                        });
+                        loadData();
+                        toast.success("Transfer request now in progress");
+                        modalActions.closeModal(dispatch);
+                      }}
+                    />
+                  );
+                }}
+              />
+            ) : (
+              <PopupButton
+                content="Complete request"
+                iconName="check"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Complete Request",
+                    <ConfirmationModal
+                      content="Is this request completed?"
+                      onSubmit={async () => {
+                        modalActions.setLoading(dispatch, true);
+                        await agent.Workers.completeTransferRequest({
+                          transfer_request_id: a.id,
+                        });
+                        loadData();
+                        toast.success("Transfer request completed");
+                        modalActions.closeModal(dispatch);
+                      }}
+                    />
+                  );
+                }}
+              />
+            )}
             <PopupButton
               content="Download attached"
               iconName="download"
@@ -159,7 +160,7 @@ export const TransferRequestComponent = () => {
               onClick={() => {
                 modalActions.openModal(
                   dispatch,
-                  "Reject Request",
+                  "Reject Transfer",
                   <TransferRequestRejectForm
                     onConfirm={() => loadData()}
                     transferRequestId={a.id}
@@ -182,11 +183,7 @@ export const TransferRequestComponent = () => {
         <hr></hr>
       </div>
 
-      <DataTable
-        columns={columns}
-        data={dtData}
-        pagination
-      />
+      <DataTable columns={columns} data={dtData} pagination />
     </>
   );
 };

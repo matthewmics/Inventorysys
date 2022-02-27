@@ -20,7 +20,7 @@ import { PopupButton } from "../Commons/PopupButton";
 import { MessageModal } from "../Commons/MessageModal";
 import { DetailsModal } from "../Commons/DetailsModal";
 
-export const DepartmentDashboard = () => {
+export const WorkersDashboard = () => {
   const dispatch = useDispatch();
 
   // constants
@@ -94,6 +94,8 @@ export const DepartmentDashboard = () => {
                     "Transfer Details",
                     <DetailsModal
                       data={{
+                        "Requested By": a.requestor.name,
+                        Details: a.details,
                         Item: a.item.inventory_parent_item.name,
                         "Serial Number": a.item.serial_number,
                         From: a.current_room
@@ -102,7 +104,6 @@ export const DepartmentDashboard = () => {
                         To: a.destination_room.name,
                         Status: a.status.toUpperCase(),
                         Date: dateStringToLocal(a.created_at),
-                        "Processed By": a.handler ? a.handler.name : "-",
                       }}
                     />
                   );
