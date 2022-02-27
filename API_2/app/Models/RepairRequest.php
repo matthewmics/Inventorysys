@@ -20,6 +20,7 @@ class RepairRequest extends Model
         'item_id',
         'status',
         'item_type',
+        'rejection_details',
         'details'
     ];
 

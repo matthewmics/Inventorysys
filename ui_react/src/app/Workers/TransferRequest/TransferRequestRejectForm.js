@@ -14,11 +14,7 @@ export const TransferRequestRejectForm = ({ transferRequestId, onConfirm }) => {
   return (
     <>
       <Modal.Content>
-        <Form
-          onSubmit={(e) => {
-            console.log(e);
-          }}
-        >
+        <Form>
           <Form.Field>
             <label>Details</label>
             <Form.TextArea

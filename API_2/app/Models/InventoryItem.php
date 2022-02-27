@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\InventoryParentItem;
 use App\Models\Room;
 use App\Models\TransferRequest;
+use App\Models\RepairRequest;
 
 class InventoryItem extends Model
 {
@@ -34,5 +35,10 @@ class InventoryItem extends Model
     public function transfer_requests()
     {
         return $this->hasMany(TransferRequest::class, 'item_id');
+    }
+
+    public function repair_requests()
+    {
+        return $this->hasMany(RepairRequest::class, 'item_id');
     }
 }

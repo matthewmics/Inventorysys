@@ -17,12 +17,12 @@ class TransferRequest extends Model
 
     protected $fillable = [
         'handler_user_id',
-        'rejection_details',
         'file_storage_id',
         'requestor_user_id',
         'current_room_id',
         'destination_room_id',
         'item_id',
+        'rejection_details',
         'details',
         'item_type',
         'status'

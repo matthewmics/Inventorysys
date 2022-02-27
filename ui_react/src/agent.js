@@ -100,6 +100,17 @@ const TransferRequest = {
   list: () => requests.get(`/transfers`),
 };
 
+const RepairRequest = {
+  request: (req, file) => {
+    const formData = new FormData();
+    Object.entries(req).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    formData.append("file", file);
+    return requests.post(`/repairs`, formData);
+  },
+};
+
 const FileStorage = {
   get: (id) => requests.get(`/file-storages/${id}`),
 };
@@ -130,6 +141,7 @@ const agent = {
   FileStorage,
   Workers,
   Notification,
+  RepairRequest,
 };
 
 export default agent;

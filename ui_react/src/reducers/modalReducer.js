@@ -17,7 +17,6 @@ const modalReducer = (state = initial, action) => {
         content: action.content,
       };
     case "SET_MODAL_ERRORS":
-      console.log(state.errorMessages);
       return {
         ...state,
         errorMessages: action.value,

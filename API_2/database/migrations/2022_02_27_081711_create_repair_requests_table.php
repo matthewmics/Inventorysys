@@ -25,6 +25,7 @@ class CreateRepairRequestsTable extends Migration
             $table->string('item_type')->default('PC');
             $table->string('status')->default('pending');
             $table->text('details');
+            $table->text('rejection_details')->nullable();
             $table->timestamps();
         });
     }

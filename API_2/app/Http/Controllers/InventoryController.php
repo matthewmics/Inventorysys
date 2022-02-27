@@ -31,6 +31,8 @@ class InventoryController extends Controller
     {
         return InventoryItem::with(['room', 'transfer_requests' => function ($query) {
             $query->whereNotIn('status', ['completed', 'rejected']);
+        }, 'repair_requests' => function ($query) {
+            $query->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created']);
         }])
             ->orderBy('created_at')
             ->where('inventory_parent_item_id', $inventory_parent_item_id)

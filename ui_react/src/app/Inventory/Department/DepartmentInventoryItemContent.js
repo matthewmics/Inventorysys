@@ -21,9 +21,10 @@ import { downloadBase64File } from "../../../libs/download";
 import { transferRepairForm } from "../../../form-files";
 import { PopupButton } from "../../Commons/PopupButton";
 import { useDispatch } from "react-redux";
+import modalActions from "../../../actions/modalActions";
+import { DepartmentRequestRepair } from "./DepartmentRequestRepair";
 
 export const DepartmentInventoryItemContent = () => {
-
   const dispatch = useDispatch();
 
   const { id: parentId, roomID } = useParams();
@@ -142,10 +143,11 @@ export const DepartmentInventoryItemContent = () => {
         }),
     ]);
 
-    setItemParent(await agent.Inventory.parentInstance(parentId));
+    const itemParentData = await agent.Inventory.parentInstance(parentId);
+    setItemParent(itemParentData);
 
     let response =
-      roomID != 0
+      parseInt(roomID) !== 0
         ? await agent.Room.items(roomID, parentId)
         : await agent.Inventory.parentAvailableItems(parentId);
 
@@ -157,6 +159,9 @@ export const DepartmentInventoryItemContent = () => {
         actions: (
           <>
             <PopupButton
+              disabled={
+                a.transfer_requests.length > 0 || a.repair_requests.length > 0
+              }
               content="Request Transfer"
               iconName="dolly"
               onClick={() => {
@@ -172,12 +177,27 @@ export const DepartmentInventoryItemContent = () => {
                 });
               }}
             />
-
-            <PopupButton
-              content="Repair Request"
-              iconName="wrench"
-              onClick={() => {}}
-            />
+            {roomID != 0 && (
+              <PopupButton
+                disabled={
+                  a.transfer_requests.length > 0 || a.repair_requests.length > 0
+                }
+                content="Repair Request"
+                iconName="wrench"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Repair Request",
+                    <DepartmentRequestRepair
+                      item={{ id: a.id, parentName: itemParentData.name }}
+                      onConfirm={() => {
+                        loadData();
+                      }}
+                    />
+                  );
+                }}
+              />
+            )}
           </>
         ),
       };
@@ -322,7 +342,6 @@ export const DepartmentInventoryItemContent = () => {
         data={data}
         pagination
         striped
-        progressPending={loading}
       />
     </>
   );

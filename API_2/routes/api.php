@@ -7,6 +7,7 @@ use App\Http\Controllers\FileStorageController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ITSPPFOController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RepairRequestController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SeedController;
@@ -88,6 +89,8 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
 
     Route::post('/transfers', [TransferRequestController::class, 'requestTransfer']);
     Route::get('/transfers', [TransferRequestController::class, 'getRequests']);
+    
+    Route::post('/repairs', [RepairRequestController::class, 'requestRepair']);
 
     Route::get('/file-storages/{id}', [FileStorageController::class, 'show']);
 
