@@ -11,6 +11,32 @@ use Illuminate\Http\Request;
 
 class RepairRequestController extends Controller
 {
+    public function listRepairRequests(Request $request)
+    {
+        $role = auth()->user()->role;
+
+        if ($role === 'department') {
+            return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item', 'handler'])
+                ->orderBy('created_at', 'desc')
+                ->where('requestor_user_id', auth()->user()->id)
+                ->get();
+        } else if ($role === 'its') {
+            return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item', 'handler'])
+                ->where('item_type', 'PC')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        } else if ($role === 'ppfo') {
+            return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item', 'handler'])
+                ->where('item_type', '<>', 'PC')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+
+        return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item', 'handler'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
     public function requestRepair(Request $request)
     {
         $userId = auth()->user()->id;

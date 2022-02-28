@@ -46,6 +46,7 @@ export const DepartmentDashboard = () => {
   // states
   const [loading, setLoading] = useState(false);
   const [transfersDt, setTransfersDt] = useState([]);
+  const [repairsDt, setRepairsDt] = useState([]);
 
   useEffect(() => {
     loadData();
@@ -125,6 +126,74 @@ export const DepartmentDashboard = () => {
       })
     );
 
+    const r_repairs = await agent.RepairRequest.list();
+
+    setRepairsDt(
+      r_repairs.map((a) => {
+        return {
+          item_name: (
+            <>
+              <div style={{ fontWeight: "bold" }}>
+                {a.item.inventory_parent_item.name}
+              </div>
+              <div style={{ color: "grey" }}>{a.item.serial_number}</div>
+            </>
+          ),
+          status: <LabelTransferStatus status={a.status} />,
+          actions: (
+            <>
+              {a.rejection_details && (
+                <PopupButton
+                  content="Rejection details"
+                  iconName="warning"
+                  color="red"
+                  onClick={() => {
+                    modalActions.openModal(
+                      dispatch,
+                      "Rejection Details",
+                      <MessageModal message={a.rejection_details} />
+                    );
+                  }}
+                />
+              )}
+              <PopupButton
+                content="Details"
+                iconName="book"
+                color="blue"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Transfer Details",
+                    <DetailsModal
+                      data={{
+                        Item: a.item.inventory_parent_item.name,
+                        "Serial Number": a.item.serial_number,
+                        Status: a.status.toUpperCase(),
+                        Date: dateStringToLocal(a.created_at),
+                        "Processed By": a.handler ? a.handler.name : "-",
+                      }}
+                    />
+                  );
+                }}
+              />
+
+              <PopupButton
+                content="Download Attached"
+                iconName="cloud download"
+                onClick={async () => {
+                  const response = await agent.FileStorage.get(
+                    a.file_storage_id
+                  );
+                  downloadBase64File(response.base64, response.name);
+                }}
+              />
+            </>
+          ),
+        };
+      })
+    );
+
+
     setLoading(false);
   };
 
@@ -169,8 +238,8 @@ export const DepartmentDashboard = () => {
               <Segment>
                 <div className="dashboard-segment">
                   <DataTable
-                    columns={[]}
-                    data={[]}
+                    columns={columns}
+                    data={repairsDt}
                     pagination
                     noTableHead
                     striped

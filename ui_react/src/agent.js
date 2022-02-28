@@ -109,6 +109,7 @@ const RepairRequest = {
     formData.append("file", file);
     return requests.post(`/repairs`, formData);
   },
+  list: () => requests.get(`/repairs`),
 };
 
 const FileStorage = {

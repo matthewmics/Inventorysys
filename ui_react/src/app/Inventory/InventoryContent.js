@@ -226,6 +226,7 @@ export const InventoryContent = () => {
             <Form.Field>
               <label>Type</label>
               <Select
+                disabled
                 options={itemTypeOptions}
                 value={formValue.item_type}
                 onChange={(e, data) => {
