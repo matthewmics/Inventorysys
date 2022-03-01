@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InventoryItem;
 use App\Models\Notification;
+use App\Models\RepairRequest;
 use App\Models\TransferRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,32 @@ class ITSPPFOController extends Controller
 
         return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item'])
             ->whereNotIn('status', ['completed', 'rejected', 'disposed'])
+            ->orderBy('id')
+            ->get();
+    }
+
+    public function listRepairRequests(Request $request)
+    {
+        $role = auth()->user()->role;
+
+        if ($role === 'ppfo') {
+
+            return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item'])
+                ->whereNotIn('item_type', ['PC'])
+                ->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created'])
+                ->orderBy('id')
+                ->get();
+        } else if ($role === 'its') {
+
+            return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item'])
+                ->where('item_type', 'PC')
+                ->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created'])
+                ->orderBy('id')
+                ->get();
+        }
+
+        return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item'])
+        ->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created'])
             ->orderBy('id')
             ->get();
     }

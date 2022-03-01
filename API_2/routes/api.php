@@ -95,6 +95,7 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
 
     Route::get('/file-storages/{id}', [FileStorageController::class, 'show']);
 
+    Route::get('/workers/repair-requests', [ITSPPFOController::class, 'listRepairRequests']);
     Route::get('/workers/transfer-requests', [ITSPPFOController::class, 'listTransferRequests']);
     Route::post('/workers/reject-transfer-request', [ITSPPFOController::class, 'rejectRequest']);
     Route::post('/workers/workon-transfer-request', [ITSPPFOController::class, 'workOnRequest']);

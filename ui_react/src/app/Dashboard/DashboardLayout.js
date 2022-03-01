@@ -19,6 +19,7 @@ import { ErrorMessage } from "../Commons/ErrorMessage";
 import notificationActions from "../../actions/notificationActions";
 import modalActions from "../../actions/modalActions";
 import { MessageModal } from "../Commons/MessageModal";
+import { RepairRequestComponent } from "../Workers/RepairRequest/RepairRequestComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -194,12 +195,24 @@ export const DashboardLayout = () => {
             )}
 
             {["admin", "its", "ppfo"].includes(user.role) && (
-              <Menu.Item>
-                <NavLink to="/transfer-requests" activeClassName="link-active">
-                  <Icon name="dolly flatbed" />
-                  Transfer Requests
-                </NavLink>
-              </Menu.Item>
+              <>
+                <Menu.Item>
+                  <NavLink
+                    to="/transfer-requests"
+                    activeClassName="link-active"
+                  >
+                    <Icon name="dolly flatbed" />
+                    Transfer Requests
+                  </NavLink>
+                </Menu.Item>
+
+                <Menu.Item>
+                  <NavLink to="/repair-requests" activeClassName="link-active">
+                    <Icon name="wrench" />
+                    Repair Requests
+                  </NavLink>
+                </Menu.Item>
+              </>
             )}
           </Menu.Menu>
         </Menu.Item>
@@ -222,6 +235,8 @@ export const DashboardLayout = () => {
             path="/transfer-requests"
             component={TransferRequestComponent}
           />
+
+          <Route path="/repair-requests" component={RepairRequestComponent} />
 
           <Route path="/">
             <Redirect to="/dashboard" />

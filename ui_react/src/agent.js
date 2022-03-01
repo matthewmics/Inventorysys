@@ -124,6 +124,8 @@ const Workers = {
     requests.post(`/workers/workon-transfer-request`, req),
   completeTransferRequest: (req) =>
     requests.post(`/workers/complete-transfer-request`, req),
+
+  listRepairRequests: () => requests.get(`/workers/repair-requests`),
 };
 
 const Notification = {
