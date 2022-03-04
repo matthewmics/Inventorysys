@@ -79,6 +79,7 @@ const Inventory = {
   itemCreate: (request) => requests.post(`/inventory/items`, request),
   itemUpdate: (request, id) => requests.put(`/inventory/items/${id}`, request),
   itemDelete: (id) => requests.delete(`/inventory/items/${id}`),
+  itemDispose: (id) => requests.post(`/inventory/items/${id}`, {}),
 };
 
 const Department = {
@@ -126,6 +127,11 @@ const Workers = {
     requests.post(`/workers/complete-transfer-request`, req),
 
   listRepairRequests: () => requests.get(`/workers/repair-requests`),
+  rejectRepairRequest: (req) =>
+    requests.post(`/workers/reject-repair-request`, req),
+  disposeRepairRequest: (req) =>
+    requests.post(`/workers/dispose-repair-request`, req),
+  createJobOrder: (req) => requests.post(`/workers/repairs/job-order`, req),
 };
 
 const Notification = {

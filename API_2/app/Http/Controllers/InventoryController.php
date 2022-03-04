@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\InventoryItem;
 use App\Models\InventoryParentItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +12,9 @@ class InventoryController extends Controller
 {
     public function getItemParents()
     {
-        $parentItems = InventoryParentItem::with(['inventory_items:inventory_parent_item_id,id'])
+        $parentItems = InventoryParentItem::with(['inventory_items' => function ($query) {
+            $query->select('inventory_parent_item_id', 'id')->where('is_disposed', false);
+        }])
             ->orderBy('id')->get();
 
         return $parentItems;
@@ -20,7 +23,7 @@ class InventoryController extends Controller
     public function getAvailableItemParents()
     {
         $parentItems = InventoryParentItem::with(['inventory_items' => function ($query) {
-            $query->select('id', 'inventory_parent_item_id')->whereNull('room_id');
+            $query->select('inventory_parent_item_id', 'id')->whereNull('room_id');
         }])
             ->orderBy('id')->get();
 
@@ -93,6 +96,7 @@ class InventoryController extends Controller
     {
         return InventoryItem::with('room')->orderBy('created_at')
             ->where('inventory_parent_item_id', $id)
+            ->where('is_disposed', false)
             ->orderBy('id')
             ->get();
     }
@@ -128,6 +132,19 @@ class InventoryController extends Controller
 
         $item = InventoryItem::find($id);
         $item->delete();
+        return response()->noContent();
+    }
+
+    public function disposeItem($id)
+    {
+
+        $item = InventoryItem::find($id);
+        $item->update([
+            'is_disposed' => true,
+            'deleted_at' => Carbon::now('UTC'),
+            'room_id' => null
+        ]);
+
         return response()->noContent();
     }
 }

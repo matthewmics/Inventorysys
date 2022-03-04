@@ -8,7 +8,7 @@ export const LabelRepairStatus = ({ status }) => {
         {status}
       </Label>
     );
-  if (status === "in progress")
+  if (status === "job order created")
     return (
       <Label size="tiny" color="yellow">
         {status}

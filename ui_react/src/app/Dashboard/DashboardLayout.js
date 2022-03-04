@@ -45,7 +45,7 @@ export const DashboardLayout = () => {
       <Menu inverted style={{ marginTop: "0px" }}>
         <Menu.Menu position="right">
           <Menu.Item style={{ paddingRight: "0px" }}>
-            <Label color="green" size="small">
+            <Label color="red" size="mini">
               {notifications.length}
             </Label>
           </Menu.Item>

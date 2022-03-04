@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventoryItem;
+use App\Models\JobOrder;
 use App\Models\Notification;
 use App\Models\RepairRequest;
 use App\Models\TransferRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ITSPPFOController extends Controller
@@ -41,24 +43,26 @@ class ITSPPFOController extends Controller
     {
         $role = auth()->user()->role;
 
+        $statuses = ['completed', 'rejected', 'disposed', 'replaced', 'PO created', 'job order created'];
+
         if ($role === 'ppfo') {
 
             return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item'])
                 ->whereNotIn('item_type', ['PC'])
-                ->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created'])
+                ->whereNotIn('status', $statuses)
                 ->orderBy('id')
                 ->get();
         } else if ($role === 'its') {
 
             return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item'])
                 ->where('item_type', 'PC')
-                ->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created'])
+                ->whereNotIn('status', $statuses)
                 ->orderBy('id')
                 ->get();
         }
 
         return RepairRequest::with(['item', 'requestor', 'item.inventory_parent_item'])
-        ->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created'])
+        ->whereNotIn('status', $statuses)
             ->orderBy('id')
             ->get();
     }
@@ -87,6 +91,100 @@ class ITSPPFOController extends Controller
         ]);
 
         return $request;
+    }
+
+    public function rejectRepairRequest(Request $request)
+    {
+        $handler_id = auth()->user()->id;
+
+        $request->validate([
+            "rejection_details" => "required",
+            "repair_request_id" => "required"
+        ]);
+
+        $request_id = $request['repair_request_id'];
+
+        $requestTransfer = RepairRequest::with(['item', 'item.inventory_parent_item'])->find($request_id);
+
+        $requestTransfer->status = 'rejected';
+        $requestTransfer->handler_user_id = $handler_id;
+        $requestTransfer->rejection_details = $request['rejection_details'];
+
+        $requestTransfer->save();
+
+        Notification::create([
+            'user_id' => $requestTransfer->requestor_user_id,
+            'message' => "Your request to have a <b>" . $requestTransfer->item->inventory_parent_item->name . "</b> repaired has been rejected"
+        ]);
+
+        return $request;
+    }
+
+    public function disposeRepairRequest(Request $request)
+    {
+        $handler_id = auth()->user()->id;
+
+        $request->validate([
+            "item_id" => "required",
+            "repair_request_id" => "required"
+        ]);
+
+        // dispose item
+        $item = InventoryItem::find($request['item_id']);
+
+        $item_name = $item->inventory_parent_item->name;
+
+        $item->is_disposed = true;
+        // $item->deleted_at = Carbon::now('UTC');
+        $item->room_id = null;
+        $item->save();
+
+        // set repair request status        
+        $repairRequest = RepairRequest::with(['item', 'item.inventory_parent_item'])->find($request['repair_request_id']);
+        $repairRequest->status = 'disposed';
+        $repairRequest->handler_user_id = $handler_id;
+        $repairRequest->save();
+
+
+        // notify 
+        Notification::create([
+            'user_id' => $repairRequest->requestor_user_id,
+            'message' => "Your request to have a <b>" . $item_name . "</b> repaired has been marked as diposed due to the item being unfixable"
+        ]);
+
+        return $repairRequest;
+    }
+
+    public function createJobOrder(Request $request)
+    {
+
+        $handler_id = auth()->user()->id;
+
+        $request->validate([
+            "repair_request_id" => "required"
+        ]);
+
+        $jobOrder = JobOrder::create([
+            'handler_user_id' => $handler_id,
+            'repair_request_id' => $request['repair_request_id']
+        ]);
+
+        $repairRequest = RepairRequest::with(['item', 'item.inventory_parent_item'])->find($request['repair_request_id']);
+
+        // set status
+        $repairRequest->status = 'job order created';
+        $repairRequest->handler_user_id = $handler_id;
+        $repairRequest->save();
+
+        // notify 
+        Notification::create([
+            'user_id' => $repairRequest->requestor_user_id,
+            'message' => "Job Order created for your request to have a <b>" . $repairRequest->item->inventory_parent_item->name .
+                "</b> repaired"
+        ]);
+
+
+        return $jobOrder;
     }
 
 

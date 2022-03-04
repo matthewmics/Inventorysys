@@ -19,7 +19,8 @@ class InventoryItem extends Model
         'brand',
         'serial_number',
         'inventory_parent_item_id',
-        'room_id'
+        'room_id',
+        'is_disposed'
     ];
 
     public function inventory_parent_item()

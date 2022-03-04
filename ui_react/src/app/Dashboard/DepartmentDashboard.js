@@ -19,6 +19,7 @@ import { LabelTransferStatus } from "../Commons/LabelTransferStatus";
 import { PopupButton } from "../Commons/PopupButton";
 import { MessageModal } from "../Commons/MessageModal";
 import { DetailsModal } from "../Commons/DetailsModal";
+import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
 
 export const DepartmentDashboard = () => {
   const dispatch = useDispatch();
@@ -139,7 +140,7 @@ export const DepartmentDashboard = () => {
               <div style={{ color: "grey" }}>{a.item.serial_number}</div>
             </>
           ),
-          status: <LabelTransferStatus status={a.status} />,
+          status: <LabelRepairStatus status={a.status} />,
           actions: (
             <>
               {a.rejection_details && (

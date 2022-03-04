@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::get('/inventory/items/{id}', [InventoryController::class, 'findItem']);
     Route::put('/inventory/items/{id}', [InventoryController::class, 'updateItem']);
     Route::delete('/inventory/items/{id}', [InventoryController::class, 'deleteItem']);
+    Route::post('/inventory/items/{id}', [InventoryController::class, 'disposeItem']);
 
     Route::post('/departments/{user_id}/set-buildings', [DepartmentController::class, 'setBuildings']);
     Route::get('/departments/{user_id}', [DepartmentController::class, 'getBuildings'])
@@ -96,6 +97,10 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::get('/file-storages/{id}', [FileStorageController::class, 'show']);
 
     Route::get('/workers/repair-requests', [ITSPPFOController::class, 'listRepairRequests']);
+    Route::post('/workers/reject-repair-request', [ITSPPFOController::class, 'rejectRepairRequest']);
+    Route::post('/workers/dispose-repair-request', [ITSPPFOController::class, 'disposeRepairRequest']);
+    Route::post('/workers/repairs/job-order', [ITSPPFOController::class, 'createJobOrder']);
+
     Route::get('/workers/transfer-requests', [ITSPPFOController::class, 'listTransferRequests']);
     Route::post('/workers/reject-transfer-request', [ITSPPFOController::class, 'rejectRequest']);
     Route::post('/workers/workon-transfer-request', [ITSPPFOController::class, 'workOnRequest']);
