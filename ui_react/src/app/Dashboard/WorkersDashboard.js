@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Grid,
@@ -20,8 +20,11 @@ import { PopupButton } from "../Commons/PopupButton";
 import { MessageModal } from "../Commons/MessageModal";
 import { DetailsModal } from "../Commons/DetailsModal";
 import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
+import { DisposedItemsComponent } from "../IventoryItem/DisposedItemsComponent";
 
 export const WorkersDashboard = () => {
+  const { user } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   // constants
@@ -165,7 +168,7 @@ export const WorkersDashboard = () => {
                 onClick={() => {
                   modalActions.openModal(
                     dispatch,
-                    "Transfer Details",
+                    "Request Details",
                     <DetailsModal
                       data={{
                         Item: a.item.inventory_parent_item.name,
@@ -209,7 +212,7 @@ export const WorkersDashboard = () => {
         <hr></hr>
       </div>
 
-      <Grid>
+      <Grid padded>
         <Grid.Row>
           <Grid.Column mobile={16} computer={8}>
             <Segment.Group>
@@ -231,6 +234,7 @@ export const WorkersDashboard = () => {
               </Segment>
             </Segment.Group>
           </Grid.Column>
+
           <Grid.Column mobile={16} computer={8}>
             <Segment.Group>
               <Segment className="bg-gradient-1">
@@ -252,6 +256,36 @@ export const WorkersDashboard = () => {
             </Segment.Group>
           </Grid.Column>
         </Grid.Row>
+
+        {["admin"].includes(user.role) && (
+          <Grid.Row>
+            <Grid.Column mobile={16} computer={8}>
+              <Segment.Group>
+                <Segment className="bg-gradient-1">
+                  <Icon name="cart arrow down" />
+                  Purchase Orders
+                </Segment>
+                <Segment>
+                  <div className="dashboard-segment"></div>
+                </Segment>
+              </Segment.Group>
+            </Grid.Column>
+
+            <Grid.Column mobile={16} computer={8}>
+              <Segment.Group>
+                <Segment className="bg-gradient-2">
+                  <Icon name="trash" />
+                  Disposed Items
+                </Segment>
+                <Segment>
+                  <div className="dashboard-segment">
+                    <DisposedItemsComponent />
+                  </div>
+                </Segment>
+              </Segment.Group>
+            </Grid.Column>
+          </Grid.Row>
+        )}
       </Grid>
     </>
   );

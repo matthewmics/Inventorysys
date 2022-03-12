@@ -265,6 +265,7 @@ export const InventoryItemContent = () => {
             <Form.Field>
               <label>Serial / Asset Number</label>
               <input
+                readOnly={formValue.id !== 0}
                 name="serial_number"
                 value={formValue.serial_number}
                 placeholder="Serial / Asset No."
@@ -283,6 +284,7 @@ export const InventoryItemContent = () => {
             <Form.Field>
               <label>Room</label>
               <Select
+                disabled={formValue.id !== 0 && formValue.room_id !== 0}
                 search
                 options={roomOptions}
                 value={formValue.room_id}

@@ -18,7 +18,7 @@ export const App = () => {
   useEffect(() => {
     getCurrentUser(dispatch);
   }, [dispatch]);
-
+  
   return (
     <Fragment>
       <ToastContainer position="bottom-right" pauseOnFocusLoss={false} />

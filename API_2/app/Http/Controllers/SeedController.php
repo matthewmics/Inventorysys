@@ -25,6 +25,14 @@ class SeedController extends Controller
                 'updated_at' => Carbon::now()
             ],
             [
+                'name' => 'Wesley Anderson',
+                'email' => 'department2@localhost.com',
+                'role' => 'department',
+                'password' => bcrypt('password'),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
                 'name' => 'Richard Smith',
                 'email' => 'its@localhost.com',
                 'role' => 'its',
@@ -74,7 +82,7 @@ class SeedController extends Controller
                 'updated_at' => Carbon::now()
             ],
             [
-                'user_id' => 2,
+                'user_id' => 3,
                 'building_id' => 3,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now()

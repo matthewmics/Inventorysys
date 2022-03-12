@@ -17,7 +17,7 @@ export const PopupButton = ({
           color={color}
           icon={iconName}
           circular
-          size="tiny"
+          size="mini"
           onClick={() => {
             onClick();
           }}

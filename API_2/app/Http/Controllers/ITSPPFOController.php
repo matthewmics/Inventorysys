@@ -43,7 +43,7 @@ class ITSPPFOController extends Controller
     {
         $role = auth()->user()->role;
 
-        $statuses = ['completed', 'rejected', 'disposed', 'replaced', 'PO created', 'job order created'];
+        $statuses = ['completed', 'rejected', 'disposed', 'replaced', 'PO created', 'job order created', 'repaired'];
 
         if ($role === 'ppfo') {
 
@@ -179,7 +179,7 @@ class ITSPPFOController extends Controller
         // notify 
         Notification::create([
             'user_id' => $repairRequest->requestor_user_id,
-            'message' => "Job Order created for your request to have a <b>" . $repairRequest->item->inventory_parent_item->name .
+            'message' => "Job Order has been created for your request to have a <b>" . $repairRequest->item->inventory_parent_item->name .
                 "</b> repaired"
         ]);
 

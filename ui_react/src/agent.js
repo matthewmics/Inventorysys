@@ -80,6 +80,7 @@ const Inventory = {
   itemUpdate: (request, id) => requests.put(`/inventory/items/${id}`, request),
   itemDelete: (id) => requests.delete(`/inventory/items/${id}`),
   itemDispose: (id) => requests.post(`/inventory/items/${id}`, {}),
+  diposedItemList: () => requests.get(`/inventory/items/disposed`),
 };
 
 const Department = {
@@ -140,6 +141,19 @@ const Notification = {
   readAll: () => requests.post(`/notifications/read-all`),
 };
 
+const JobOrders = {
+  listPending: () => requests.get(`/job-orders`),
+  repair: (id) => requests.post(`/job-orders/${id}/repair`, {}),
+  replace: (id, req) => {
+    return requests.post(`/job-orders/${id}/replace`, req);
+  },
+  createPO: (id, file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return requests.post(`/job-orders/${id}/create-po`, formData);
+  },
+};
+
 const agent = {
   User,
   Building,
@@ -151,6 +165,7 @@ const agent = {
   Workers,
   Notification,
   RepairRequest,
+  JobOrders,
 };
 
 export default agent;

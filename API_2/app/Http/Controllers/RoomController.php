@@ -25,9 +25,9 @@ class RoomController extends Controller
     public function getItems($room_id, $inventory_parent_item_id)
     {
         return InventoryItem::with(['room', 'transfer_requests' => function ($query) {
-            $query->whereNotIn('status', ['completed', 'rejected']);
+            $query->whereNotIn('status', ['completed', 'rejected', 'disposed']);
         }, 'repair_requests' => function ($query) {
-            $query->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created']);
+            $query->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created', 'repaired']);
          }])
             ->where('room_id', $room_id)
             ->where('inventory_parent_item_id', $inventory_parent_item_id)

@@ -242,7 +242,7 @@ export const BuildingComponent = () => {
         </div>
       </div>
 
-      <DataTable columns={columns} data={data} pagination />
+      <DataTable columns={columns} data={data} pagination striped />
     </>
   );
 };

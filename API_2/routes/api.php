@@ -6,6 +6,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FileStorageController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ITSPPFOController;
+use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RepairRequestController;
 use App\Http\Controllers\RfidController;
@@ -77,6 +78,7 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::put('/inventory/parents/{id}', [InventoryController::class, 'updateItemParent']);
     Route::delete('/inventory/parents/{id}', [InventoryController::class, 'deleteItemParent']);
 
+    Route::get('/inventory/items/disposed', [InventoryController::class, 'getDisposedItems']);
     Route::post('/inventory/items', [InventoryController::class, 'createItem']);
     Route::get('/inventory/items/{id}', [InventoryController::class, 'findItem']);
     Route::put('/inventory/items/{id}', [InventoryController::class, 'updateItem']);
@@ -109,6 +111,12 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/{id}/read', [NotificationController::class, 'read']);
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll']);
+
+    
+    Route::get('/job-orders', [JobOrderController::class, 'listPendingJobOrders']);
+    Route::post('/job-orders/{id}/repair', [JobOrderController::class, 'markAsRepaired']);
+    Route::post('/job-orders/{id}/replace', [JobOrderController::class, 'replaceItem']);
+    Route::post('/job-orders/{id}/create-po', [JobOrderController::class, 'createPO']);
 });
 
 

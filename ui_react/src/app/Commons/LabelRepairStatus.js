@@ -14,7 +14,7 @@ export const LabelRepairStatus = ({ status }) => {
         {status}
       </Label>
     );
-  if (status === "completed")
+  if (status === "completed" || status === "repaired" || status === "replaced" || status === "PO created")
     return (
       <Label size="tiny" color="green">
         {status}

@@ -145,7 +145,7 @@ export const DepartmentDashboard = () => {
             <>
               {a.rejection_details && (
                 <PopupButton
-                  content="Rejection details"
+                  content="Request Details"
                   iconName="warning"
                   color="red"
                   onClick={() => {

@@ -63,7 +63,20 @@ div.notification-unread {
 }
 
 .bg-gradient-1 {
-  background: radial-gradient(circle, rgba(187,222,251,1) 0%, rgba(227,242,253,1) 100%) !important;
+  background: radial-gradient(
+    circle,
+    rgba(187, 222, 251, 1) 0%,
+    rgba(227, 242, 253, 1) 100%
+  ) !important;
+}
+
+.bg-gradient-2 {
+  background: radial-gradient(
+    circle,
+    rgba(244, 67, 54, 1) 0%,
+    rgba(229, 115, 115, 1) 100%
+  ) !important;
+  color: white;
 }
 
 .dashboard-segment {

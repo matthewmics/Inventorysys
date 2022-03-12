@@ -20,6 +20,7 @@ import notificationActions from "../../actions/notificationActions";
 import modalActions from "../../actions/modalActions";
 import { MessageModal } from "../Commons/MessageModal";
 import { RepairRequestComponent } from "../Workers/RepairRequest/RepairRequestComponent";
+import { JobOrderComponent } from "../JobOrders/JobOrderComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -95,6 +96,7 @@ export const DashboardLayout = () => {
                   <div
                     style={{
                       maxWidth: "700px",
+                      minWidth: "300px",
                       width: "max-content",
                       whiteSpace: "nowrap",
                       overflow: "hidden",
@@ -214,11 +216,34 @@ export const DashboardLayout = () => {
                 </Menu.Item>
               </>
             )}
+
+            {["admin"].includes(user.role) && (
+              <>
+                <Menu.Item>
+                  <NavLink to="/job-orders" activeClassName="link-active">
+                    <Icon name="list" />
+                    Job Orders
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
           </Menu.Menu>
         </Menu.Item>
       </Menu>
 
       <div style={{ marginLeft: "16rem", paddingRight: "1em" }}>
+        <div
+          style={{
+            backgroundColor: "red",
+            color: "white",
+            marginBottom: "1em",
+            fontWeight: "bold",
+            padding: "25px",
+          }}
+        >
+          <Icon name="warning" />
+          THIS SYSTEM IS IN DEBUG MODE.
+        </div>
         <Switch>
           <Route path="/dashboard" component={DashboardContent} />
           <Route path="/users" component={UserComponent} />
@@ -238,10 +263,25 @@ export const DashboardLayout = () => {
 
           <Route path="/repair-requests" component={RepairRequestComponent} />
 
+          <Route path="/job-orders" component={JobOrderComponent} />
+
           <Route path="/">
             <Redirect to="/dashboard" />
           </Route>
         </Switch>
+
+        <div
+          style={{
+            backgroundColor: "red",
+            color: "white",
+            marginTop: "1em",
+            fontWeight: "bold",
+            padding: "25px",
+          }}
+        >
+          <Icon  name="warning" />
+          THIS SYSTEM IS IN DEBUG MODE.
+        </div>
       </div>
     </Fragment>
   );

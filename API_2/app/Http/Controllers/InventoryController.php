@@ -23,7 +23,7 @@ class InventoryController extends Controller
     public function getAvailableItemParents()
     {
         $parentItems = InventoryParentItem::with(['inventory_items' => function ($query) {
-            $query->select('inventory_parent_item_id', 'id')->whereNull('room_id');
+            $query->select('inventory_parent_item_id', 'id')->whereNull('room_id')->where('is_disposed', false);
         }])
             ->orderBy('id')->get();
 
@@ -40,8 +40,14 @@ class InventoryController extends Controller
             ->orderBy('created_at')
             ->where('inventory_parent_item_id', $inventory_parent_item_id)
             ->whereNull('room_id')
+            ->where('is_disposed', false)
             ->orderBy('id')
             ->get();
+    }
+
+    public function getDisposedItems()
+    {
+        return InventoryItem::with('inventory_parent_item')->where('is_disposed', true)->get();
     }
 
     public function createItemParent(Request $request)
