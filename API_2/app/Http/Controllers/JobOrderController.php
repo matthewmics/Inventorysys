@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FileStorage;
 use App\Models\InventoryItem;
 use App\Models\JobOrder;
 use App\Models\Notification;
@@ -107,8 +108,14 @@ class JobOrderController extends Controller
         $room_name = $item->room->name;
 
         $base64file = base64_encode(file_get_contents($request->file('file')->path()));
+
+        $file_storage = FileStorage::create([
+            'name' => uniqid() . "_" . $request->file('file')->getClientOriginalName(),
+            'base64' => $base64file
+        ]);
+
         PurchaseOrder::create([
-            'base64_file' => $base64file,
+            'file_storage_id' => $file_storage->id,
             'job_order_id' => $jobOrder->id,
             'room_name' => $room_name,
             'item_name' => $item_name
