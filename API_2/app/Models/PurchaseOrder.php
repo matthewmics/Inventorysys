@@ -14,7 +14,9 @@ class PurchaseOrder extends Model
 
     protected $fillable = [
         'base64_file',
-        'job_order_id'
+        'job_order_id',
+        'room_name',
+        'item_name'
     ];
 
     public function job_order()

@@ -154,6 +154,10 @@ const JobOrders = {
   },
 };
 
+const PurchaseOrders = {
+  list: () => requests.get(`/purchase-orders`),
+};
+
 const agent = {
   User,
   Building,
@@ -166,6 +170,7 @@ const agent = {
   Notification,
   RepairRequest,
   JobOrders,
+  PurchaseOrders,
 };
 
 export default agent;

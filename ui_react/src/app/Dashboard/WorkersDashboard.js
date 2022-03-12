@@ -21,6 +21,7 @@ import { MessageModal } from "../Commons/MessageModal";
 import { DetailsModal } from "../Commons/DetailsModal";
 import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
 import { DisposedItemsComponent } from "../IventoryItem/DisposedItemsComponent";
+import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
 
 export const WorkersDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -266,7 +267,9 @@ export const WorkersDashboard = () => {
                   Purchase Orders
                 </Segment>
                 <Segment>
-                  <div className="dashboard-segment"></div>
+                  <div className="dashboard-segment">
+                    <PurchaseOrderComponent />
+                  </div>
                 </Segment>
               </Segment.Group>
             </Grid.Column>

@@ -97,25 +97,29 @@ class JobOrderController extends Controller
         $jobOrder->processor_user_id = $handler_id;
         $jobOrder->save();
 
-        $repairRequest = RepairRequest::with(['item', 'item.inventory_parent_item'])->find($jobOrder->repair_request_id);
+        $repairRequest = RepairRequest::with(['item', 'item.inventory_parent_item', 'item.room'])->find($jobOrder->repair_request_id);
         $repairRequest->status = 'PO created';
         $repairRequest->save();
 
         $item = InventoryItem::find($repairRequest->item->id);
 
         $item_name = $item->inventory_parent_item->name;
+        $room_name = $item->room->name;
+
+        $base64file = base64_encode(file_get_contents($request->file('file')->path()));
+        PurchaseOrder::create([
+            'base64_file' => $base64file,
+            'job_order_id' => $jobOrder->id,
+            'room_name' => $room_name,
+            'item_name' => $item_name
+        ]);
 
         $item->room_id = null;
         $item->is_disposed = true;
 
         $item->save();
 
-        $base64file = base64_encode(file_get_contents($request->file('file')->path()));
 
-        PurchaseOrder::create([
-            'base64_file' => $base64file,
-            'job_order_id' => $jobOrder->id
-        ]);
 
         Notification::create([
             'user_id' => $repairRequest->requestor_user_id,

@@ -8,6 +8,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ITSPPFOController;
 use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\POController;
 use App\Http\Controllers\RepairRequestController;
 use App\Http\Controllers\RfidController;
 use App\Http\Controllers\RoomController;
@@ -92,7 +93,7 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
 
     Route::post('/transfers', [TransferRequestController::class, 'requestTransfer']);
     Route::get('/transfers', [TransferRequestController::class, 'getRequests']);
-    
+
     Route::post('/repairs', [RepairRequestController::class, 'requestRepair']);
     Route::get('/repairs', [RepairRequestController::class, 'listRepairRequests']);
 
@@ -112,11 +113,12 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::post('/notifications/{id}/read', [NotificationController::class, 'read']);
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll']);
 
-    
     Route::get('/job-orders', [JobOrderController::class, 'listPendingJobOrders']);
     Route::post('/job-orders/{id}/repair', [JobOrderController::class, 'markAsRepaired']);
     Route::post('/job-orders/{id}/replace', [JobOrderController::class, 'replaceItem']);
     Route::post('/job-orders/{id}/create-po', [JobOrderController::class, 'createPO']);
+
+    Route::get('/purchase-orders', [POController::class, 'index']);
 });
 
 
