@@ -232,18 +232,7 @@ export const DashboardLayout = () => {
       </Menu>
 
       <div style={{ marginLeft: "16rem", paddingRight: "1em" }}>
-        <div
-          style={{
-            backgroundColor: "red",
-            color: "white",
-            marginBottom: "1em",
-            fontWeight: "bold",
-            padding: "25px",
-          }}
-        >
-          <Icon name="warning" />
-          THIS SYSTEM IS IN DEBUG MODE.
-        </div>
+        
         <Switch>
           <Route path="/dashboard" component={DashboardContent} />
           <Route path="/users" component={UserComponent} />
@@ -269,19 +258,7 @@ export const DashboardLayout = () => {
             <Redirect to="/dashboard" />
           </Route>
         </Switch>
-
-        <div
-          style={{
-            backgroundColor: "red",
-            color: "white",
-            marginTop: "1em",
-            fontWeight: "bold",
-            padding: "25px",
-          }}
-        >
-          <Icon  name="warning" />
-          THIS SYSTEM IS IN DEBUG MODE.
-        </div>
+        
       </div>
     </Fragment>
   );
