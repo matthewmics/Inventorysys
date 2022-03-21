@@ -226,7 +226,7 @@ export const InventoryContent = () => {
             <Form.Field>
               <label>Type</label>
               <Select
-                disabled
+                disabled={formValue.id !== 0}
                 options={itemTypeOptions}
                 value={formValue.item_type}
                 onChange={(e, data) => {
@@ -286,7 +286,7 @@ export const InventoryContent = () => {
           </Button>
         </div>
       </div>
-      <DataTable columns={columns} data={data} pagination  striped/>
+      <DataTable columns={columns} data={data} pagination striped />
     </>
   );
 };
