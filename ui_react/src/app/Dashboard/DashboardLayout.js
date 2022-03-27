@@ -21,6 +21,8 @@ import modalActions from "../../actions/modalActions";
 import { MessageModal } from "../Commons/MessageModal";
 import { RepairRequestComponent } from "../Workers/RepairRequest/RepairRequestComponent";
 import { JobOrderComponent } from "../JobOrders/JobOrderComponent";
+import { PCComponentContent } from "../PCComponent/PCComponentContent";
+import { PCComponentInstanceContent } from "../PCComponentInstance/PCComponentInstanceContent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -196,6 +198,15 @@ export const DashboardLayout = () => {
               </Menu.Item>
             )}
 
+            {["admin"].includes(user.role) && (
+              <Menu.Item>
+                <NavLink to="/pc-components" activeClassName="link-active">
+                  <Icon name="computer" />
+                  PC Components
+                </NavLink>
+              </Menu.Item>
+            )}
+
             {["admin", "its", "ppfo"].includes(user.role) && (
               <>
                 <Menu.Item>
@@ -232,7 +243,6 @@ export const DashboardLayout = () => {
       </Menu>
 
       <div style={{ marginLeft: "16rem", paddingRight: "1em" }}>
-        
         <Switch>
           <Route path="/dashboard" component={DashboardContent} />
           <Route path="/users" component={UserComponent} />
@@ -254,11 +264,16 @@ export const DashboardLayout = () => {
 
           <Route path="/job-orders" component={JobOrderComponent} />
 
+          <Route
+            path="/pc-components/:id"
+            component={PCComponentInstanceContent}
+          />
+          <Route path="/pc-components" component={PCComponentContent} />
+
           <Route path="/">
             <Redirect to="/dashboard" />
           </Route>
         </Switch>
-        
       </div>
     </Fragment>
   );

@@ -17,24 +17,26 @@ class ITSPPFOController extends Controller
     {
         $role = auth()->user()->role;
 
+        $statuses = ['completed', 'rejected', 'disposed'];
+
         if ($role === 'ppfo') {
 
             return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item'])
                 ->whereNotIn('item_type', ['PC'])
-                ->whereNotIn('status', ['completed', 'rejected', 'disposed'])
+                ->whereNotIn('status', $statuses)
                 ->orderBy('id')
                 ->get();
         } else if ($role === 'its') {
 
             return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item'])
                 ->where('item_type', 'PC')
-                ->whereNotIn('status', ['completed', 'rejected', 'disposed'])
+                ->whereNotIn('status', $statuses)
                 ->orderBy('id')
                 ->get();
         }
 
         return TransferRequest::with(['item', 'current_room', 'destination_room', 'requestor', 'item.inventory_parent_item'])
-            ->whereNotIn('status', ['completed', 'rejected', 'disposed'])
+            ->whereNotIn('status', $statuses)
             ->orderBy('id')
             ->get();
     }

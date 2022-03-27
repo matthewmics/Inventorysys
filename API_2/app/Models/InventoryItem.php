@@ -38,8 +38,20 @@ class InventoryItem extends Model
         return $this->hasMany(TransferRequest::class, 'item_id');
     }
 
+    public function available_transfer_requests()
+    {
+        return $this->hasMany(TransferRequest::class, 'item_id')
+            ->whereNotIn('status', ['completed', 'rejected', 'disposed']);
+    }
+
     public function repair_requests()
     {
         return $this->hasMany(RepairRequest::class, 'item_id');
+    }
+
+    public function available_repair_requests()
+    {
+        return $this->hasMany(RepairRequest::class, 'item_id')
+            ->whereNotIn('status', ['completed', 'rejected', 'disposed', 'replaced', 'PO created', 'repaired']);
     }
 }

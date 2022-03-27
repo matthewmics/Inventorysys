@@ -8,6 +8,8 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ITSPPFOController;
 use App\Http\Controllers\JobOrderController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PCComponentController;
+use App\Http\Controllers\PCComponentInstanceController;
 use App\Http\Controllers\POController;
 use App\Http\Controllers\RepairRequestController;
 use App\Http\Controllers\RfidController;
@@ -85,6 +87,9 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::put('/inventory/items/{id}', [InventoryController::class, 'updateItem']);
     Route::delete('/inventory/items/{id}', [InventoryController::class, 'deleteItem']);
     Route::post('/inventory/items/{id}', [InventoryController::class, 'disposeItem']);
+
+    Route::resource('pc-components', PCComponentController::class);
+    Route::resource('pc-component-instances', PCComponentInstanceController::class);
 
     Route::post('/departments/{user_id}/set-buildings', [DepartmentController::class, 'setBuildings']);
     Route::get('/departments/{user_id}', [DepartmentController::class, 'getBuildings'])

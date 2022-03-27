@@ -234,7 +234,6 @@ export const RoomComponent = () => {
             <Form.Field>
               <label>Type</label>
               <Select
-                disabled={formValue.id !== 0}
                 options={roomTypeOptions}
                 value={formValue.room_type}
                 onChange={(undefined, data) => {

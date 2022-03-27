@@ -158,6 +158,22 @@ const PurchaseOrders = {
   list: () => requests.get(`/purchase-orders`),
 };
 
+const PCComponent = {
+  list: () => requests.get(`/pc-components`),
+  show: (id) => requests.get(`/pc-components/${id}`),
+  create: (req) => requests.post(`/pc-components`, req),
+  update: (id, req) => requests.put(`/pc-components/${id}`, req),
+  delete: (id) => requests.delete(`/pc-components/${id}`),
+};
+
+const PCComponentInstance = {
+  list: () => requests.get(`/pc-component-instances`),
+  show: (id) => requests.get(`/pc-component-instances/${id}`),
+  create: (req) => requests.post(`/pc-component-instances`, req),
+  update: (id, req) => requests.put(`/pc-component-instances/${id}`, req),
+  delete: (id) => requests.delete(`/pc-component-instances/${id}`),
+};
+
 const agent = {
   User,
   Building,
@@ -171,6 +187,8 @@ const agent = {
   RepairRequest,
   JobOrders,
   PurchaseOrders,
+  PCComponent,
+  PCComponentInstance,
 };
 
 export default agent;

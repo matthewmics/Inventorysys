@@ -4,11 +4,14 @@ import { Message } from "semantic-ui-react";
 export const ErrorMessage = ({ errors }) => {
   const [errorList, setErrorList] = useState([]);
 
+  const errorList2 = [];
+  for (var props in errors) {
+    errorList2.push(errors[props]);
+  }
+
   useEffect(() => {
-    for (var props in errors) {
-      errorList.push(...errors[props]);
-    }
-  }, [errorList]);
+    setErrorList(errorList2);
+  }, [errors]);
 
   return (
     <Message error>
