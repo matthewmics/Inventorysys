@@ -63,6 +63,7 @@ const Room = {
   itemParents: (id) => requests.get(`/rooms/${id}/item-parents`),
   items: (id, parentId) =>
     requests.get(`/rooms/${id}/parents/${parentId}/items`),
+  allItems: (id) => requests.get(`/rooms/${id}/items`),
 };
 
 const Inventory = {
@@ -81,6 +82,10 @@ const Inventory = {
   itemDelete: (id) => requests.delete(`/inventory/items/${id}`),
   itemDispose: (id) => requests.post(`/inventory/items/${id}`, {}),
   diposedItemList: () => requests.get(`/inventory/items/disposed`),
+
+  itemShowComponents: (id) => requests.get(`/inventory/items/${id}/components`),
+  setRoom: (id, req) => requests.post(`/inventory/items/${id}/set-room`, req),
+  availableItems: () => requests.get(`/inventory/items/available`),
 };
 
 const Department = {
@@ -172,6 +177,9 @@ const PCComponentInstance = {
   create: (req) => requests.post(`/pc-component-instances`, req),
   update: (id, req) => requests.put(`/pc-component-instances/${id}`, req),
   delete: (id) => requests.delete(`/pc-component-instances/${id}`),
+  available: () => requests.get(`/pc-component-instances/available`),
+  setItem: (id, req) =>
+    requests.post(`/pc-component-instances/${id}/set-item`, req),
 };
 
 const agent = {

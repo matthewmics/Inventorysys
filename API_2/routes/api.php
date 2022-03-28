@@ -66,10 +66,11 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::resource('buildings', BuildingController::class);
 
     Route::get('/rooms/{room_id}/item-parents', [RoomController::class, 'getItemParents'])
-        ->where(['room_id' => '[0-9]']);
+        ->where(['room_id' => '[0-9]+']);
 
     Route::get('/rooms/{room_id}/parents/{inventory_parent_item_id}/items', [RoomController::class, 'getItems'])
-        ->where(['room_id' => '[0-9]', 'inventory_parent_item_id' => '[0-9]']);
+        ->where(['room_id' => '[0-9]+', 'inventory_parent_item_id' => '[0-9]+']);
+    Route::get('/rooms/{id}/items', [RoomController::class, 'getAllItems'])->where(['id' => '[0-9]+']);
     Route::resource('rooms', RoomController::class);
 
     Route::get('/inventory/parents', [InventoryController::class, 'getItemParents']);
@@ -82,18 +83,24 @@ Route::group(['middleware' => ['auth:sanctum', 'cors']], function () {
     Route::delete('/inventory/parents/{id}', [InventoryController::class, 'deleteItemParent']);
 
     Route::get('/inventory/items/disposed', [InventoryController::class, 'getDisposedItems']);
+    Route::get('/inventory/items/{id}/components', [InventoryController::class, 'inventoryItemShowComponents'])->where(['id' => '[0-9]+']);
     Route::post('/inventory/items', [InventoryController::class, 'createItem']);
-    Route::get('/inventory/items/{id}', [InventoryController::class, 'findItem']);
-    Route::put('/inventory/items/{id}', [InventoryController::class, 'updateItem']);
-    Route::delete('/inventory/items/{id}', [InventoryController::class, 'deleteItem']);
-    Route::post('/inventory/items/{id}', [InventoryController::class, 'disposeItem']);
+    Route::get('/inventory/items/{id}', [InventoryController::class, 'findItem'])->where(['id' => '[0-9]+']);
+    Route::put('/inventory/items/{id}', [InventoryController::class, 'updateItem'])->where(['id' => '[0-9]+']);
+    Route::delete('/inventory/items/{id}', [InventoryController::class, 'deleteItem'])->where(['id' => '[0-9]+']);
+    Route::post('/inventory/items/{id}', [InventoryController::class, 'disposeItem'])->where(['id' => '[0-9]+']);
+    Route::get('/inventory/items/available', [InventoryController::class, 'allAvailableItems']);
+    Route::post('/inventory/items/{id}/set-room', [InventoryController::class, 'setRoom']);
 
     Route::resource('pc-components', PCComponentController::class);
+
+    Route::post('/pc-component-instances/{id}/set-item', [PCComponentInstanceController::class, 'setItem']);
+    Route::get('/pc-component-instances/available', [PCComponentInstanceController::class, 'availableItems']);
     Route::resource('pc-component-instances', PCComponentInstanceController::class);
 
     Route::post('/departments/{user_id}/set-buildings', [DepartmentController::class, 'setBuildings']);
     Route::get('/departments/{user_id}', [DepartmentController::class, 'getBuildings'])
-        ->where(['user_id' => '[0-9]']);
+        ->where(['user_id' => '[0-9]+']);
     Route::get('/departments', [DepartmentController::class, 'getRooms']);
 
     Route::post('/transfers', [TransferRequestController::class, 'requestTransfer']);

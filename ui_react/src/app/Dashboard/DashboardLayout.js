@@ -23,6 +23,8 @@ import { RepairRequestComponent } from "../Workers/RepairRequest/RepairRequestCo
 import { JobOrderComponent } from "../JobOrders/JobOrderComponent";
 import { PCComponentContent } from "../PCComponent/PCComponentContent";
 import { PCComponentInstanceContent } from "../PCComponentInstance/PCComponentInstanceContent";
+import { InventoryItemComponentsContent } from "../InventoryItem/InventoryItemComponentsContent";
+import { RoomItemsComponent } from "../Rooms/RoomItemsComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -247,11 +249,24 @@ export const DashboardLayout = () => {
           <Route path="/dashboard" component={DashboardContent} />
           <Route path="/users" component={UserComponent} />
           <Route path="/buildings" component={BuildingComponent} />
+
+
+
+          <Route path="/rooms/:id/items" component={RoomItemsComponent} />
           <Route path="/rooms" component={RoomComponent} />
+
+
+
           <Route
             path="/inventory/:id/rooms/:roomID"
             component={DepartmentInventoryItemContent}
           />
+
+          <Route
+            path="/inventory/items/:id/components"
+            component={InventoryItemComponentsContent}
+          />
+
           <Route path="/inventory/:id" component={InventoryItemComponent} />
           <Route path="/inventory" component={InventoryComponent} />
 

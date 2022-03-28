@@ -90,23 +90,37 @@ class InventoryController extends Controller
     }
 
 
-    //--
+    //-- item------------------------------------------------------------------------------=====================
 
+
+    // item
     public function findItem($id)
     {
         return InventoryItem::find($id);
     }
 
-
+    //item
     public function getItems($id)
     {
-        return InventoryItem::with('room')->orderBy('created_at')
+        return InventoryItem::with('room')
+            ->with(['available_transfer_requests', 'available_repair_requests'])
             ->where('inventory_parent_item_id', $id)
             ->where('is_disposed', false)
-            ->orderBy('id')
+            ->orderBy('created_at')
             ->get();
     }
 
+    //item
+    public function inventoryItemShowComponents($id)
+    {
+        return InventoryItem::with(['components', 'inventory_parent_item', 'components.component'])
+            ->where('id', $id)
+            ->where('is_disposed', false)
+            ->orderBy('created_at')
+            ->first();
+    }
+
+    //item
     public function createItem(Request $request)
     {
         $request->validate([
@@ -118,6 +132,7 @@ class InventoryController extends Controller
         return InventoryItem::create($request->all());
     }
 
+    //item
     public function updateItem(Request $request, $id)
     {
 
@@ -133,6 +148,7 @@ class InventoryController extends Controller
     }
 
 
+    // item
     public function deleteItem($id)
     {
 
@@ -141,6 +157,8 @@ class InventoryController extends Controller
         return response()->noContent();
     }
 
+
+    // item
     public function disposeItem($id)
     {
 
@@ -152,5 +170,23 @@ class InventoryController extends Controller
         ]);
 
         return response()->noContent();
+    }
+
+    public function setRoom(Request $request, $id)
+    {
+        $item = InventoryItem::find($id);
+
+        $item->room_id = $request['room_id'];
+
+        $item->save();
+
+        $item->load(['inventory_parent_item']);
+
+        return $item;
+    }
+
+    public function allAvailableItems()
+    {
+        return InventoryItem::with(['inventory_parent_item'])->where('is_disposed', false)->whereNull('room_id')->get();
     }
 }

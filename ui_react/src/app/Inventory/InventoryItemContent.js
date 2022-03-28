@@ -8,6 +8,7 @@ import {
   Form,
   Icon,
   Input,
+  Label,
   Loader,
   Modal,
   Popup,
@@ -44,6 +45,19 @@ export const InventoryItemContent = () => {
     {
       name: "Brand",
       selector: (row) => row.brand,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => {
+        if (row.available_transfer_requests.length > 0) {
+          return <Label color="orange">Transferring</Label>;
+        } else if (row.available_repair_requests.length > 0) {
+          return <Label color="red">Repairing</Label>;
+        } else {
+          return <Label>Normal</Label>;
+        }
+      },
       sortable: true,
     },
     {
@@ -107,7 +121,8 @@ export const InventoryItemContent = () => {
       }),
     ]);
 
-    setItemParent(await agent.Inventory.parentInstance(parentId));
+    const itemParentResponse = await agent.Inventory.parentInstance(parentId);
+    setItemParent(itemParentResponse);
 
     let response = await agent.Inventory.parentItemItems(parentId);
 
@@ -118,6 +133,22 @@ export const InventoryItemContent = () => {
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
+            {itemParentResponse.item_type === "PC" && (
+              <Popup
+                content="Components"
+                trigger={
+                  <Button
+                    icon="computer"
+                    circular
+                    size="tiny"
+                    onClick={() => {
+                      history.push(`/inventory/items/${a.id}/components`);
+                    }}
+                  />
+                }
+              />
+            )}
+
             <Popup
               content="Edit Item"
               trigger={
@@ -284,7 +315,6 @@ export const InventoryItemContent = () => {
             <Form.Field>
               <label>Room</label>
               <Select
-                disabled={formValue.id !== 0 && formValue.room_id !== 0}
                 search
                 options={roomOptions}
                 value={formValue.room_id}
@@ -359,7 +389,7 @@ export const InventoryItemContent = () => {
           </Button>
         </div>
       </div>
-      <DataTable columns={columns} data={data} pagination striped/>
+      <DataTable columns={columns} data={data} pagination striped />
     </>
   );
 };

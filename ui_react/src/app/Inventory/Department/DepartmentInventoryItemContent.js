@@ -6,6 +6,7 @@ import {
   Form,
   Icon,
   Input,
+  Label,
   Loader,
   Modal,
   Popup,
@@ -101,6 +102,19 @@ export const DepartmentInventoryItemContent = () => {
     {
       name: "Brand",
       selector: (row) => row.brand,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => {
+        if (row.transfer_requests.length > 0) {
+          return <Label color="orange">Transferring</Label>;
+        } else if (row.repair_requests.length > 0) {
+          return <Label color="red">Repairing</Label>;
+        } else {
+          return <Label>Normal</Label>;
+        }
+      },
       sortable: true,
     },
     {
@@ -337,12 +351,7 @@ export const DepartmentInventoryItemContent = () => {
           </Button>
         </div>
       </div>
-      <DataTable
-        columns={columns}
-        data={data}
-        pagination
-        striped
-      />
+      <DataTable columns={columns} data={data} pagination striped />
     </>
   );
 };

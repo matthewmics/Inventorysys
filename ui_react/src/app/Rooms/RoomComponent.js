@@ -13,11 +13,13 @@ import {
   Segment,
   Select,
 } from "semantic-ui-react";
+import { history } from "../..";
 import agent from "../../agent";
 import { dateStringToLocal } from "../../helpers";
 import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
 import { roleOptions, roomTypeOptions } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
+import { PopupButton } from "../Commons/PopupButton";
 
 export const RoomComponent = () => {
   const [buildingList, setBuildingList] = useState([
@@ -54,7 +56,7 @@ export const RoomComponent = () => {
       right: true,
     },
   ];
-  
+
   const handleTextInputChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
@@ -105,6 +107,14 @@ export const RoomComponent = () => {
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
+            <PopupButton
+              content="Items"
+              iconName="boxes"
+              color="teal"
+              onClick={() => {
+                history.push(`/rooms/${a.id}/items`);
+              }}
+            />
             <Popup
               content="Edit Room"
               trigger={
@@ -174,14 +184,13 @@ export const RoomComponent = () => {
     }
   };
 
-  const onArchive = async () => {      
+  const onArchive = async () => {
     setArchive({ ...archive, loading: true });
     await agent.Room.delete(archive.data.id);
     toast.success("Room archived successfully");
     setArchive({ ...archive, loading: false, open: false });
     loadRooms();
   };
-
 
   useEffect(() => {
     loadRooms();
@@ -310,7 +319,7 @@ export const RoomComponent = () => {
         </div>
       </div>
 
-      <DataTable columns={columns} data={data} pagination striped/>
+      <DataTable columns={columns} data={data} pagination striped />
     </>
   );
 };

@@ -13,6 +13,23 @@ class PCComponentInstanceController extends Controller
         return PCComponentInstance::get();
     }
 
+    public function availableItems()
+    {
+        return PCComponentInstance::with('component')->whereNull('inventory_item_id')->get();
+    }
+
+    public function setItem(Request $request, $id)
+    {
+        $instance = PCComponentInstance::find($id);
+
+        $instance->inventory_item_id = $request["inventory_item_id"];
+
+        $instance->save();
+
+        $instance->load(['component']);
+
+        return $instance;
+    }
 
     public function store(Request $request)
     {

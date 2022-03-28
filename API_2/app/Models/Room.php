@@ -24,7 +24,8 @@ class Room extends Model
         return $this->belongsTo(Building::class);
     }
 
-    public function inventory_items(){
-        return $this->hasMany(InventoryItem::class);
+    public function inventory_items()
+    {
+        return $this->hasMany(InventoryItem::class)->where('is_disposed', false);
     }
 }
