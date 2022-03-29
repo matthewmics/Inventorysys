@@ -14,8 +14,7 @@ class AddRoomIdColumnToInventoryItem extends Migration
     public function up()
     {
         Schema::table('inventory_items', function (Blueprint $table) {
-            $table->bigInteger('room_id')->nullable();            
-            $table->foreign('room_id')->references('id')->on('rooms');
+            $table->foreignId('room_id')->nullable()->constrained('rooms');
         });
     }
 
@@ -25,7 +24,9 @@ class AddRoomIdColumnToInventoryItem extends Migration
      * @return void
      */
     public function down()
-    {
-        
+    { 
+        Schema::table('inventory_items', function (Blueprint $table) {
+            $table->removeColumn(['room_id']);
+        });
     }
 }

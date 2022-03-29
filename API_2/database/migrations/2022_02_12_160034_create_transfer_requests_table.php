@@ -16,20 +16,15 @@ class CreateTransferRequestsTable extends Migration
         Schema::create('transfer_requests', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger('requestor_user_id');
-            $table->bigInteger('current_room_id')->nullable();            
-            $table->bigInteger('destination_room_id');    
-            $table->bigInteger('item_id');
+            $table->foreignId('requestor_user_id')->constrained('users');
+            $table->foreignId('current_room_id')->nullable()->constrained('rooms');            
+            $table->foreignId('destination_room_id')->constrained('rooms');    
+            $table->foreignId('item_id')->constrained('inventory_items');
             $table->text('details');
             $table->string('status', 100)->default('pending');
 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('requestor_user_id')->references('id')->on('users');
-            $table->foreign('current_room_id')->references('id')->on('rooms');
-            $table->foreign('destination_room_id')->references('id')->on('rooms');
-            $table->foreign('item_id')->references('id')->on('inventory_items');
         });
     }
 

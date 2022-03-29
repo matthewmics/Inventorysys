@@ -15,7 +15,7 @@ class CreateInventoryItemsTable extends Migration
     {
         Schema::create('inventory_items', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('inventory_parent_item_id');
+            $table->foreignId('inventory_parent_item_id')->constrained("inventory_parent_items");
             $table->string('brand', 100);
             $table->string('serial_number', 255);
 
@@ -23,7 +23,6 @@ class CreateInventoryItemsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('inventory_parent_item_id')->references('id')->on('inventory_parent_items');
         });
     }
 

@@ -14,12 +14,10 @@ class CreateDepartmentBuildingsTable extends Migration
     public function up()
     {
         Schema::create('department_building', function (Blueprint $table) {
-            $table->bigInteger('building_id');
-            $table->bigInteger('user_id');
+            $table->foreignId('building_id')->constrained('buildings');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
 
-            $table->foreign('building_id')->references('id')->on('buildings');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->primary(['user_id', 'building_id']);
         });
     }

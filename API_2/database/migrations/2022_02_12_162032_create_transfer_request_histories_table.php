@@ -15,13 +15,10 @@ class CreateTransferRequestHistoriesTable extends Migration
     {
         Schema::create('transfer_request_histories', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('transfer_request_id');
-            $table->bigInteger('handler_user_id');
+            $table->foreignId('transfer_request_id')->constrained('transfer_requests');
+            $table->foreignId('handler_user_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign('transfer_request_id')->references('id')->on('transfer_requests');
-            $table->foreign('handler_user_id')->references('id')->on('users');
         });
     }
 

@@ -14,14 +14,12 @@ class CreateRoomsTable extends Migration
     public function up()
     {
         Schema::create('rooms', function (Blueprint $table) {
-            $table->id();            
-            $table->bigInteger('building_id')->nullable();
+            $table->id();
+            $table->foreignId('building_id')->nullable()->constrained("buildings");
             $table->string('name', 100);
             $table->string('room_type', 100);
             $table->softDeletes();
             $table->timestamps();
-            
-            $table->foreign('building_id')->references('id')->on('buildings');
         });
     }
 
