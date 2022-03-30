@@ -81,7 +81,6 @@ export const RepairRequestComponent = () => {
                     <ConfirmationModal
                       content="Are you sure you want to create a job order for this request? Click OK to proceed."
                       onSubmit={async () => {
-
                         modalActions.setLoading(dispatch, true);
 
                         await agent.Workers.createJobOrder({
@@ -168,7 +167,7 @@ export const RepairRequestComponent = () => {
         </div>
         <hr></hr>
       </div>
-      <DataTable columns={columns} data={dtData} pagination />
+      <DataTable columns={columns} data={dtData} pagination striped />
     </>
   );
 };

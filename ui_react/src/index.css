@@ -83,3 +83,8 @@ div.notification-unread {
   height: 300px;
   overflow-y: auto;
 }
+
+.label-secondary {
+  color: "grey";
+  font-size: 12px;
+}
