@@ -8,6 +8,7 @@ import agent from "../../agent";
 import { dateStringToLocal } from "../../helpers";
 import { ConfirmationModal } from "../Commons/ConfirmationModal";
 import { PopupButton } from "../Commons/PopupButton";
+import { JobOrderReplace } from "./JobOrderReplace";
 
 export const JobOrderComponent = () => {
   const dispatch = useDispatch();
@@ -63,7 +64,21 @@ export const JobOrderComponent = () => {
             content="Replace With Available Items From Inventory"
             iconName="redo"
             color="teal"
-            onClick={() => {}}
+            onClick={() => {
+              modalActions.openModal(
+                dispatch,
+                "Replace Item - " +
+                  row.repair_request.item.inventory_parent_item.name,
+                <JobOrderReplace
+                  onSave={async () => {
+                    toast.success("Item Replaced");
+                    loadData();
+                  }}
+                  parentId={row.repair_request.item.inventory_parent_item.id}
+                  jobOrderId={row.id}
+                />
+              );
+            }}
           />
           <PopupButton
             content="Create Purchase Order"
