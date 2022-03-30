@@ -8,6 +8,7 @@ import agent from "../../agent";
 import { dateStringToLocal } from "../../helpers";
 import { ConfirmationModal } from "../Commons/ConfirmationModal";
 import { PopupButton } from "../Commons/PopupButton";
+import { JobOrderPurchaseOrder } from "./JobOrderPurchaseOrder";
 import { JobOrderReplace } from "./JobOrderReplace";
 
 export const JobOrderComponent = () => {
@@ -84,7 +85,21 @@ export const JobOrderComponent = () => {
             content="Create Purchase Order"
             iconName="file"
             color="teal"
-            onClick={() => {}}
+            onClick={() => {
+              modalActions.openModal(
+                dispatch,
+                "Purchase Order - " +
+                  row.repair_request.item.inventory_parent_item.name,
+                <JobOrderPurchaseOrder
+                  onSave={async () => {
+                    toast.success("PO Created");
+                    loadData();
+                  }}
+                  itemName={row.repair_request.item.inventory_parent_item.name}
+                  jobOrderId={row.id}
+                />
+              );
+            }}
           />
         </>
       ),
