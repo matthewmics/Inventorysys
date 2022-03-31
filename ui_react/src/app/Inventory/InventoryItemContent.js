@@ -133,7 +133,7 @@ export const InventoryItemContent = () => {
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
-            {itemParentResponse.item_type === "PC" && (
+            {/* {itemParentResponse.item_type === "PC" && (
               <Popup
                 content="Components"
                 trigger={
@@ -147,7 +147,7 @@ export const InventoryItemContent = () => {
                   />
                 }
               />
-            )}
+            )} */}
 
             <Popup
               content="Edit Item"

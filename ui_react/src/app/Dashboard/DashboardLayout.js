@@ -24,7 +24,7 @@ import { JobOrderComponent } from "../JobOrders/JobOrderComponent";
 import { PCComponentContent } from "../PCComponent/PCComponentContent";
 import { PCComponentInstanceContent } from "../PCComponentInstance/PCComponentInstanceContent";
 import { InventoryItemComponentsContent } from "../InventoryItem/InventoryItemComponentsContent";
-import { RoomItemsComponent } from "../Rooms/RoomItemsComponent";
+import { RoomItemsComponent } from "../Rooms/RoomItemsComponent/RoomItemsComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -200,14 +200,14 @@ export const DashboardLayout = () => {
               </Menu.Item>
             )}
 
-            {["admin"].includes(user.role) && (
+            {/* {["admin"].includes(user.role) && (
               <Menu.Item>
                 <NavLink to="/pc-components" activeClassName="link-active">
                   <Icon name="computer" />
                   PC Components
                 </NavLink>
               </Menu.Item>
-            )}
+            )} */}
 
             {["admin", "its", "ppfo"].includes(user.role) && (
               <>
@@ -241,6 +241,19 @@ export const DashboardLayout = () => {
               </>
             )}
           </Menu.Menu>
+
+          <Menu.Menu style={{ borderTop: "1px solid #424242" }}>
+            {["admin"].includes(user.role) && (
+              <>
+                <Menu.Item>
+                  <NavLink to="/job-orders" activeClassName="link-active">
+                    <Icon name="list" />
+                    Job Orders
+                  </NavLink>
+                </Menu.Item>
+              </>
+            )}
+          </Menu.Menu>
         </Menu.Item>
       </Menu>
 
@@ -250,12 +263,8 @@ export const DashboardLayout = () => {
           <Route path="/users" component={UserComponent} />
           <Route path="/buildings" component={BuildingComponent} />
 
-
-
           <Route path="/rooms/:id/items" component={RoomItemsComponent} />
           <Route path="/rooms" component={RoomComponent} />
-
-
 
           <Route
             path="/inventory/:id/rooms/:roomID"
