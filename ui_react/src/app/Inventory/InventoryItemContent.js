@@ -50,10 +50,10 @@ export const InventoryItemContent = () => {
     {
       name: "Status",
       selector: (row) => {
-        if (row.available_transfer_requests.length > 0) {
-          return <Label color="orange">Transferring</Label>;
-        } else if (row.available_repair_requests.length > 0) {
-          return <Label color="red">Repairing</Label>;
+        if (row.is_transferring > 0) {
+          return <Label color="orange">Pending for transfer</Label>;
+        } else if (row.is_broken > 0) {
+          return <Label color="red">Pending for repair</Label>;
         } else {
           return <Label>Normal</Label>;
         }

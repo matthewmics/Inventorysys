@@ -86,6 +86,7 @@ const Inventory = {
   itemShowComponents: (id) => requests.get(`/inventory/items/${id}/components`),
   setRoom: (id, req) => requests.post(`/inventory/items/${id}/set-room`, req),
   availableItems: () => requests.get(`/inventory/items/available`),
+  unavailableItems: () => requests.get(`/inventory/items/unavailable`),
 };
 
 const Department = {
@@ -93,6 +94,7 @@ const Department = {
   setBuildings: (req, id) =>
     requests.post(`/departments/${id}/set-buildings`, req),
   current: () => requests.get("/departments"),
+  rooms: () => requests.get("/departments/rooms"),
 };
 
 const TransferRequest = {
@@ -163,6 +165,11 @@ const PurchaseOrders = {
   list: () => requests.get(`/purchase-orders`),
 };
 
+const Borrow = {
+  borrow: (req) => requests.post(`/borrows`, req),
+  list: () => requests.get(`/borrows`),
+};
+
 const PCComponent = {
   list: () => requests.get(`/pc-components`),
   show: (id) => requests.get(`/pc-components/${id}`),
@@ -197,6 +204,7 @@ const agent = {
   PurchaseOrders,
   PCComponent,
   PCComponentInstance,
+  Borrow,
 };
 
 export default agent;

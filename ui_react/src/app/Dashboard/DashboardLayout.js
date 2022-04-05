@@ -25,6 +25,7 @@ import { PCComponentContent } from "../PCComponent/PCComponentContent";
 import { PCComponentInstanceContent } from "../PCComponentInstance/PCComponentInstanceContent";
 import { InventoryItemComponentsContent } from "../InventoryItem/InventoryItemComponentsContent";
 import { RoomItemsComponent } from "../Rooms/RoomItemsComponent/RoomItemsComponent";
+import { BorrowComponent } from "../Borrow/BorrowComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -191,6 +192,13 @@ export const DashboardLayout = () => {
               </>
             )}
 
+            <Menu.Item>
+              <NavLink to="/borrows" activeClassName="link-active">
+                <Icon name="pallet" />
+                Borrow Request
+              </NavLink>
+            </Menu.Item>
+
             {["admin", "department"].includes(user.role) && (
               <Menu.Item>
                 <NavLink to="/inventory" activeClassName="link-active">
@@ -293,6 +301,8 @@ export const DashboardLayout = () => {
             component={PCComponentInstanceContent}
           />
           <Route path="/pc-components" component={PCComponentContent} />
+
+          <Route path="/borrows" component={BorrowComponent} />
 
           <Route path="/">
             <Redirect to="/dashboard" />

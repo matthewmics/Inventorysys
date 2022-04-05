@@ -107,10 +107,10 @@ export const DepartmentInventoryItemContent = () => {
     {
       name: "Status",
       selector: (row) => {
-        if (row.transfer_requests.length > 0) {
-          return <Label color="orange">Transferring</Label>;
-        } else if (row.repair_requests.length > 0) {
-          return <Label color="red">Repairing</Label>;
+        if (row.is_transferring > 0) {
+          return <Label color="orange">Pending for transfer</Label>;
+        } else if (row.is_broken > 0) {
+          return <Label color="red">Pending for repair</Label>;
         } else {
           return <Label>Normal</Label>;
         }
@@ -174,7 +174,7 @@ export const DepartmentInventoryItemContent = () => {
           <>
             <PopupButton
               disabled={
-                a.transfer_requests.length > 0 || a.repair_requests.length > 0
+                a.is_broken || a.is_transferring
               }
               content="Request Transfer"
               iconName="dolly"
@@ -194,7 +194,7 @@ export const DepartmentInventoryItemContent = () => {
             {roomID != 0 && (
               <PopupButton
                 disabled={
-                  a.transfer_requests.length > 0 || a.repair_requests.length > 0
+                  a.is_broken || a.is_transferring
                 }
                 content="Repair Request"
                 iconName="wrench"

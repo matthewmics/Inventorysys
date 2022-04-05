@@ -22,6 +22,7 @@ import { DetailsModal } from "../Commons/DetailsModal";
 import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
 import { DisposedItemsComponent } from "../IventoryItem/DisposedItemsComponent";
 import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
+import { BorrowRequestSummary } from "./Department/BorrowRequestSummary";
 
 export const WorkersDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -253,6 +254,19 @@ export const WorkersDashboard = () => {
                     progressPending={loading}
                   />
                 </div>
+              </Segment>
+            </Segment.Group>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column computer={8} mobile={16}>
+            <Segment.Group>
+              <Segment className="bg-gradient-1">
+                <Icon name="pallet" />
+                Borrows
+              </Segment>
+              <Segment>
+                <BorrowRequestSummary />
               </Segment>
             </Segment.Group>
           </Grid.Column>
