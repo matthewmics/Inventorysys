@@ -24,6 +24,8 @@ import { PopupButton } from "../../Commons/PopupButton";
 import { useDispatch } from "react-redux";
 import modalActions from "../../../actions/modalActions";
 import { DepartmentRequestRepair } from "./DepartmentRequestRepair";
+import { ItemStatusCurrentStatusLabel } from "../ItemStatusCurrentStatusLabel";
+import { checkIfItemInTransaction } from "../InventoryHelpers";
 
 export const DepartmentInventoryItemContent = () => {
   const dispatch = useDispatch();
@@ -107,15 +109,8 @@ export const DepartmentInventoryItemContent = () => {
     {
       name: "Status",
       selector: (row) => {
-        if (row.is_transferring > 0) {
-          return <Label color="orange">Pending for transfer</Label>;
-        } else if (row.is_broken > 0) {
-          return <Label color="red">Pending for repair</Label>;
-        } else {
-          return <Label>Normal</Label>;
-        }
+        return <ItemStatusCurrentStatusLabel item={row} />;
       },
-      sortable: true,
     },
     {
       name: "Date Created",
@@ -173,9 +168,7 @@ export const DepartmentInventoryItemContent = () => {
         actions: (
           <>
             <PopupButton
-              disabled={
-                a.is_broken || a.is_transferring
-              }
+              disabled={checkIfItemInTransaction(a)}
               content="Request Transfer"
               iconName="dolly"
               onClick={() => {
@@ -193,9 +186,7 @@ export const DepartmentInventoryItemContent = () => {
             />
             {roomID != 0 && (
               <PopupButton
-                disabled={
-                  a.is_broken || a.is_transferring
-                }
+                disabled={checkIfItemInTransaction(a)}
                 content="Repair Request"
                 iconName="wrench"
                 onClick={() => {

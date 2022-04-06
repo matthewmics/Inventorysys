@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { Icon, Loader, Segment } from "semantic-ui-react";
 import { history } from "../../..";
 import agent from "../../../agent";
+import { DelayedSearchInput } from "../../Commons/DelayedSearchInput";
 import { PopupButton } from "../../Commons/PopupButton";
 
 export const RoomItemsComponent = () => {
@@ -121,7 +122,11 @@ export const RoomItemsComponent = () => {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
 
   const [room, setRoom] = useState({});
+
+  const [dtRoomItemsTemp, setDtRoomItemsTemp] = useState([]);
   const [dtRoomItems, setDtRoomItems] = useState([]);
+
+  const [dtAvailableItemsTemp, setDtAvailableItemsTemp] = useState([]);
   const [dtAvailableItems, setDtAvailableItems] = useState([]);
 
   useEffect(() => {
@@ -133,8 +138,10 @@ export const RoomItemsComponent = () => {
     let response = await agent.Room.allItems(id);
     setRoom({ name: response.name });
     setDtRoomItems(response.inventory_items);
+    setDtRoomItemsTemp(response.inventory_items);
     response = await agent.Inventory.availableItems();
     setDtAvailableItems(response);
+    setDtAvailableItemsTemp(response);
     setLoading(false);
   };
 
@@ -157,9 +164,23 @@ export const RoomItemsComponent = () => {
         <hr></hr>
       </div>
       <Segment.Group>
-        <Segment>
+        <Segment style={{ overflow: "auto" }}>
           <Icon name="boxes" />
           <b>ITEMS</b>
+          <div style={{ float: "right" }}>
+            <DelayedSearchInput
+              onSearch={(term) => {
+                setDtRoomItems(
+                  dtRoomItemsTemp.filter((a) => {
+                    return (
+                      a.serial_number.toLowerCase().includes(term) ||
+                      a.inventory_parent_item.name.toLowerCase().includes(term)
+                    );
+                  })
+                );
+              }}
+            />
+          </div>
         </Segment>
         <Segment>
           <DataTable
@@ -173,9 +194,23 @@ export const RoomItemsComponent = () => {
       </Segment.Group>
 
       <Segment.Group>
-        <Segment>
+        <Segment style={{ overflow: "auto" }}>
           <Icon name="boxes" />
           <b>AVAILABLE ITEMS</b>
+          <div style={{ float: "right" }}>
+            <DelayedSearchInput
+              onSearch={(term) => {
+                setDtAvailableItems(
+                  dtAvailableItemsTemp.filter((a) => {
+                    return (
+                      a.serial_number.toLowerCase().includes(term) ||
+                      a.inventory_parent_item.name.toLowerCase().includes(term)
+                    );
+                  })
+                );
+              }}
+            />
+          </div>
         </Segment>
         <Segment>
           <DataTable

@@ -25,6 +25,11 @@ import {
   roomTypeOptions,
 } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
+import {
+  checkIfItemInTransaction,
+  getItemLabelStatus,
+} from "./InventoryHelpers";
+import { ItemStatusCurrentStatusLabel } from "./ItemStatusCurrentStatusLabel";
 
 export const InventoryItemContent = () => {
   const { id: parentId } = useParams();
@@ -49,16 +54,7 @@ export const InventoryItemContent = () => {
     },
     {
       name: "Status",
-      selector: (row) => {
-        if (row.is_transferring > 0) {
-          return <Label color="orange">Pending for transfer</Label>;
-        } else if (row.is_broken > 0) {
-          return <Label color="red">Pending for repair</Label>;
-        } else {
-          return <Label>Normal</Label>;
-        }
-      },
-      sortable: true,
+      selector: (row) => <ItemStatusCurrentStatusLabel item={row} />,
     },
     {
       name: "Date Created",
@@ -153,6 +149,7 @@ export const InventoryItemContent = () => {
               content="Edit Item"
               trigger={
                 <Button
+                  disabled={checkIfItemInTransaction(a)}
                   icon="pencil"
                   circular
                   size="tiny"
@@ -172,6 +169,7 @@ export const InventoryItemContent = () => {
               content="Archive Item"
               trigger={
                 <Button
+                  disabled={checkIfItemInTransaction(a)}
                   icon="archive"
                   circular
                   size="tiny"
@@ -296,7 +294,6 @@ export const InventoryItemContent = () => {
             <Form.Field>
               <label>Serial / Asset Number</label>
               <input
-                readOnly={formValue.id !== 0}
                 name="serial_number"
                 value={formValue.serial_number}
                 placeholder="Serial / Asset No."
