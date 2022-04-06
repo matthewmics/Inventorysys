@@ -117,7 +117,7 @@ export const RoomItemsComponent = () => {
 
   const { id } = useParams();
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
 

@@ -8,11 +8,9 @@ import {
   Dropdown,
   Form,
   Icon,
-  Input,
   Loader,
   Modal,
   Popup,
-  Segment,
   Select,
 } from "semantic-ui-react";
 import agent from "../../agent";

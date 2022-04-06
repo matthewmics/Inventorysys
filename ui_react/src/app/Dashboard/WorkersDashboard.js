@@ -272,7 +272,7 @@ export const WorkersDashboard = () => {
           </Grid.Column>
         </Grid.Row>
 
-        {["admin"].includes(user.role) && (
+        {["admin-bak"].includes(user.role) && (
           <Grid.Row>
             <Grid.Column mobile={16} computer={8}>
               <Segment.Group>

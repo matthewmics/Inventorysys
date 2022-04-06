@@ -1,34 +1,22 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   Button,
   Form,
   Icon,
-  Input,
-  Label,
   Loader,
   Modal,
   Popup,
-  Segment,
   Select,
 } from "semantic-ui-react";
 import { history } from "../..";
 import agent from "../../agent";
 import { dateStringToLocal } from "../../helpers";
 import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
-import {
-  itemTypeOptions,
-  roleOptions,
-  roomTypeOptions,
-} from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
-import {
-  checkIfItemInTransaction,
-  getItemLabelStatus,
-} from "./InventoryHelpers";
+import { checkIfItemInTransaction } from "./InventoryHelpers";
 import { ItemStatusCurrentStatusLabel } from "./ItemStatusCurrentStatusLabel";
 
 export const InventoryItemContent = () => {

@@ -100,9 +100,10 @@ export const DepartmentInventoryContent = () => {
       };
     });
 
-    if (roomID !== 0) {
-      itemParentsReponse = itemParentsReponse.filter((a) => a.qty > 0);
-    }
+    // if (roomID !== 0) {
+    // }
+
+    itemParentsReponse = itemParentsReponse.filter((a) => a.qty > 0);
 
     setDataTemp(itemParentsReponse);
     setData(itemParentsReponse);

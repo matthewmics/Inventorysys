@@ -2,15 +2,12 @@ import React, { Fragment } from "react";
 
 import { Dropdown, Icon, Menu, Label, Modal, Button } from "semantic-ui-react";
 import { NavLink, Redirect, Route, Switch } from "react-router-dom";
-import { history } from "../..";
 import { DashboardContent } from "./DashboardContent";
 import { UserComponent } from "../Users/UserComponent";
 import { BuildingComponent } from "../Buildings/BuildingComponent";
 import { RoomComponent } from "../Rooms/RoomComponent";
-import { InventoryContent } from "../Inventory/InventoryContent";
 import { useDispatch, useSelector } from "react-redux";
 import { authSignOut } from "../../actions";
-import { InventoryItemContent } from "../Inventory/InventoryItemContent";
 import { InventoryItemComponent } from "../Inventory/InventoryItemComponent";
 import { InventoryComponent } from "../Inventory/InventoryComponent";
 import { DepartmentInventoryItemContent } from "../Inventory/Department/DepartmentInventoryItemContent";
@@ -26,6 +23,8 @@ import { PCComponentInstanceContent } from "../PCComponentInstance/PCComponentIn
 import { InventoryItemComponentsContent } from "../InventoryItem/InventoryItemComponentsContent";
 import { RoomItemsComponent } from "../Rooms/RoomItemsComponent/RoomItemsComponent";
 import { BorrowComponent } from "../Borrow/BorrowComponent";
+import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
+import { DisposedItemsComponent } from "../IventoryItem/DisposedItemsComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -254,9 +253,16 @@ export const DashboardLayout = () => {
             {["admin"].includes(user.role) && (
               <>
                 <Menu.Item>
-                  <NavLink to="/job-orders" activeClassName="link-active">
-                    <Icon name="list" />
-                    Job Orders
+                  <NavLink to="/purchase-orders" activeClassName="link-active">
+                    <Icon name="money" />
+                    Purchase Orders
+                  </NavLink>
+                </Menu.Item>
+
+                <Menu.Item>
+                  <NavLink to="/disposed-items" activeClassName="link-active">
+                    <Icon name="trash" />
+                    Disposed Items
                   </NavLink>
                 </Menu.Item>
               </>
@@ -303,6 +309,10 @@ export const DashboardLayout = () => {
           <Route path="/pc-components" component={PCComponentContent} />
 
           <Route path="/borrows" component={BorrowComponent} />
+
+          <Route path="/purchase-orders" component={PurchaseOrderComponent} />
+
+          <Route path="/disposed-items" component={DisposedItemsComponent} />
 
           <Route path="/">
             <Redirect to="/dashboard" />
