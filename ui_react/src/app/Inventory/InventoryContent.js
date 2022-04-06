@@ -121,7 +121,7 @@ export const InventoryContent = () => {
               }
             />
             <Popup
-              content="Archive Item"
+              content="Delete Item"
               trigger={
                 <Button
                   icon="archive"
@@ -170,7 +170,7 @@ export const InventoryContent = () => {
   const onArchive = async () => {
     setArchive({ ...archive, loading: true });
     await agent.Inventory.parentDelete(archive.data.id);
-    toast.success("Item archived successfully");
+    toast.success("Item deleted successfully");
     setArchive({ ...archive, loading: false, open: false });
     loadParentItems();
   };
@@ -183,7 +183,7 @@ export const InventoryContent = () => {
     <>
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
-        <Modal.Header>Confirm archive</Modal.Header>
+        <Modal.Header>Confirm Delete</Modal.Header>
         <Modal.Content>
           Are you sure you want to archive {archive.data?.name} ?
         </Modal.Content>

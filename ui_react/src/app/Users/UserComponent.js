@@ -148,7 +148,7 @@ export const UserComponent = () => {
             )}
             {user.id !== a.id && (
               <Popup
-                content="Archive User"
+                content="Delete User"
                 trigger={
                   <Button
                     icon="archive"
@@ -190,7 +190,7 @@ export const UserComponent = () => {
     await agent.User.delete(archiveUser.user.id);
     setArchiveUser({ ...archiveUser, loading: false, open: false });
     loadUsers();
-    toast.success("Successfully archived " + archiveUser.user.name);
+    toast.success("Successfully deleted " + archiveUser.user.name);
   };
 
   const handleTextInputChange = (e) => {
@@ -251,7 +251,7 @@ export const UserComponent = () => {
       </Modal>
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archiveUser.open} closeOnDimmerClick={false}>
-        <Modal.Header>Confirm archive</Modal.Header>
+        <Modal.Header>Confirm Delete</Modal.Header>
         <Modal.Content>
           Are you sure you want to archive {archiveUser.user?.name} ?
         </Modal.Content>

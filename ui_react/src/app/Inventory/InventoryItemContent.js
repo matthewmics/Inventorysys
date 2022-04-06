@@ -166,7 +166,7 @@ export const InventoryItemContent = () => {
               }
             />
             <Popup
-              content="Archive Item"
+              content="Delete Item"
               trigger={
                 <Button
                   disabled={checkIfItemInTransaction(a)}
@@ -222,7 +222,7 @@ export const InventoryItemContent = () => {
   const onArchive = async () => {
     setArchive({ ...archive, loading: true });
     await agent.Inventory.itemDelete(archive.data.id);
-    toast.success("Item archived successfully");
+    toast.success("Item deleted successfully");
     setArchive({ ...archive, loading: false, open: false });
     loadData();
   };
@@ -235,7 +235,7 @@ export const InventoryItemContent = () => {
     <>
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
-        <Modal.Header>Confirm archive</Modal.Header>
+        <Modal.Header>Confirm Delete</Modal.Header>
         <Modal.Content>
           Are you sure you want to archive {archive.data?.name} ?
         </Modal.Content>
@@ -260,7 +260,7 @@ export const InventoryItemContent = () => {
       </Modal>
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
-        <Modal.Header>Confirm archive</Modal.Header>
+        <Modal.Header>Confirm Delete</Modal.Header>
         <Modal.Content>
           Are you sure you want to archive {archive.data?.name} ?
         </Modal.Content>

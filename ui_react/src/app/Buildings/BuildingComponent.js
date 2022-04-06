@@ -86,7 +86,7 @@ export const BuildingComponent = () => {
               }
             />
             <Popup
-              content="Archive Building"
+              content="Delete Building"
               trigger={
                 <Button
                   icon="archive"
@@ -137,7 +137,7 @@ export const BuildingComponent = () => {
   const onArchive = async () => {
     setArchive({ ...archive, loading: true });
     await agent.Building.delete(archive.data.id);
-    toast.success("Building archived successfully");
+    toast.success("Building deleted successfully");
     setArchive({ ...archive, loading: false, open: false });
     loadBuildings();
   };
@@ -150,7 +150,7 @@ export const BuildingComponent = () => {
     <>
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
-        <Modal.Header>Confirm archive</Modal.Header>
+        <Modal.Header>Confirm Delete</Modal.Header>
         <Modal.Content>
           Are you sure you want to archive {archive.data?.name} ?
         </Modal.Content>
