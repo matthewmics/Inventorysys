@@ -100,8 +100,13 @@ export const DepartmentInventoryContent = () => {
       };
     });
 
+    if (roomID !== 0) {
+      itemParentsReponse = itemParentsReponse.filter((a) => a.qty > 0);
+    }
+
     setDataTemp(itemParentsReponse);
     setData(itemParentsReponse);
+
     setLoading(false);
   };
 
@@ -163,14 +168,13 @@ export const DepartmentInventoryContent = () => {
         </div>
         <div className="float-r disp-ib"></div>
       </div>
-      
-      
+
       <DataTable
-          columns={columns}
-          data={data}
-          progressPending={loading}
-          pagination
-        />
+        columns={columns}
+        data={data}
+        progressPending={loading}
+        pagination
+      />
     </>
   );
 };

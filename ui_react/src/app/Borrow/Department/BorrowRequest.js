@@ -80,7 +80,7 @@ export const BorrowRequest = ({ onSave, itemToBorrow }) => {
                 details: "N/A",
               };
 
-              await agent.Borrow.borrow(req);
+              await agent.Borrow.borrowRequest(req);
 
               if (onSave) onSave();
               modalActions.closeModal(dispatch);

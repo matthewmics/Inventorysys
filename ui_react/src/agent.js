@@ -166,8 +166,14 @@ const PurchaseOrders = {
 };
 
 const Borrow = {
-  borrow: (req) => requests.post(`/borrows`, req),
+  borrowRequest: (req) => requests.post(`/borrows`, req),
   list: () => requests.get(`/borrows`),
+  processable: () => requests.get(`/borrows/processable`),
+
+  inprogress: (id) => requests.post(`/borrows/${id}/inprogress`, {}),
+  reject: (id) => requests.post(`/borrows/${id}/reject`, {}),
+  borrow: (id) => requests.post(`/borrows/${id}/borrow`, {}),
+  return: (id) => requests.post(`/borrows/${id}/return`, {}),
 };
 
 const PCComponent = {
