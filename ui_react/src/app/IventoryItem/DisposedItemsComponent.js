@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const DisposedItemsComponent = () => {
+export const DisposedItemsComponentBak = () => {
     return (
         <div>
             Disposed items

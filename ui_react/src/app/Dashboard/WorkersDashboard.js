@@ -20,7 +20,7 @@ import { PopupButton } from "../Commons/PopupButton";
 import { MessageModal } from "../Commons/MessageModal";
 import { DetailsModal } from "../Commons/DetailsModal";
 import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
-import { DisposedItemsComponent } from "../IventoryItem/DisposedItemsComponent";
+import { DisposedItemsComponentBak } from "../IventoryItem/DisposedItemsComponent";
 import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
 import { BorrowRequestSummary } from "./Department/BorrowRequestSummary";
 
@@ -296,7 +296,7 @@ export const WorkersDashboard = () => {
                 </Segment>
                 <Segment>
                   <div className="dashboard-segment">
-                    <DisposedItemsComponent />
+                    {/* <DisposedItemsComponent /> */}
                   </div>
                 </Segment>
               </Segment.Group>

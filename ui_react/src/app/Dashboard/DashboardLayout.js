@@ -24,7 +24,7 @@ import { InventoryItemComponentsContent } from "../InventoryItem/InventoryItemCo
 import { RoomItemsComponent } from "../Rooms/RoomItemsComponent/RoomItemsComponent";
 import { BorrowComponent } from "../Borrow/BorrowComponent";
 import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
-import { DisposedItemsComponent } from "../IventoryItem/DisposedItemsComponent";
+import { DisposedItemsComponent } from "../DisposedItems/DisposedItemsComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
