@@ -85,7 +85,6 @@ export const InventoryContent = () => {
     response = response.map((a) => {
       return {
         ...a,
-        qty: a.inventory_items.length,
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>

@@ -78,7 +78,7 @@ export const DepartmentInventoryContent = () => {
     itemParentsReponse = itemParentsReponse.map((a) => {
       return {
         ...a,
-        qty: a.inventory_items.length,
+        qty: a.qty_available,
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
