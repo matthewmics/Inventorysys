@@ -191,13 +191,6 @@ export const DashboardLayout = () => {
               </>
             )}
 
-            <Menu.Item>
-              <NavLink to="/borrows" activeClassName="link-active">
-                <Icon name="pallet" />
-                Borrow Request
-              </NavLink>
-            </Menu.Item>
-
             {["admin", "department"].includes(user.role) && (
               <Menu.Item>
                 <NavLink to="/inventory" activeClassName="link-active">
@@ -206,6 +199,13 @@ export const DashboardLayout = () => {
                 </NavLink>
               </Menu.Item>
             )}
+
+            <Menu.Item>
+              <NavLink to="/borrows" activeClassName="link-active">
+                <Icon name="pallet" />
+                Borrow Request
+              </NavLink>
+            </Menu.Item>
 
             {/* {["admin"].includes(user.role) && (
               <Menu.Item>

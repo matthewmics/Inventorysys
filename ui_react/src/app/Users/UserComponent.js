@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -13,13 +13,18 @@ import {
   Popup,
   Select,
 } from "semantic-ui-react";
+import modalActions from "../../actions/modalActions";
 import agent from "../../agent";
 import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
 import { roleOptions } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
+import { PopupButton } from "../Commons/PopupButton";
+import { UserChangePassword } from "./UserChangePassword";
 
 export const UserComponent = () => {
   const { user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
 
   const columns = [
     {
@@ -133,7 +138,7 @@ export const UserComponent = () => {
                           a.id
                         );
                         setModalBuilding({
-                          open:true,
+                          open: true,
                           loading: false,
                           user: a,
                           selectedBuildings: response.map((b) => b.id),
@@ -159,6 +164,18 @@ export const UserComponent = () => {
                 }
               />
             )}
+
+            <PopupButton
+              content="Change Password"
+              iconName="lock"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  `Change ${a.name} Password`,
+                  <UserChangePassword user={a} />
+                );
+              }}
+            />
           </>
         ),
       };
