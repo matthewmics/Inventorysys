@@ -43,6 +43,7 @@ export const JobOrderReplace = ({ onSave, parentId, jobOrderId }) => {
               value={selectedItem}
               placeholder="Select Item"
               options={availableItems}
+              search
               onChange={(e, data) => {
                 setSelectedItem(data.value);
               }}

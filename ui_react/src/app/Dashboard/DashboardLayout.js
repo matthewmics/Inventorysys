@@ -25,6 +25,7 @@ import { RoomItemsComponent } from "../Rooms/RoomItemsComponent/RoomItemsCompone
 import { BorrowComponent } from "../Borrow/BorrowComponent";
 import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
 import { DisposedItemsComponent } from "../DisposedItems/DisposedItemsComponent";
+import { ActivityLogComponent } from "../ActivityLog/ActivityLogComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -253,6 +254,12 @@ export const DashboardLayout = () => {
             {["admin"].includes(user.role) && (
               <>
                 <Menu.Item>
+                  <NavLink to="/activity-logs" activeClassName="link-active">
+                    <Icon name="clipboard list" />
+                    Activity Logs
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item>
                   <NavLink to="/purchase-orders" activeClassName="link-active">
                     <Icon name="money" />
                     Purchase Orders
@@ -313,6 +320,7 @@ export const DashboardLayout = () => {
           <Route path="/purchase-orders" component={PurchaseOrderComponent} />
 
           <Route path="/disposed-items" component={DisposedItemsComponent} />
+          <Route path="/activity-logs" component={ActivityLogComponent} />
 
           <Route path="/">
             <Redirect to="/dashboard" />

@@ -195,6 +195,10 @@ const PCComponentInstance = {
     requests.post(`/pc-component-instances/${id}/set-item`, req),
 };
 
+const ActivityLogs = {
+  list: () => requests.get(`/activity-logs`),
+};
+
 const agent = {
   User,
   Building,
@@ -211,6 +215,7 @@ const agent = {
   PCComponent,
   PCComponentInstance,
   Borrow,
+  ActivityLogs,
 };
 
 export default agent;

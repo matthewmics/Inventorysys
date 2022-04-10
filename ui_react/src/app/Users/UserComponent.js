@@ -231,6 +231,7 @@ export const UserComponent = () => {
               <Dropdown
                 placeholder="buildings"
                 multiple
+                search
                 selection
                 value={modalBuilding.selectedBuildings}
                 options={buildingList}
