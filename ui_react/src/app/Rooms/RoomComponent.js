@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   Button,
+  Dimmer,
   Form,
   Icon,
   Input,
@@ -20,6 +21,9 @@ import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
 import { roleOptions, roomTypeOptions } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
 import { PopupButton } from "../Commons/PopupButton";
+import { saveAs } from "file-saver";
+
+import moment from "moment";
 
 export const RoomComponent = () => {
   const [buildingList, setBuildingList] = useState([
@@ -83,6 +87,8 @@ export const RoomComponent = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
+  const [reportLoading, setReportLoading] = useState(false);
+
   const loadRooms = async () => {
     setLoading(true);
 
@@ -113,6 +119,25 @@ export const RoomComponent = () => {
               color="teal"
               onClick={() => {
                 history.push(`/rooms/${a.id}/items`);
+              }}
+            />
+            <PopupButton
+              content="Generate Report"
+              iconName="file"
+              color="blue"
+              onClick={async () => {
+                const req = {
+                  date: moment().format("LLL"),
+                  room_id: a.id,
+                };
+
+                setReportLoading(true);
+
+                const response = await agent.Reports.roomReport(req);
+
+                saveAs(response, a.name + "-" + moment().format("L") + ".csv");
+
+                setReportLoading(false);
               }}
             />
             <Popup
@@ -198,6 +223,11 @@ export const RoomComponent = () => {
 
   return (
     <>
+      {reportLoading && (
+        <Dimmer active>
+          <Loader>Generating Report. Please Wait</Loader>
+        </Dimmer>
+      )}
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
         <Modal.Header>Confirm Delete</Modal.Header>

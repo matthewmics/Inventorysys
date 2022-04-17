@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   Button,
+  Dimmer,
   Form,
   Icon,
   Input,
@@ -18,6 +19,10 @@ import { dateStringToLocal } from "../../helpers";
 import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
 import { roleOptions } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
+import { saveAs } from "file-saver";
+
+import moment from "moment";
+import { PopupButton } from "../Commons/PopupButton";
 
 export const BuildingComponent = () => {
   const columns = [
@@ -49,7 +54,6 @@ export const BuildingComponent = () => {
     open: false,
   });
 
-
   const [formLoading, setFormLoading] = useState(false);
   const [formErrors, setFormErrors] = useState(null);
   const [formValue, setFormValue] = useState(formDefaultValue);
@@ -58,6 +62,7 @@ export const BuildingComponent = () => {
   const [dataTemp, setDataTemp] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [reportLoading, setReportLoading] = useState(false);
 
   const loadBuildings = async () => {
     setLoading(true);
@@ -68,6 +73,25 @@ export const BuildingComponent = () => {
         created_at: dateStringToLocal(a.created_at),
         actions: (
           <>
+            <PopupButton
+              content="Generate Report"
+              iconName="file"
+              color="blue"
+              onClick={async () => {
+                const req = {
+                  date: moment().format("LLL"),
+                  building_id: a.id,
+                };
+
+                setReportLoading(true);
+
+                const response = await agent.Reports.buildingReport(req);
+
+                saveAs(response, a.name + "-" + moment().format("L") + ".csv");
+
+                setReportLoading(false);
+              }}
+            />
             <Popup
               content="Edit Building"
               trigger={
@@ -148,6 +172,12 @@ export const BuildingComponent = () => {
 
   return (
     <>
+      {" "}
+      {reportLoading && (
+        <Dimmer active>
+          <Loader>Generating Report. Please Wait</Loader>
+        </Dimmer>
+      )}
       {/* MODAL ARCHIVE */}
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
         <Modal.Header>Confirm Delete</Modal.Header>
@@ -210,14 +240,12 @@ export const BuildingComponent = () => {
           </Button>
         </Modal.Actions>
       </Modal>
-
       <div>
         <div className="page-header-title">
           BUILDINGS <Loader active={loading} inline size="tiny" />
         </div>
         <hr></hr>
       </div>
-
       <div className="mb-10 clearfix">
         <div className="disp-ib">
           <DelayedSearchInput
@@ -241,7 +269,6 @@ export const BuildingComponent = () => {
           </Button>
         </div>
       </div>
-
       <DataTable columns={columns} data={data} pagination striped />
     </>
   );

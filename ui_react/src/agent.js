@@ -34,6 +34,11 @@ const requests = {
     axios.put(url, body).then(sleep(sleepDuration)).then(responseBody),
   delete: (url) =>
     axios.delete(url).then(sleep(sleepDuration)).then(responseBody),
+  postBlob: (url, body) =>
+    axios
+      .post(url, body, { responseType: "blob" })
+      .then(sleep(sleepDuration))
+      .then(responseBody),
 };
 
 const User = {
@@ -199,6 +204,11 @@ const ActivityLogs = {
   list: () => requests.get(`/activity-logs`),
 };
 
+const Reports = {
+  roomReport: (req) => requests.postBlob(`/reports/room`, req),
+  buildingReport: (req) => requests.postBlob(`/reports/building`, req),
+};
+
 const agent = {
   User,
   Building,
@@ -216,6 +226,7 @@ const agent = {
   PCComponentInstance,
   Borrow,
   ActivityLogs,
+  Reports,
 };
 
 export default agent;

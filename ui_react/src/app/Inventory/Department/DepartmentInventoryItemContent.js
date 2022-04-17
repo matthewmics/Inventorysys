@@ -136,11 +136,11 @@ export const DepartmentInventoryItemContent = () => {
   const loadData = async () => {
     setLoading(true);
 
-    const responseDeptCurrent = await agent.Department.current();
+    const responseDeptCurrent = await agent.Room.list();
 
     setRooms([
       { value: 0, text: "---" },
-      ...responseDeptCurrent.rooms
+      ...responseDeptCurrent
         .map((room) => {
           return {
             value: room.id,
