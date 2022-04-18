@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -23,8 +23,12 @@ import { saveAs } from "file-saver";
 
 import moment from "moment";
 import { PopupButton } from "../Commons/PopupButton";
+import modalActions from "../../actions/modalActions";
+import { BuildingGenerateReportComponent } from "./BuildingGenerateReportComponent";
 
 export const BuildingComponent = () => {
+  const dispatch = useDispatch();
+
   const columns = [
     {
       name: "Name",
@@ -78,18 +82,27 @@ export const BuildingComponent = () => {
               iconName="file"
               color="blue"
               onClick={async () => {
-                const req = {
-                  date: moment().format("LLL"),
-                  building_id: a.id,
-                };
+                modalActions.openModal(
+                  dispatch,
+                  "Generate report for building: " + a.name,
+                  <BuildingGenerateReportComponent
+                    buildingID={a.id}
+                    buildingName={a.name}
+                  />
+                );
 
-                setReportLoading(true);
+                // const req = {
+                //   date: moment().format("LLL"),
+                //   building_id: a.id,
+                // };
 
-                const response = await agent.Reports.buildingReport(req);
+                // setReportLoading(true);
 
-                saveAs(response, a.name + "-" + moment().format("L") + ".csv");
+                // const response = await agent.Reports.buildingReport(req);
 
-                setReportLoading(false);
+                // saveAs(response, a.name + "-" + moment().format("L") + ".csv");
+
+                // setReportLoading(false);
               }}
             />
             <Popup

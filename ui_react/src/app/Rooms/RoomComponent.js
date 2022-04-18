@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -24,8 +24,12 @@ import { PopupButton } from "../Commons/PopupButton";
 import { saveAs } from "file-saver";
 
 import moment from "moment";
+import modalActions from "../../actions/modalActions";
+import { RoomGenerateReportComponent } from "./RoomGenerateReportComponent";
 
 export const RoomComponent = () => {
+  const dispatch = useDispatch();
+
   const [buildingList, setBuildingList] = useState([
     {
       value: 0,
@@ -126,18 +130,27 @@ export const RoomComponent = () => {
               iconName="file"
               color="blue"
               onClick={async () => {
-                const req = {
-                  date: moment().format("LLL"),
-                  room_id: a.id,
-                };
+                modalActions.openModal(
+                  dispatch,
+                  "Generate Report for Room: " + a.name,
+                  <RoomGenerateReportComponent
+                    roomId={a.id}
+                    roomName={a.name}
+                  />
+                );
 
-                setReportLoading(true);
+                // const req = {
+                //   date: moment().format("LLL"),
+                //   room_id: a.id,
+                // };
 
-                const response = await agent.Reports.roomReport(req);
+                // setReportLoading(true);
 
-                saveAs(response, a.name + "-" + moment().format("L") + ".csv");
+                // const response = await agent.Reports.roomReport(req);
 
-                setReportLoading(false);
+                // saveAs(response, a.name + "-" + moment().format("L") + ".csv");
+
+                // setReportLoading(false);
               }}
             />
             <Popup
