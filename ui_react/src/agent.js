@@ -91,7 +91,12 @@ const Inventory = {
   itemShowComponents: (id) => requests.get(`/inventory/items/${id}/components`),
   setRoom: (id, req) => requests.post(`/inventory/items/${id}/set-room`, req),
   availableItems: () => requests.get(`/inventory/items/available`),
+
   unavailableItems: () => requests.get(`/inventory/items/unavailable`),
+  forBorrows: (parentId, roomId) =>
+    requests.get(
+      `/inventory/items/for-borrows?parentId=${parentId}&roomId=${roomId}`
+    ),
 };
 
 const Department = {
@@ -173,10 +178,11 @@ const PurchaseOrders = {
 const Borrow = {
   borrowRequest: (req) => requests.post(`/borrows`, req),
   list: () => requests.get(`/borrows`),
+  show: (id) => requests.get(`/borrows/${id}`),
   processable: () => requests.get(`/borrows/processable`),
 
   inprogress: (id) => requests.post(`/borrows/${id}/inprogress`, {}),
-  reject: (id) => requests.post(`/borrows/${id}/reject`, {}),
+  reject: (id, req) => requests.post(`/borrows/${id}/reject`, req),
   borrow: (id) => requests.post(`/borrows/${id}/borrow`, {}),
   return: (id) => requests.post(`/borrows/${id}/return`, {}),
 };

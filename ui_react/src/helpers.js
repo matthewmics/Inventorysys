@@ -14,6 +14,10 @@ const dateStringToLocal = (date) => {
   return moment(stillUtc).local().format("LLL");
 };
 
+const dateStringCommonDateFormat = (date) => {
+  return moment(date).format("LLL");
+};
+
 const toMoney = (price) => {
   return "₱" + price.toFixed(2);
 };
@@ -37,4 +41,5 @@ export {
   dateStringToLocal,
   toMoney,
   titleCase,
+  dateStringCommonDateFormat,
 };

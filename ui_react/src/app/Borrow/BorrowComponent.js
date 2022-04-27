@@ -5,7 +5,7 @@ import { BorrowContent as DepartmentBorrowContent } from "./Department/BorrowCon
 
 export const BorrowComponent = () => {
   const { user } = useSelector((state) => state.auth);
-
-  if (user.role === "department") return <DepartmentBorrowContent />;
-  else return <WorkerBorrowContent />;
+  return <DepartmentBorrowContent />;
+  // if (user.role === "department") return <DepartmentBorrowContent />;
+  // else return <WorkerBorrowContent />;
 };

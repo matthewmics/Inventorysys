@@ -4,11 +4,29 @@ import { toast } from "react-toastify";
 import { Button, Form, Modal, Select } from "semantic-ui-react";
 import modalActions from "../../../actions/modalActions";
 import agent from "../../../agent";
+import moment from "moment";
 
-export const BorrowRequest = ({ onSave, itemToBorrow }) => {
+export const BorrowRequest = ({ onSave }) => {
   const dispatch = useDispatch();
   const modal = useSelector((state) => state.modal);
   const [selectedRoom, setSelectedRoom] = useState(0);
+
+  const [formData, setFormData] = useState({
+    borrower: "",
+    borrow_details: "",
+    purpose: "",
+  });
+
+  const [dateInput, setDateInput] = useState({
+    from: moment().format("YYYY-MM-DD"),
+    to: moment().format("YYYY-MM-DD"),
+    min: moment().format("YYYY-MM-DD"),
+    max: moment().format("YYYY-MM-DD"),
+  });
+
+  const onFormDataInput = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const [rooms, setRooms] = useState([]);
   useEffect(() => {
@@ -20,9 +38,9 @@ export const BorrowRequest = ({ onSave, itemToBorrow }) => {
 
     let response = await agent.Department.rooms();
 
-    response = response.filter((a) => {
-      return a.id !== itemToBorrow.room_id;
-    });
+    // response = response.filter((a) => {
+    //   return a.id !== itemToBorrow.room_id;
+    // });
 
     response = response.map((a) => {
       return {
@@ -43,6 +61,7 @@ export const BorrowRequest = ({ onSave, itemToBorrow }) => {
           <Form.Field>
             <label>Borrow For</label>
             <Select
+              search
               options={rooms}
               placeholder="Select Room"
               value={selectedRoom}
@@ -51,6 +70,78 @@ export const BorrowRequest = ({ onSave, itemToBorrow }) => {
               }}
             ></Select>
           </Form.Field>
+
+          <Form.Field>
+            <label>Borrower Name</label>
+            <Form.Input
+              onChange={onFormDataInput}
+              placeholder="Borrower Name"
+              name="borrower"
+              value={formData.borrower}
+            ></Form.Input>
+          </Form.Field>
+
+          <Form.Field>
+            <label>Things to borrow</label>
+            <Form.TextArea
+              onChange={onFormDataInput}
+              placeholder="Write here the things you want to borrow and how many"
+              name="borrow_details"
+              value={formData.borrow_details}
+            ></Form.TextArea>
+          </Form.Field>
+
+          <Form.Field>
+            <label>Purpose of borrow</label>
+            <Form.TextArea
+              onChange={onFormDataInput}
+              placeholder="Write here the purpose of borrow"
+              name="purpose"
+              value={formData.purpose}
+            ></Form.TextArea>
+          </Form.Field>
+
+          <Form.Group widths="equal">
+            <Form.Field>
+              <label>From</label>
+              <Form.Input
+                type="date"
+                min={dateInput.max}
+                value={dateInput.from}
+                onChange={(e) => {
+                  if (moment(e.target.value).isAfter(dateInput.to)) {
+                    setDateInput({
+                      ...dateInput,
+                      from: e.target.value,
+                      to: e.target.value,
+                      min: e.target.value,
+                    });
+                    return;
+                  }
+
+                  setDateInput({
+                    ...dateInput,
+                    from: e.target.value,
+                    min: e.target.value,
+                  });
+                }}
+              ></Form.Input>
+            </Form.Field>
+            <Form.Field>
+              <label>To</label>
+              <Form.Input
+                type="date"
+                value={dateInput.to}
+                min={dateInput.min}
+                onChange={(e) => {
+                  setDateInput({
+                    ...dateInput,
+                    to: e.target.value,
+                  });
+                }}
+              ></Form.Input>
+            </Form.Field>
+          </Form.Group>
         </Form>
       </Modal.Content>
       <Modal.Actions>
@@ -73,19 +164,20 @@ export const BorrowRequest = ({ onSave, itemToBorrow }) => {
             modalActions.setLoading(dispatch, true);
             try {
               // request here
-
-              const req = {
-                destination_room_id: selectedRoom,
-                item_id: itemToBorrow.id,
-                details: "N/A",
+              var req = {
+                ...formData,
+                destination_room: selectedRoom,
+                from: dateInput.from,
+                to: dateInput.to,
               };
 
               await agent.Borrow.borrowRequest(req);
 
+              toast.success("Request submitted");
               if (onSave) onSave();
               modalActions.closeModal(dispatch);
             } catch (err) {
-              console.log(err);
+              // console.log(err);
               modalActions.setErrors(dispatch, err.data.errors);
               modalActions.setLoading(dispatch, false);
             }

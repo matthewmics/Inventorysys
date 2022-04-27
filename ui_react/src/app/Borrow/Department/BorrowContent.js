@@ -1,63 +1,122 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Button, Icon, Loader } from "semantic-ui-react";
+import { Button, Icon, Label, Loader, Menu } from "semantic-ui-react";
 import modalActions from "../../../actions/modalActions";
 import agent from "../../../agent";
 import { DelayedSearchInput } from "../../Commons/DelayedSearchInput";
 import { PopupButton } from "../../Commons/PopupButton";
 import { BorrowRequest } from "./BorrowRequest";
 
+import moment from "moment";
+import { LabelBorrowStatus } from "../../Commons/LabelBorrowStatus";
+import { DetailsModal } from "../../Commons/DetailsModal";
+
+import { ConfirmationModal } from "../../Commons/ConfirmationModal";
+import { RejectBorrow } from "../RejectBorrow";
+import { history } from "../../..";
+
 export const BorrowContent = () => {
+  const {
+    user: { role: userRole },
+  } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
 
   const columns = [
     {
-      name: "Item",
-      selector: (row) => row.inventory_parent_item.name,
+      name: "Borrower",
+      selector: (row) => row.borrower,
+      sortable: true,
+    },
+    {
+      name: "To Borrow",
+      selector: (row) => row.borrow_details,
       format: (row) => (
-        <>
-          {row.inventory_parent_item.name}
-          <div className="label-secondary">{row.serial_number}</div>
-        </>
+        <div style={{ padding: "1em 0em" }}>{row.borrow_details}</div>
       ),
       sortable: true,
+      wrap: true,
     },
     {
-      name: "Building",
-      selector: (row) => row.room.building.name,
+      name: "For",
+      selector: (row) => row.destination.name,
       sortable: true,
     },
     {
-      name: "Room",
-      selector: (row) => row.room.name,
+      name: "From",
+      selector: (row) => moment(row.from).format("ll"),
+      sortable: true,
+    },
+    {
+      name: "To",
+      selector: (row) => moment(row.to).format("ll"),
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => <LabelBorrowStatus status={row.status} />,
       sortable: true,
     },
     {
       name: "Actions",
-      selector: (row) => (
+      selector: (row) => <>-</>,
+      format: (row) => (
         <>
           <PopupButton
-            content="Borrow"
-            iconName="hand point up outline"
+            content="Details"
+            iconName="book"
+            color="blue"
             onClick={() => {
               modalActions.openModal(
                 dispatch,
-                "Borrow " +
-                  row.inventory_parent_item.name +
-                  " | Room: " +
-                  row.room.name,
-                <BorrowRequest
-                  itemToBorrow={row}
-                  onSave={() => {
-                    toast.success("Request submitted");
-                    loadData();
+                "Borrow Details",
+                <DetailsModal
+                  data={{
+                    Borrower: (
+                      <>
+                        <b>{row.borrower}</b>
+                      </>
+                    ),
+                    "To Borrow": row.borrow_details,
+                    Purpose: row.purpose,
+                    For: <Label>{row.destination.name}</Label>,
+                    From: moment(row.from).format("ll"),
+                    To: moment(row.to).format("ll"),
+                    Status: <LabelBorrowStatus status={row.status} />,
+                    "Processed by": row.worker ? row.worker.name : "-",
+                    Items: "Still pending",
                   }}
                 />
               );
             }}
           />
+
+          {userRole !== "department" && (
+            <>
+              <PopupButton
+                content="Process request"
+                iconName="hourglass half"
+                color="orange"
+                onClick={() => {
+                  history.push("/borrows/" + row.id);
+                }}
+              />
+              <PopupButton
+                content="Reject"
+                iconName="cancel"
+                color="red"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Reject Borrow",
+                    <RejectBorrow id={row.id} onSave={loadRequests} />
+                  );
+                }}
+              />
+            </>
+          )}
         </>
       ),
       right: true,
@@ -68,6 +127,9 @@ export const BorrowContent = () => {
   const [dt, setDt] = useState([]);
   const [dtTemp, setDtTemp] = useState([]);
 
+  const [rooms, setRooms] = useState([]);
+  const [selectedRoomID, setSelectedRoomID] = useState(0);
+
   useEffect(() => {
     loadData();
   }, []);
@@ -75,38 +137,121 @@ export const BorrowContent = () => {
   const loadData = async () => {
     setLoading(true);
 
-    const response = await agent.Inventory.unavailableItems();
+    if (userRole === "department") {
+      const responseDeptCurrent = await agent.Department.current();
+      setRooms(responseDeptCurrent.rooms);
+    }
+
+    loadRequests();
+  };
+
+  const loadRequests = async () => {
+    setLoading(true);
+
+    const response = await agent.Borrow.processable();
+
     setDtTemp(response);
-    setDt(response);
-    console.log(response);
+    // setDt(response);
+
+    if (userRole !== "department") {
+      var rooms = [];
+
+      response.forEach((a) => {
+        const exists = rooms.find((b) => b.id === a.destination_room);
+        if (!exists) rooms.push(a.destination);
+      });
+
+      setRooms(rooms);
+    }
+
+    if (userRole !== "department") {
+      setSelectedRoomID(0);
+      loadBorrows(response, 0);
+    } else {
+      loadBorrows(response, selectedRoomID);
+    }
+
     setLoading(false);
+  };
+
+  const loadBorrows = (data, id) => {
+    if (id === 0) {
+      setDt(data);
+      return;
+    }
+
+    setDt(
+      data.filter((a) => {
+        return a.destination_room === id;
+      })
+    );
   };
 
   return (
     <>
       <div>
         <div className="page-header-title">
-          BORROW <Loader active={loading} inline size="tiny" />
+          BORROWS <Loader active={loading} inline size="tiny" />
         </div>
         <hr></hr>
       </div>
       <div className="mb-10 clearfix">
-        <div className="disp-ib">
-          <DelayedSearchInput
-            onSearch={(val) => {
-              setDt(
-                dtTemp.filter(
-                  (a) =>
-                    a.serial_number.toLowerCase().includes(val) ||
-                    a.inventory_parent_item.name.toLowerCase().includes(val) ||
-                    a.room.name.toLowerCase().includes(val) ||
-                    a.room.building.name.toLowerCase().includes(val)
-                )
-              );
-            }}
-          />
-        </div>
+        {userRole === "department" && (
+          <div className="float-r disp-ib">
+            <Button
+              size="small"
+              color="green"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Borrow Request",
+                  <BorrowRequest
+                    onSave={() => {
+                      loadRequests();
+                    }}
+                  />
+                );
+              }}
+            >
+              <Icon name="add" /> Borrow Request
+            </Button>
+          </div>
+        )}
       </div>
+
+      <Menu style={{ overflowX: "auto" }}>
+        <Menu.Item
+          disabled={loading}
+          onClick={() => {
+            setSelectedRoomID(0);
+            loadBorrows(dtTemp, 0);
+          }}
+          className={0 === selectedRoomID ? "text-bold" : ""}
+          active={0 === selectedRoomID}
+        >
+          <Icon name="cubes" />
+          All Borrows
+        </Menu.Item>
+        {rooms.map((room, index) => {
+          return (
+            <Menu.Item
+              key={index}
+              active={room.id === selectedRoomID}
+              className={room.id === selectedRoomID ? "text-bold" : ""}
+              onClick={() => {
+                setSelectedRoomID(room.id);
+                loadBorrows(dtTemp, room.id);
+              }}
+              disabled={loading}
+            >
+              <Icon name="cube" />
+              {room.name}
+            </Menu.Item>
+          );
+        })}
+
+        <Menu.Menu position="right"></Menu.Menu>
+      </Menu>
 
       <DataTable columns={columns} data={dt} pagination striped />
     </>

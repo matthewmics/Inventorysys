@@ -26,6 +26,7 @@ import { BorrowComponent } from "../Borrow/BorrowComponent";
 import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
 import { DisposedItemsComponent } from "../DisposedItems/DisposedItemsComponent";
 import { ActivityLogComponent } from "../ActivityLog/ActivityLogComponent";
+import { ProcessBorrow } from "../Borrow/ProcessBorrow";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -204,7 +205,7 @@ export const DashboardLayout = () => {
             <Menu.Item>
               <NavLink to="/borrows" activeClassName="link-active">
                 <Icon name="pallet" />
-                Borrow Request
+                Borrows
               </NavLink>
             </Menu.Item>
 
@@ -315,6 +316,7 @@ export const DashboardLayout = () => {
           />
           <Route path="/pc-components" component={PCComponentContent} />
 
+          <Route path="/borrows/:id" component={ProcessBorrow} />
           <Route path="/borrows" component={BorrowComponent} />
 
           <Route path="/purchase-orders" component={PurchaseOrderComponent} />
