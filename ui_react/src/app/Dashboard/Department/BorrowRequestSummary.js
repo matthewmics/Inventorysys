@@ -3,33 +3,63 @@ import DataTable from "react-data-table-component";
 import { useDispatch } from "react-redux";
 import modalActions from "../../../actions/modalActions";
 import agent from "../../../agent";
-import { dateStringToLocal } from "../../../helpers";
-import { DetailsModal } from "../../Commons/DetailsModal";
+import moment from "moment";
 import { LabelBorrowStatus } from "../../Commons/LabelBorrowStatus";
+import { BorrowDetailsObject } from "../../Borrow/BorrowHelper";
 import { PopupButton } from "../../Commons/PopupButton";
+import { DetailsModal } from "../../Commons/DetailsModal";
+import { MessageModal } from "../../Commons/MessageModal";
+import { dateStringToLocal } from "../../../helpers";
 
 export const BorrowRequestSummary = () => {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const columns = [
     {
-      name: "Item",
+      name: "Borrower",
+      selector: (row) => row.borrower,
+    },
+    {
+      name: "For",
+      selector: (row) => row.destination.name,
+    },
+    {
+      name: "Requested Date",
       selector: (row) => (
         <>
-          <b>{row.item.inventory_parent_item.name}</b>
-          <div className="label-secondary">{row.item.serial_number}</div>
+          <b className="label-secondary">{moment(row.from).format("ll")}</b> TO{" "}
+          <b className="label-secondary">{moment(row.to).format("ll")}</b>
         </>
       ),
     },
     {
-      name: "Status",
-      selector: (row) => <LabelBorrowStatus status={row.status} />,
+      name: "Date Returned",
+      selector: (row) =>
+        row.date_returned ? dateStringToLocal(row.date_returned) : "-",
       center: true,
     },
     {
+      name: "Status",
+      selector: (row) => <LabelBorrowStatus status={row.status} />,
+    },
+    {
       name: "Actions",
-      selector: (a) => (
+      selector: (row) => <>-</>,
+      format: (row) => (
         <>
-          {" "}
+          {row.rejection_details && (
+            <PopupButton
+              content="Rejection details"
+              iconName="warning"
+              color="red"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Rejection Details",
+                  <MessageModal message={row.rejection_details} />
+                );
+              }}
+            />
+          )}
           <PopupButton
             content="Details"
             iconName="book"
@@ -39,15 +69,11 @@ export const BorrowRequestSummary = () => {
                 dispatch,
                 "Borrow Details",
                 <DetailsModal
-                  data={{
-                    Item: a.item.inventory_parent_item.name,
-                    "Serial Number": a.item.serial_number,
-                    From: a.current_room ? a.current_room.name : "Inventory",
-                    "Borrowed for": a.destination_room.name,
-                    Status: a.status.toUpperCase(),
-                    Date: dateStringToLocal(a.created_at),
-                    "Processed By": a.handler ? a.handler.name : "-",
-                  }}
+                  data={
+                    !row.borrow_data
+                      ? BorrowDetailsObject(row)
+                      : BorrowDetailsObject(JSON.parse(row.borrow_data))
+                  }
                 />
               );
             }}
@@ -78,7 +104,6 @@ export const BorrowRequestSummary = () => {
         columns={columns}
         data={dt}
         pagination
-        noTableHead
         striped
         progressPending={loading}
       />

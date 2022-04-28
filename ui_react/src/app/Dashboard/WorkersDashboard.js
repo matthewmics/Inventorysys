@@ -259,7 +259,7 @@ export const WorkersDashboard = () => {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column computer={8} mobile={16}>
+          <Grid.Column computer={16} mobile={16}>
             <Segment.Group>
               <Segment className="bg-gradient-1">
                 <Icon name="pallet" />

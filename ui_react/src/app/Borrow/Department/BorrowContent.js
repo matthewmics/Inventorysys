@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Button, Icon, Label, Loader, Menu } from "semantic-ui-react";
+import { Button, Dimmer, Icon, Label, Loader, Menu } from "semantic-ui-react";
 import modalActions from "../../../actions/modalActions";
 import agent from "../../../agent";
 import { DelayedSearchInput } from "../../Commons/DelayedSearchInput";
@@ -89,8 +89,13 @@ export const BorrowContent = () => {
                     dispatch,
                     "Return Borrowed Items",
                     <ConfirmationModal
-                      onSubmit={() => {
+                      onSubmit={async () => {
                         modalActions.closeModal(dispatch);
+                        setLoadingReturn(true);
+                        await agent.Borrow.return(row.id);
+                        setLoadingReturn(false);
+                        toast.success("Items Returned");
+                        loadData();
                       }}
                       content={<LabelBorrowedItems items={row.items} />}
                     />
@@ -131,6 +136,7 @@ export const BorrowContent = () => {
   ];
 
   const [loading, setLoading] = useState(false);
+  const [loadingReturn, setLoadingReturn] = useState(false);
   const [dt, setDt] = useState([]);
   const [dtTemp, setDtTemp] = useState([]);
 
@@ -196,6 +202,9 @@ export const BorrowContent = () => {
 
   return (
     <>
+      <Dimmer active={loadingReturn}>
+        <Loader>Loading...</Loader>
+      </Dimmer>
       <div>
         <div className="page-header-title">
           BORROWS <Loader active={loading} inline size="tiny" />

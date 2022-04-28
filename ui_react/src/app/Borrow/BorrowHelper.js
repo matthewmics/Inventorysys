@@ -1,6 +1,7 @@
 import { Label } from "semantic-ui-react";
-import moment from 'moment'
+import moment from "moment";
 import { LabelBorrowStatus } from "../Commons/LabelBorrowStatus";
+import { dateStringToLocal } from "../../helpers";
 
 export const LabelBorrowedItems = ({ items }) => {
   const itemObj = {};
@@ -26,6 +27,7 @@ export const LabelBorrowedItems = ({ items }) => {
 };
 
 export const BorrowDetailsObject = (row) => {
+  console.log(row);
   return {
     Borrower: (
       <>
@@ -35,11 +37,23 @@ export const BorrowDetailsObject = (row) => {
     "To Borrow": row.borrow_details,
     Purpose: row.purpose,
     For: <Label>{row.destination.name}</Label>,
-    From: moment(row.from).format("ll"),
-    To: moment(row.to).format("ll"),
+    "Created At": dateStringToLocal(row.created_at),
+    "Requested Date": (
+      <>
+        <b className="label-secondary">{moment(row.from).format("ll")}</b> TO{" "}
+        <b className="label-secondary">{moment(row.to).format("ll")}</b>
+      </>
+    ),
     Status: <LabelBorrowStatus status={row.status} />,
-    "Processed by": row.worker ? row.worker.name : "-",
-    Items:
-      row.items.length === 0 ? "-" : <LabelBorrowedItems items={row.items} />,
+    "Worked on by": row.worker ? row.worker.name : "-",
+    "Worked on at": row.date_processed
+      ? dateStringToLocal(row.date_processed)
+      : "-",
+    "Borrowed Items":
+      row.items.length === 0 ? (
+        "NONE"
+      ) : (
+        <LabelBorrowedItems items={row.items} />
+      ),
   };
 };

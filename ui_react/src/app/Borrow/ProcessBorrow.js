@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   Button,
+  Dimmer,
   Grid,
   Icon,
   Label,
@@ -309,6 +310,7 @@ export const ProcessBorrow = () => {
         </Segment>
       </Segment.Group>
 
+      <div style={{ height: "1em" }}></div>
       {/* DATATABLES  */}
       <Grid>
         <Grid.Row>
