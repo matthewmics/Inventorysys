@@ -10,6 +10,7 @@ import { PopupButton } from "../../Commons/PopupButton";
 import { DetailsModal } from "../../Commons/DetailsModal";
 import { MessageModal } from "../../Commons/MessageModal";
 import { dateStringToLocal } from "../../../helpers";
+import { NotesList } from "../../Notes/NotesList";
 
 export const BorrowRequestSummary = () => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ export const BorrowRequestSummary = () => {
     {
       name: "Status",
       selector: (row) => <LabelBorrowStatus status={row.status} />,
+      center: true,
     },
     {
       name: "Actions",
@@ -60,6 +62,18 @@ export const BorrowRequestSummary = () => {
               }}
             />
           )}
+          <PopupButton
+            content="Notes"
+            iconName="sticky note"
+            color="green"
+            onClick={() => {
+              modalActions.openModal(
+                dispatch,
+                "Note(s)",
+                <NotesList id={row.id} name={"borrow"} />
+              );
+            }}
+          />
           <PopupButton
             content="Details"
             iconName="book"

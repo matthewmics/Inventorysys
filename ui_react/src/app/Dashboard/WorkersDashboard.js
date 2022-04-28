@@ -23,6 +23,7 @@ import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
 import { DisposedItemsComponentBak } from "../IventoryItem/DisposedItemsComponent";
 import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
 import { BorrowRequestSummary } from "./Department/BorrowRequestSummary";
+import { NotesList } from "../Notes/NotesList";
 
 export const WorkersDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -91,6 +92,18 @@ export const WorkersDashboard = () => {
                   }}
                 />
               )}
+              <PopupButton
+                content="Notes"
+                iconName="sticky note"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Note(s)",
+                    <NotesList id={a.id} name={"transfer"} />
+                  );
+                }}
+              />
               <PopupButton
                 content="Details"
                 iconName="book"
@@ -163,6 +176,18 @@ export const WorkersDashboard = () => {
                   }}
                 />
               )}
+              <PopupButton
+                content="Notes"
+                iconName="sticky note"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Note(s)",
+                    <NotesList id={a.id} name={"repair"} />
+                  );
+                }}
+              />
               <PopupButton
                 content="Details"
                 iconName="book"

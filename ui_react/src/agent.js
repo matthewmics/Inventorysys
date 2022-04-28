@@ -215,6 +215,18 @@ const Reports = {
   buildingReport: (req) => requests.postBlob(`/reports/building`, req),
 };
 
+const Notes = {
+  create: (req, file) => {
+    const formData = new FormData();
+    if (file) formData.append("file", file);
+    Object.entries(req).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    return requests.post(`/notes`, formData);
+  },
+  show: (id, name) => requests.get(`/notes?name=${name}&id=${id}`),
+};
+
 const agent = {
   User,
   Building,
@@ -233,6 +245,7 @@ const agent = {
   Borrow,
   ActivityLogs,
   Reports,
+  Notes,
 };
 
 export default agent;

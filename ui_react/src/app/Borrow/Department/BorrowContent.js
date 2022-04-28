@@ -17,6 +17,7 @@ import { ConfirmationModal } from "../../Commons/ConfirmationModal";
 import { RejectBorrow } from "../RejectBorrow";
 import { history } from "../../..";
 import { BorrowDetailsObject, LabelBorrowedItems } from "../BorrowHelper";
+import { NotesForm } from "../../Notes/NotesForm";
 
 export const BorrowContent = () => {
   const {
@@ -65,6 +66,21 @@ export const BorrowContent = () => {
       selector: (row) => <>-</>,
       format: (row) => (
         <>
+          {userRole !== "department" && (
+            <PopupButton
+              content="Create Note"
+              iconName="sticky note"
+              color="green"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Note",
+                  <NotesForm name="borrow_id" id={row.id} />
+                );
+              }}
+            />
+          )}
+
           <PopupButton
             content="Details"
             iconName="book"

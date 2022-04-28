@@ -11,6 +11,7 @@ import { ConfirmationModal } from "../../Commons/ConfirmationModal";
 import { ErrorMessage } from "../../Commons/ErrorMessage";
 import { LabelTransferStatus } from "../../Commons/LabelTransferStatus";
 import { PopupButton } from "../../Commons/PopupButton";
+import { NotesForm } from "../../Notes/NotesForm";
 import { TransferRequestRejectForm } from "./TransferRequestRejectForm";
 
 export const TransferRequestComponent = () => {
@@ -60,6 +61,7 @@ export const TransferRequestComponent = () => {
       name: "Actions",
       selector: (row) => row.actions,
       right: true,
+      wrap: true,
     },
   ];
 
@@ -94,7 +96,19 @@ export const TransferRequestComponent = () => {
         from: a.current_room ? a.current_room.name : "Inventory",
         to: a.destination_room.name,
         actions: (
-          <div style={{ textOverflow: "clip", overflow: "auto" }}>
+          <>
+            <PopupButton
+              content="Create Note"
+              iconName="sticky note"
+              color="green"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Note",
+                  <NotesForm name="transfer_id" id={a.id} />
+                );
+              }}
+            />
             {a.status !== "in progress" ? (
               <PopupButton
                 content="Work on request"
@@ -168,7 +182,7 @@ export const TransferRequestComponent = () => {
                 );
               }}
             />
-          </div>
+          </>
         ),
       };
     });
@@ -182,8 +196,9 @@ export const TransferRequestComponent = () => {
         </div>
         <hr></hr>
       </div>
-
-      <DataTable columns={columns} data={dtData} pagination />
+      <div style={{ overflowX: "auto" }}>
+        <DataTable columns={columns} data={dtData} pagination />
+      </div>
     </>
   );
 };

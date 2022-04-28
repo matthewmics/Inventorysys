@@ -11,6 +11,7 @@ import { PopupButton } from "../../Commons/PopupButton";
 import { RepairRequestRejectForm } from "./RepairRequestRejectForm";
 import { ConfirmationModal } from "../../Commons/ConfirmationModal";
 import { toast } from "react-toastify";
+import { NotesForm } from "../../Notes/NotesForm";
 
 export const RepairRequestComponent = () => {
   const columns = [
@@ -38,6 +39,7 @@ export const RepairRequestComponent = () => {
       name: "Actions",
       selector: (row) => row.actions,
       right: true,
+      wrap: true,
     },
   ];
 
@@ -71,9 +73,21 @@ export const RepairRequestComponent = () => {
           actions: (
             <>
               <PopupButton
+                content="Create Note"
+                iconName="sticky note"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Note",
+                    <NotesForm name="repair_id" id={a.id} />
+                  );
+                }}
+              />
+              <PopupButton
                 content="Create Job Order"
                 iconName="briefcase"
-                color="green"
+                color="yellow"
                 onClick={async () => {
                   modalActions.openModal(
                     dispatch,
