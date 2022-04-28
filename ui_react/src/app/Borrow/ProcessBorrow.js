@@ -15,6 +15,8 @@ import { history } from "../..";
 import agent from "../../agent";
 import moment from "moment";
 import DataTable from "react-data-table-component";
+import { PopupButton } from "../Commons/PopupButton";
+import { LabelBorrowedItems } from "../Borrow/BorrowHelper";
 
 export const ProcessBorrow = () => {
   const {
@@ -33,13 +35,78 @@ export const ProcessBorrow = () => {
       ),
     },
     {
+      name: "Room",
+      selector: (row) => row.serial_number,
+      format: (row) => (
+        <>
+          {row.room.name}
+          <div className="label-secondary">{row.room.building.name}</div>
+        </>
+      ),
+    },
+    {
       name: "Type",
       selector: (row) => <Label> {row.inventory_parent_item.item_type}</Label>,
     },
     {
       name: "Actions",
       selector: (row) => "actions",
-      format: (row) => <>-</>,
+      format: (row) => (
+        <>
+          <PopupButton
+            content="Add"
+            iconName="add"
+            color="green"
+            onClick={() => {
+              addToCart(row.id);
+            }}
+          />
+        </>
+      ),
+      right: true,
+    },
+  ];
+
+  const columnCart = [
+    {
+      name: "Item",
+      selector: (row) => row.serial_number,
+      format: (row) => (
+        <>
+          {row.inventory_parent_item.name}
+          <div className="label-secondary">{row.serial_number}</div>
+        </>
+      ),
+    },
+    {
+      name: "Room",
+      selector: (row) => row.serial_number,
+      format: (row) => (
+        <>
+          {row.room.name}
+          <div className="label-secondary">{row.room.building.name}</div>
+        </>
+      ),
+    },
+    {
+      name: "Type",
+      selector: (row) => <Label> {row.inventory_parent_item.item_type}</Label>,
+    },
+    {
+      name: "Actions",
+      selector: (row) => "actions",
+      format: (row) => (
+        <>
+          <PopupButton
+            content="Remove"
+            iconName="minus"
+            color="red"
+            onClick={() => {
+              removeFromCart(row.id);
+            }}
+          />
+        </>
+      ),
       right: true,
     },
   ];
@@ -66,13 +133,34 @@ export const ProcessBorrow = () => {
   const [selectedItem, setSelectedItem] = useState(0);
 
   const [dtAvailableItems, setDtAvailableItems] = useState([]);
+  const [dtCart, setDtCart] = useState([]);
 
   useEffect(() => {
     loadRequest();
     loadOptions();
   }, []);
 
+  const addToCart = (id) => {
+    const item = dtAvailableItems.find((a) => a.id === id);
+    setDtAvailableItems(dtAvailableItems.filter((a) => a.id !== id));
+    setDtCart([item, ...dtCart]);
+  };
+
+  const removeFromCart = (id) => {
+    const item = dtCart.find((a) => a.id === id);
+    setDtCart(dtCart.filter((a) => a.id !== id));
+    setDtAvailableItems([item, ...dtAvailableItems]);
+  };
+
+  const clearCart = () => {
+    setDtAvailableItems([...dtCart, ...dtAvailableItems]);
+    setDtCart([]);
+  };
+
   const loadOptions = async () => {
+    let firstItem = 0;
+    let firstRoom = 0;
+
     // items
     let response = await agent.Inventory.parentList();
 
@@ -95,7 +183,8 @@ export const ProcessBorrow = () => {
     setItemOptions(response);
 
     if (response.length > 0) {
-      setSelectedItem(response[0].value);
+      firstItem = response[0].value;
+      setSelectedItem(firstItem);
     }
 
     // room
@@ -109,19 +198,27 @@ export const ProcessBorrow = () => {
     });
     setRoomOptions(response);
     if (response.length > 0) {
-      setSelectedRoom(response[0].value);
+      firstRoom = response[0].value;
+      setSelectedRoom(firstRoom);
     }
 
-    loadItems();
+    loadItems(firstItem, firstRoom);
   };
 
-  const loadItems = async () => {
+  const loadItems = async (item, room) => {
     setLoadingItems(true);
 
-    const response = await agent.Inventory.forBorrows(
-      selectedItem,
-      selectedRoom
-    );
+    let response;
+
+    if (selectedItem !== 0 && selectedRoom !== 0) {
+      response = await agent.Inventory.forBorrows(selectedItem, selectedRoom);
+    } else {
+      response = await agent.Inventory.forBorrows(item, room);
+    }
+
+    response = response.filter((a) => {
+      return dtCart.find((b) => b.id === a.id) === undefined;
+    });
 
     setDtAvailableItems(response);
 
@@ -273,13 +370,34 @@ export const ProcessBorrow = () => {
                 TO BORROW
               </Segment>
               <Segment style={{ height: "353px", overflowX: "auto" }}>
-                <DataTable />
+                {dtCart.length > 0 && (
+                  <Segment>
+                    <LabelBorrowedItems items={dtCart} />
+                  </Segment>
+                )}
+                <DataTable columns={columnCart} data={dtCart} noTableHead />
               </Segment>
               <Segment style={{ overflow: "auto" }}>
-                <Button floated="right" positive>
+                <Button
+                  floated="right"
+                  positive
+                  disabled={dtCart.length === 0}
+                  onClick={() => {
+                    const req = {
+                      items: dtCart.map((a) => a.id),
+                    };
+                  }}
+                >
                   Submit
                 </Button>
-                <Button floated="right">Clear</Button>
+                <Button
+                  floated="right"
+                  onClick={() => {
+                    clearCart();
+                  }}
+                >
+                  Clear
+                </Button>
               </Segment>
             </Segment.Group>
           </Grid.Column>
