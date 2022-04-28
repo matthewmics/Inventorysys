@@ -1,4 +1,6 @@
 import { Label } from "semantic-ui-react";
+import moment from 'moment'
+import { LabelBorrowStatus } from "../Commons/LabelBorrowStatus";
 
 export const LabelBorrowedItems = ({ items }) => {
   const itemObj = {};
@@ -21,4 +23,23 @@ export const LabelBorrowedItems = ({ items }) => {
       </Label>
     );
   });
+};
+
+export const BorrowDetailsObject = (row) => {
+  return {
+    Borrower: (
+      <>
+        <b>{row.borrower}</b>
+      </>
+    ),
+    "To Borrow": row.borrow_details,
+    Purpose: row.purpose,
+    For: <Label>{row.destination.name}</Label>,
+    From: moment(row.from).format("ll"),
+    To: moment(row.to).format("ll"),
+    Status: <LabelBorrowStatus status={row.status} />,
+    "Processed by": row.worker ? row.worker.name : "-",
+    Items:
+      row.items.length === 0 ? "-" : <LabelBorrowedItems items={row.items} />,
+  };
 };

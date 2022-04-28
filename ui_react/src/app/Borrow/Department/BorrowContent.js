@@ -16,6 +16,7 @@ import { DetailsModal } from "../../Commons/DetailsModal";
 import { ConfirmationModal } from "../../Commons/ConfirmationModal";
 import { RejectBorrow } from "../RejectBorrow";
 import { history } from "../../..";
+import { BorrowDetailsObject, LabelBorrowedItems } from "../BorrowHelper";
 
 export const BorrowContent = () => {
   const {
@@ -72,26 +73,32 @@ export const BorrowContent = () => {
               modalActions.openModal(
                 dispatch,
                 "Borrow Details",
-                <DetailsModal
-                  data={{
-                    Borrower: (
-                      <>
-                        <b>{row.borrower}</b>
-                      </>
-                    ),
-                    "To Borrow": row.borrow_details,
-                    Purpose: row.purpose,
-                    For: <Label>{row.destination.name}</Label>,
-                    From: moment(row.from).format("ll"),
-                    To: moment(row.to).format("ll"),
-                    Status: <LabelBorrowStatus status={row.status} />,
-                    "Processed by": row.worker ? row.worker.name : "-",
-                    Items: "Still pending",
-                  }}
-                />
+                <DetailsModal data={BorrowDetailsObject(row)} />
               );
             }}
           />
+
+          {userRole === "department" && row.status === "borrowed" && (
+            <>
+              <PopupButton
+                content="Return"
+                iconName="refresh"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Return Borrowed Items",
+                    <ConfirmationModal
+                      onSubmit={() => {
+                        modalActions.closeModal(dispatch);
+                      }}
+                      content={<LabelBorrowedItems items={row.items} />}
+                    />
+                  );
+                }}
+              />
+            </>
+          )}
 
           {userRole !== "department" && (
             <>

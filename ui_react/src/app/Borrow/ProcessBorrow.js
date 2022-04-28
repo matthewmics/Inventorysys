@@ -17,6 +17,7 @@ import moment from "moment";
 import DataTable from "react-data-table-component";
 import { PopupButton } from "../Commons/PopupButton";
 import { LabelBorrowedItems } from "../Borrow/BorrowHelper";
+import { toast } from "react-toastify";
 
 export const ProcessBorrow = () => {
   const {
@@ -116,6 +117,7 @@ export const ProcessBorrow = () => {
 
   const [loading, setLoading] = useState(false);
   const [loadingItems, setLoadingItems] = useState(false);
+  const [loadingProcessRequest, setLoadingProcessRequest] = useState(false);
 
   const [data, setData] = useState({
     borrow_details: "---",
@@ -137,7 +139,6 @@ export const ProcessBorrow = () => {
 
   useEffect(() => {
     loadRequest();
-    loadOptions();
   }, []);
 
   const addToCart = (id) => {
@@ -157,7 +158,7 @@ export const ProcessBorrow = () => {
     setDtCart([]);
   };
 
-  const loadOptions = async () => {
+  const loadOptions = async (roomId) => {
     let firstItem = 0;
     let firstRoom = 0;
 
@@ -190,12 +191,15 @@ export const ProcessBorrow = () => {
     // room
     response = await agent.Room.list();
 
+    response = response.filter((a) => a.id !== roomId);
+
     response = response.map((a) => {
       return {
         text: a.name + " | " + a.building.name,
         value: a.id,
       };
     });
+
     setRoomOptions(response);
     if (response.length > 0) {
       firstRoom = response[0].value;
@@ -230,6 +234,8 @@ export const ProcessBorrow = () => {
     const response = await agent.Borrow.show(id);
     setData(response);
     setLoading(false);
+
+    loadOptions(response.destination_room);
   };
 
   return (
@@ -379,13 +385,23 @@ export const ProcessBorrow = () => {
               </Segment>
               <Segment style={{ overflow: "auto" }}>
                 <Button
+                  loading={loadingProcessRequest}
                   floated="right"
                   positive
-                  disabled={dtCart.length === 0}
-                  onClick={() => {
+                  disabled={dtCart.length === 0 || loadingProcessRequest}
+                  onClick={async () => {
                     const req = {
                       items: dtCart.map((a) => a.id),
                     };
+
+                    setLoadingProcessRequest(true);
+
+                    await agent.Borrow.borrow(id, req);
+
+                    setLoadingProcessRequest(false);
+
+                    toast.success("Borrowed Succesfully");
+                    history.goBack();
                   }}
                 >
                   Submit

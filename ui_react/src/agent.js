@@ -183,7 +183,7 @@ const Borrow = {
 
   inprogress: (id) => requests.post(`/borrows/${id}/inprogress`, {}),
   reject: (id, req) => requests.post(`/borrows/${id}/reject`, req),
-  borrow: (id) => requests.post(`/borrows/${id}/borrow`, {}),
+  borrow: (id, req) => requests.post(`/borrows/${id}/borrow`, req),
   return: (id) => requests.post(`/borrows/${id}/return`, {}),
 };
 
