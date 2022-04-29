@@ -269,7 +269,7 @@ export const UserComponent = () => {
       <Modal size="tiny" open={archiveUser.open} closeOnDimmerClick={false}>
         <Modal.Header>Confirm Delete</Modal.Header>
         <Modal.Content>
-          Are you sure you want to archive {archiveUser.user?.name} ?
+          Are you sure you want to delete {archiveUser.user?.name} ?
         </Modal.Content>
         <Modal.Actions>
           <Button
