@@ -45,6 +45,11 @@ export const InventoryItemContent = () => {
       selector: (row) => <ItemStatusCurrentStatusLabel item={row} />,
     },
     {
+      name: "Remarks",
+      selector: (row) => (row.remarks ? row.remarks : "-"),
+      wrap: true,
+    },
+    {
       name: "Date Created",
       selector: (row) => row.created_at,
       sortable: true,
@@ -53,6 +58,7 @@ export const InventoryItemContent = () => {
       name: "Actions",
       selector: (row) => row.actions,
       right: true,
+      wrap: true,
     },
   ];
 
@@ -70,6 +76,7 @@ export const InventoryItemContent = () => {
     brand: "",
     room_id: 0,
     id: 0,
+    remarks: "",
   };
 
   const [archive, setArchive] = useState({
@@ -309,6 +316,15 @@ export const InventoryItemContent = () => {
                     room_id: data.value,
                   });
                 }}
+              />
+            </Form.Field>{" "}
+            <Form.Field>
+              <label>Room</label>
+              <input
+                name="remarks"
+                value={formValue.remarks}
+                placeholder="Remarks"
+                onChange={handleTextInputChange}
               />
             </Form.Field>
           </Form>

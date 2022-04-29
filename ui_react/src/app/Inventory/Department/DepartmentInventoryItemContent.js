@@ -113,6 +113,12 @@ export const DepartmentInventoryItemContent = () => {
       },
     },
     {
+      name: "Status",
+      selector: (row) => {
+        return row.remarks ? row.remarks : "-";
+      },
+    },
+    {
       name: "Date Created",
       selector: (row) => row.created_at,
       sortable: true,
