@@ -213,6 +213,9 @@ const ActivityLogs = {
 const Reports = {
   roomReport: (req) => requests.postBlob(`/reports/room`, req),
   buildingReport: (req) => requests.postBlob(`/reports/building`, req),
+  transferReport: (req) => requests.postBlob(`/reports/transfer`, req),
+  repairReport: (req) => requests.postBlob(`/reports/repair`, req),
+  borrowReport: (req) => requests.postBlob(`/reports/borrow`, req),
 };
 
 const Notes = {

@@ -21,6 +21,7 @@ import { MessageModal } from "../Commons/MessageModal";
 import { DetailsModal } from "../Commons/DetailsModal";
 import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
 import { BorrowRequestSummary } from "./Department/BorrowRequestSummary";
+import { NotesList } from "../Notes/NotesList";
 
 export const DepartmentDashboard = () => {
   const dispatch = useDispatch();
@@ -87,6 +88,18 @@ export const DepartmentDashboard = () => {
                   }}
                 />
               )}
+              <PopupButton
+                content="Notes"
+                iconName="sticky note"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Note(s)",
+                    <NotesList id={a.id} name={"transfer"} />
+                  );
+                }}
+              />
               <PopupButton
                 content="Details"
                 iconName="book"
@@ -158,6 +171,18 @@ export const DepartmentDashboard = () => {
                   }}
                 />
               )}
+              <PopupButton
+                content="Notes"
+                iconName="sticky note"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Note(s)",
+                    <NotesList id={a.id} name={"repair"} />
+                  );
+                }}
+              />
               <PopupButton
                 content="Details"
                 iconName="book"

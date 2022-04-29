@@ -27,7 +27,6 @@ export const LabelBorrowedItems = ({ items }) => {
 };
 
 export const BorrowDetailsObject = (row) => {
-  console.log(row);
   return {
     Borrower: (
       <>
@@ -45,8 +44,8 @@ export const BorrowDetailsObject = (row) => {
       </>
     ),
     Status: <LabelBorrowStatus status={row.status} />,
-    "Worked on by": row.worker ? row.worker.name : "-",
-    "Worked on at": row.date_processed
+    "Worked On By": row.worker ? row.worker.name : "-",
+    "Action Date": row.date_processed
       ? dateStringToLocal(row.date_processed)
       : "-",
     "Borrowed Items":

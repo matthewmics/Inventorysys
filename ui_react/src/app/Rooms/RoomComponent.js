@@ -245,7 +245,7 @@ export const RoomComponent = () => {
       <Modal size="tiny" open={archive.open} closeOnDimmerClick={false}>
         <Modal.Header>Confirm Delete</Modal.Header>
         <Modal.Content>
-          Are you sure you want to archive {archive.data?.name} ?
+          Are you sure you want to delete {archive.data?.name} ?
         </Modal.Content>
         <Modal.Actions>
           <Button

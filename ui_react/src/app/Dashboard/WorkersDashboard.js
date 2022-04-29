@@ -24,6 +24,9 @@ import { DisposedItemsComponentBak } from "../IventoryItem/DisposedItemsComponen
 import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent";
 import { BorrowRequestSummary } from "./Department/BorrowRequestSummary";
 import { NotesList } from "../Notes/NotesList";
+import { TransferReport } from "./TransferReport";
+import { BorrowReport } from "./BorrowReport";
+import { RepairReport } from "./RepairReport";
 
 export const WorkersDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -246,6 +249,22 @@ export const WorkersDashboard = () => {
               <Segment className="bg-gradient-1">
                 <Icon name="dolly" />
                 Transfer Requests
+                {user.role === "admin" && (
+                  <div style={{ float: "right" }}>
+                    <PopupButton
+                      content="Generate Report"
+                      iconName="file excel"
+                      color="blue"
+                      onClick={() => {
+                        modalActions.openModal(
+                          dispatch,
+                          "Generate Transfer Report",
+                          <TransferReport />
+                        );
+                      }}
+                    />
+                  </div>
+                )}
               </Segment>
               <Segment>
                 <div className="dashboard-segment">
@@ -267,6 +286,22 @@ export const WorkersDashboard = () => {
               <Segment className="bg-gradient-1">
                 <Icon name="wrench" />
                 Repair Requests
+                {user.role === "admin" && (
+                  <div style={{ float: "right" }}>
+                    <PopupButton
+                      content="Generate Report"
+                      iconName="file excel"
+                      color="blue"
+                      onClick={() => {
+                        modalActions.openModal(
+                          dispatch,
+                          "Generate Repair Report",
+                          <RepairReport />
+                        );
+                      }}
+                    />
+                  </div>
+                )}
               </Segment>
               <Segment>
                 <div className="dashboard-segment">
@@ -289,6 +324,22 @@ export const WorkersDashboard = () => {
               <Segment className="bg-gradient-1">
                 <Icon name="pallet" />
                 Borrows
+                {user.role === "admin" && (
+                  <div style={{ float: "right" }}>
+                    <PopupButton
+                      content="Generate Report"
+                      iconName="file excel"
+                      color="blue"
+                      onClick={() => {
+                        modalActions.openModal(
+                          dispatch,
+                          "Generate Borrow Report",
+                          <BorrowReport />
+                        );
+                      }}
+                    />
+                  </div>
+                )}
               </Segment>
               <Segment>
                 <BorrowRequestSummary />
