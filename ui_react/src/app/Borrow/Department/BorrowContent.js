@@ -18,6 +18,7 @@ import { RejectBorrow } from "../RejectBorrow";
 import { history } from "../../..";
 import { BorrowDetailsObject, LabelBorrowedItems } from "../BorrowHelper";
 import { NotesForm } from "../../Notes/NotesForm";
+import { BorrowReturnForm } from "../BorrowReturnForm";
 
 export const BorrowContent = () => {
   const {
@@ -101,19 +102,30 @@ export const BorrowContent = () => {
                 iconName="refresh"
                 color="green"
                 onClick={() => {
+                  // modalActions.openModal(
+                  //   dispatch,
+                  //   "Return Borrowed Items",
+                  //   <ConfirmationModal
+                  //     onSubmit={async () => {
+                  //       modalActions.closeModal(dispatch);
+                  //       setLoadingReturn(true);
+                  //       await agent.Borrow.return(row.id);
+                  //       setLoadingReturn(false);
+                  //       toast.success("Items Returned");
+                  //       loadData();
+                  //     }}
+                  //     content={<LabelBorrowedItems items={row.items} />}
+                  //   />
+                  // );
                   modalActions.openModal(
                     dispatch,
                     "Return Borrowed Items",
-                    <ConfirmationModal
-                      onSubmit={async () => {
-                        modalActions.closeModal(dispatch);
-                        setLoadingReturn(true);
-                        await agent.Borrow.return(row.id);
-                        setLoadingReturn(false);
-                        toast.success("Items Returned");
+                    <BorrowReturnForm
+                      id={row.id}
+                      onSave={() => {
                         loadData();
                       }}
-                      content={<LabelBorrowedItems items={row.items} />}
+                      itemList={<LabelBorrowedItems items={row.items} />}
                     />
                   );
                 }}

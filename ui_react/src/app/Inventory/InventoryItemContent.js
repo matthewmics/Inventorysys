@@ -319,7 +319,7 @@ export const InventoryItemContent = () => {
               />
             </Form.Field>{" "}
             <Form.Field>
-              <label>Room</label>
+              <label>Remarks</label>
               <input
                 name="remarks"
                 value={formValue.remarks}

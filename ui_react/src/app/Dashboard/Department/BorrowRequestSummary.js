@@ -11,6 +11,7 @@ import { DetailsModal } from "../../Commons/DetailsModal";
 import { MessageModal } from "../../Commons/MessageModal";
 import { dateStringToLocal } from "../../../helpers";
 import { NotesList } from "../../Notes/NotesList";
+import { BorrowerNote } from "../../Borrow/BorrowerNote";
 
 export const BorrowRequestSummary = () => {
   const dispatch = useDispatch();
@@ -62,6 +63,25 @@ export const BorrowRequestSummary = () => {
               }}
             />
           )}
+
+          {row.status === "returned" && (
+            <PopupButton
+              content="Borrower Notes"
+              iconName="sticky note"
+              color="violet"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Note(s)",
+                  <BorrowerNote
+                    note={row.borrower_note}
+                    fileId={row.borrower_file}
+                  />
+                );
+              }}
+            />
+          )}
+
           <PopupButton
             content="Notes"
             iconName="sticky note"

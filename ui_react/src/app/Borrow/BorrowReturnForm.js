@@ -1,18 +1,16 @@
 import React, { useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Button, Form, Modal } from "semantic-ui-react";
 import modalActions from "../../actions/modalActions";
 import agent from "../../agent";
 
-export const NotesForm = ({ name, id, onSave }) => {
+export const BorrowReturnForm = ({ onSave, id, itemList }) => {
   const dispatch = useDispatch();
-
   const modal = useSelector((state) => state.modal);
-  const inputFile = useRef(null);
+  const [noteText, setNoteText] = useState("");
 
-  const [note, setNote] = useState("");
+  const inputFile = useRef(null);
 
   return (
     <>
@@ -21,10 +19,10 @@ export const NotesForm = ({ name, id, onSave }) => {
           <Form.Field>
             <label>Note</label>
             <Form.TextArea
+              value={noteText}
               placeholder="Note"
-              value={note}
               onChange={(e) => {
-                setNote(e.target.value);
+                setNoteText(e.target.value);
               }}
             />
           </Form.Field>
@@ -33,8 +31,10 @@ export const NotesForm = ({ name, id, onSave }) => {
             <input type="file" ref={inputFile} />
           </Form.Field>
         </Form>
+        <br></br>
+        <label className="label-secondary">To Return</label>
+        <div> {itemList}</div>
       </Modal.Content>
-
       <Modal.Actions>
         <Button
           negative
@@ -46,32 +46,26 @@ export const NotesForm = ({ name, id, onSave }) => {
         >
           Cancel
         </Button>
-
         <Button
           positive
           loading={modal.loading}
           disabled={modal.loading}
           onClick={async () => {
+            modalActions.setErrors(dispatch, null);
             modalActions.setLoading(dispatch, true);
+
             try {
-              // request here
               const file =
                 inputFile.current.files.length > 0
                   ? inputFile.current.files[0]
                   : "";
-
-              const req = {
-                [name]: id,
-                message: note,
-              };
-
-              await agent.Notes.create(req, file);
+                  
+              await agent.Borrow.return(id, { borrower_note: noteText }, file);
 
               if (onSave) onSave();
-              toast.success("Note Created");
+              toast.success("Returned");
               modalActions.closeModal(dispatch);
             } catch (err) {
-              console.log(err);
               modalActions.setErrors(dispatch, err.data.errors);
               modalActions.setLoading(dispatch, false);
             }

@@ -113,7 +113,7 @@ export const DepartmentInventoryItemContent = () => {
       },
     },
     {
-      name: "Status",
+      name: "Remarks",
       selector: (row) => {
         return row.remarks ? row.remarks : "-";
       },

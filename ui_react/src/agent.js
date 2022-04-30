@@ -175,18 +175,6 @@ const PurchaseOrders = {
   list: () => requests.get(`/purchase-orders`),
 };
 
-const Borrow = {
-  borrowRequest: (req) => requests.post(`/borrows`, req),
-  list: () => requests.get(`/borrows`),
-  show: (id) => requests.get(`/borrows/${id}`),
-  processable: () => requests.get(`/borrows/processable`),
-
-  inprogress: (id) => requests.post(`/borrows/${id}/inprogress`, {}),
-  reject: (id, req) => requests.post(`/borrows/${id}/reject`, req),
-  borrow: (id, req) => requests.post(`/borrows/${id}/borrow`, req),
-  return: (id) => requests.post(`/borrows/${id}/return`, {}),
-};
-
 const PCComponent = {
   list: () => requests.get(`/pc-components`),
   show: (id) => requests.get(`/pc-components/${id}`),
@@ -228,6 +216,25 @@ const Notes = {
     return requests.post(`/notes`, formData);
   },
   show: (id, name) => requests.get(`/notes?name=${name}&id=${id}`),
+};
+
+const Borrow = {
+  borrowRequest: (req) => requests.post(`/borrows`, req),
+  list: () => requests.get(`/borrows`),
+  show: (id) => requests.get(`/borrows/${id}`),
+  processable: () => requests.get(`/borrows/processable`),
+
+  inprogress: (id) => requests.post(`/borrows/${id}/inprogress`, {}),
+  reject: (id, req) => requests.post(`/borrows/${id}/reject`, req),
+  borrow: (id, req) => requests.post(`/borrows/${id}/borrow`, req),
+  return: (id, req, file) => {
+    const formData = new FormData();
+    if (file) formData.append("file", file);
+    Object.entries(req).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    return requests.post(`/borrows/${id}/return`, formData);
+  },
 };
 
 const agent = {
