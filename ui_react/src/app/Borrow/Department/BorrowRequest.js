@@ -15,6 +15,7 @@ export const BorrowRequest = ({ onSave }) => {
     borrower: "",
     borrow_details: "",
     purpose: "",
+    department: "",
   });
 
   const [dateInput, setDateInput] = useState({
@@ -78,6 +79,16 @@ export const BorrowRequest = ({ onSave }) => {
               placeholder="Borrower Name"
               name="borrower"
               value={formData.borrower}
+            ></Form.Input>
+          </Form.Field>
+
+          <Form.Field>
+            <label>Department</label>
+            <Form.Input
+              onChange={onFormDataInput}
+              placeholder="Department"
+              name="department"
+              value={formData.department}
             ></Form.Input>
           </Form.Field>
 

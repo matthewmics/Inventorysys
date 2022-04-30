@@ -33,6 +33,11 @@ export const BorrowDetailsObject = (row) => {
         <b>{row.borrower}</b>
       </>
     ),
+    Department: (
+      <>
+        <b>{row.department}</b>
+      </>
+    ),
     "To Borrow": row.borrow_details,
     Purpose: row.purpose,
     For: <Label>{row.destination.name}</Label>,
