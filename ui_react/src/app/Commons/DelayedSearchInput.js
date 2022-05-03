@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon, Input } from "semantic-ui-react";
 
-export const DelayedSearchInput = ({ onSearch }) => {
+export const DelayedSearchInput = ({ onSearch, searchRef }) => {
   var timeoutInstance = null;
 
   const handleInputChange = (e) => {
@@ -9,11 +9,11 @@ export const DelayedSearchInput = ({ onSearch }) => {
     timeoutInstance = setTimeout(() => {
       onSearch(e.target.value);
     }, 250);
-
   };
 
   return (
     <Input
+      ref={searchRef}
       onChange={handleInputChange}
       placeholder="Search"
       icon={<Icon name="search" inverted circular />}

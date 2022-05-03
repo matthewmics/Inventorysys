@@ -1,6 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Button, Icon, Loader, Menu, Popup, Segment } from "semantic-ui-react";
+import {
+  Button,
+  Icon,
+  Loader,
+  Menu,
+  Popup,
+  Segment,
+  Select,
+} from "semantic-ui-react";
 import { history } from "../../..";
 import agent from "../../../agent";
 import { dateStringToLocal } from "../../../helpers";
@@ -8,6 +16,21 @@ import { DelayedSearchInput } from "../../Commons/DelayedSearchInput";
 import { itemTypeOptions } from "../../Commons/Enumerations";
 
 export const DepartmentInventoryContent = () => {
+  const searchRef = useRef(null);
+
+  const [selectedItemType, setSelectedItemType] = useState("All");
+
+  const filterData = (a) => {
+    const val = searchRef.current.inputRef.current.value;
+
+    const filteredByType =
+      "All" === selectedItemType || a.item_type === selectedItemType;
+
+    return a.name.toLowerCase().includes(val.toLowerCase()) && filteredByType;
+  };
+
+  const [loaded, setLoaded] = useState(false);
+
   const [rooms, setRooms] = useState([]);
   const [selectedRoomID, setSelectedRoomID] = useState(0);
 
@@ -58,6 +81,7 @@ export const DepartmentInventoryContent = () => {
 
   const loadData = async () => {
     setLoading(true);
+    setLoaded(true);
 
     const responseDeptCurrent = await agent.Department.current();
 
@@ -112,8 +136,10 @@ export const DepartmentInventoryContent = () => {
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    setData(dataTemp.filter(filterData));
+
+    if (!loaded) loadData();
+  }, [selectedItemType, dataTemp]);
 
   return (
     <>
@@ -157,13 +183,20 @@ export const DepartmentInventoryContent = () => {
 
         <Menu.Menu position="right"></Menu.Menu>
       </Menu>
-      <div className="mb-10 clearfix">
-        <div className="disp-ib">
+      <div className="mb-10">
+        <div style={{ display: "flex" }}>
           <DelayedSearchInput
+            searchRef={searchRef}
             onSearch={(val) => {
-              setData(
-                dataTemp.filter((a) => a.name.toLowerCase().includes(val))
-              );
+              setData(dataTemp.filter(filterData));
+            }}
+          />
+          <span style={{ width: "1em" }}></span>
+          <Select
+            value={selectedItemType}
+            options={[{ text: "All Types", value: "All" }, ...itemTypeOptions]}
+            onChange={(e, data) => {
+              setSelectedItemType(data.value);
             }}
           />
         </div>

@@ -16,3 +16,13 @@ export const itemTypeOptions = [
   { value: "Electrical", text: "Electrical" },
   { value: "Toiletry", text: "Toiletry" },
 ];
+
+export const itemStatusOptions = [
+  { value: "Working", text: "Working" },
+  { value: "Pending for transfer", text: "Pending for transfer" },
+  { value: "Transferring", text: "Transferring" },
+  { value: "Pending for repair", text: "Pending for repair" },
+  { value: "Repairing", text: "Repairing" },
+  { value: "Pending for borrow", text: "Pending for borrow" },
+  { value: "Borrowed", text: "Borrowed" },
+];

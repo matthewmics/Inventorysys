@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -25,6 +25,8 @@ import {
 import { ErrorMessage } from "../Commons/ErrorMessage";
 
 export const InventoryContent = () => {
+  const searchRef = useRef(null);
+
   const columns = [
     {
       name: "Name",
@@ -78,7 +80,10 @@ export const InventoryContent = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
+  const [selectedItemType, setSelectedItemType] = useState("All");
+
   const loadParentItems = async () => {
+    setLoaded(true);
     setLoading(true);
 
     let response = await agent.Inventory.parentList();
@@ -174,9 +179,21 @@ export const InventoryContent = () => {
     loadParentItems();
   };
 
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
-    loadParentItems();
-  }, []);
+    setData(dataTemp.filter(filterData));
+    if (!loaded) loadParentItems();
+  }, [selectedItemType, dataTemp]);
+
+  const filterData = (a) => {
+    const val = searchRef.current.inputRef.current.value;
+
+    const filteredByType =
+      "All" === selectedItemType || a.item_type === selectedItemType;
+
+    return a.name.toLowerCase().includes(val.toLowerCase()) && filteredByType;
+  };
 
   return (
     <>
@@ -261,27 +278,34 @@ export const InventoryContent = () => {
         </div>
         <hr></hr>
       </div>
-      <div className="mb-10 clearfix">
-        <div className="disp-ib">
+      <div className="mb-10" style={{ overflowY: "visible" }}>
+        <div style={{ display: "flex" }}>
           <DelayedSearchInput
+            searchRef={searchRef}
             onSearch={(val) => {
-              setData(
-                dataTemp.filter((a) => a.name.toLowerCase().includes(val))
-              );
+              setData(dataTemp.filter(filterData));
             }}
           />
-        </div>
-        <div className="float-r disp-ib">
-          <Button
-            size="small"
-            color="green"
-            onClick={() => {
-              setFormValue(formDefaultValue);
-              setModalFormOpen(true);
+          <span style={{ width: "1em" }}></span>
+          <Select
+            value={selectedItemType}
+            options={[{ text: "All Types", value: "All" }, ...itemTypeOptions]}
+            onChange={(e, data) => {
+              setSelectedItemType(data.value);
             }}
-          >
-            <Icon name="add" /> Create Item
-          </Button>
+          />
+          <div className="float-r disp-ib" style={{ marginLeft: "auto" }}>
+            <Button
+              size="small"
+              color="green"
+              onClick={() => {
+                setFormValue(formDefaultValue);
+                setModalFormOpen(true);
+              }}
+            >
+              <Icon name="add" /> Create Item
+            </Button>
+          </div>
         </div>
       </div>
       <DataTable columns={columns} data={data} pagination striped />

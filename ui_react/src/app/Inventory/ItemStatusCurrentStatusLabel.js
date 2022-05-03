@@ -31,3 +31,36 @@ export const ItemStatusCurrentStatusLabel = ({ item }) => {
 
   return <Label>Working</Label>;
 };
+
+export const ItemStatusCurrentStatusText = (item) => {
+  if (item.transfer_status === "pending") {
+    return "Pending for transfer";
+  }
+
+  if (item.transfer_status === "in progress") {
+    return "Transferring";
+  }
+
+  if (item.repair_status === "pending") {
+    return "Pending for repair";
+  }
+
+  if (item.repair_status === "job order created") {
+    return "Repairing";
+  }
+
+  if (item.borrow_status === "pending") {
+    return "Pending for borrow";
+  }
+
+  if (item.borrow_status === "in progress") {
+    return "Transferring for borrow";
+  }
+  if (item.borrow_status === "borrowed") {
+    return "Borrowed";
+  }
+
+  return "Working";
+};
+
+

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -15,11 +15,31 @@ import { history } from "../..";
 import agent from "../../agent";
 import { dateStringToLocal } from "../../helpers";
 import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
+import { itemStatusOptions } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
 import { checkIfItemInTransaction } from "./InventoryHelpers";
-import { ItemStatusCurrentStatusLabel } from "./ItemStatusCurrentStatusLabel";
+import {
+  ItemStatusCurrentStatusLabel,
+  ItemStatusCurrentStatusText,
+} from "./ItemStatusCurrentStatusLabel";
 
 export const InventoryItemContent = () => {
+  const searchRef = useRef(null);
+
+  const [selectedStatus, setSelectedStatus] = useState("All");
+
+  const filterData = (a) => {
+    const val = searchRef.current.inputRef.current.value;
+    // console.log(a);
+    const status = ItemStatusCurrentStatusText(a);
+
+    return (
+      (a.serial_number.toLowerCase().includes(val.toLowerCase()) ||
+        a.brand.toLowerCase().includes(val.toLowerCase())) &&
+      (selectedStatus === "All" || selectedStatus === status)
+    );
+  };
+
   const { id: parentId } = useParams();
 
   const [roomOptions, setRoomOptions] = useState([]);
@@ -42,7 +62,9 @@ export const InventoryItemContent = () => {
     },
     {
       name: "Status",
-      selector: (row) => <ItemStatusCurrentStatusLabel item={row} />,
+      selector: (row) => ItemStatusCurrentStatusText(row),
+      format: (row) => <ItemStatusCurrentStatusLabel item={row} />,
+      sortable: true,
     },
     {
       name: "Remarks",
@@ -95,6 +117,8 @@ export const InventoryItemContent = () => {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
+    setLoaded(true);
+
     setLoading(true);
 
     let roomResponse = await agent.Room.list();
@@ -222,9 +246,12 @@ export const InventoryItemContent = () => {
     loadData();
   };
 
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
-    loadData();
-  }, []);
+    setData(dataTemp.filter(filterData));
+    if (!loaded) loadData();
+  }, [selectedStatus, dataTemp]);
 
   return (
     <>
@@ -363,22 +390,29 @@ export const InventoryItemContent = () => {
         </div>
         <hr></hr>
       </div>
-      <div className="mb-10 clearfix">
-        <div className="disp-ib">
+      <div className="mb-10" style={{ overflowY: "visible" }}>
+        <div style={{ display: "flex" }}>
           <DelayedSearchInput
+            searchRef={searchRef}
             onSearch={(val) => {
-              setData(
-                dataTemp.filter(
-                  (a) =>
-                    a.serial_number.toLowerCase().includes(val) ||
-                    a.brand.toLowerCase().includes(val)
-                )
-              );
+              setData(dataTemp.filter(filterData));
             }}
           />
-        </div>
-        <div className="float-r disp-ib">
+
+          <span style={{ width: "1em" }}></span>
+          <Select
+            search
+            value={selectedStatus}
+            options={[
+              { text: "All Status", value: "All" },
+              ...itemStatusOptions,
+            ]}
+            onChange={(e, data) => {
+              setSelectedStatus(data.value);
+            }}
+          />
           <Button
+            style={{ marginLeft: "auto" }}
             size="small"
             color="green"
             onClick={() => {

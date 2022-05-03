@@ -24,10 +24,32 @@ import { PopupButton } from "../../Commons/PopupButton";
 import { useDispatch } from "react-redux";
 import modalActions from "../../../actions/modalActions";
 import { DepartmentRequestRepair } from "./DepartmentRequestRepair";
-import { ItemStatusCurrentStatusLabel } from "../ItemStatusCurrentStatusLabel";
+import {
+  ItemStatusCurrentStatusLabel,
+  ItemStatusCurrentStatusText,
+} from "../ItemStatusCurrentStatusLabel";
 import { checkIfItemInTransaction } from "../InventoryHelpers";
+import { itemStatusOptions } from "../../Commons/Enumerations";
 
 export const DepartmentInventoryItemContent = () => {
+  const searchRef = useRef(null);
+
+  const [selectedStatus, setSelectedStatus] = useState("All");
+
+  const filterData = (a) => {
+    const val = searchRef.current.inputRef.current.value;
+    // console.log(a);
+    const status = ItemStatusCurrentStatusText(a);
+
+    return (
+      (a.serial_number.toLowerCase().includes(val.toLowerCase()) ||
+        a.brand.toLowerCase().includes(val.toLowerCase())) &&
+      (selectedStatus === "All" || selectedStatus === status)
+    );
+  };
+
+  const [loaded, setLoaded] = useState(false);
+
   const dispatch = useDispatch();
 
   const { id: parentId, roomID } = useParams();
@@ -108,9 +130,9 @@ export const DepartmentInventoryItemContent = () => {
     },
     {
       name: "Status",
-      selector: (row) => {
-        return <ItemStatusCurrentStatusLabel item={row} />;
-      },
+      selector: (row) => ItemStatusCurrentStatusText(row),
+      format: (row) => <ItemStatusCurrentStatusLabel item={row} />,
+      sortable: true,
     },
     {
       name: "Remarks",
@@ -140,6 +162,7 @@ export const DepartmentInventoryItemContent = () => {
   const [data, setData] = useState([]);
 
   const loadData = async () => {
+    setLoaded(true);
     setLoading(true);
 
     const responseDeptCurrent = await agent.Room.list();
@@ -220,8 +243,9 @@ export const DepartmentInventoryItemContent = () => {
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    setData(dataTemp.filter(filterData));
+    if (!loaded) loadData();
+  }, [dataTemp, selectedStatus]);
 
   return (
     <>
@@ -320,32 +344,39 @@ export const DepartmentInventoryItemContent = () => {
         </div>
         <hr></hr>
       </div>
-      <div className="mb-10 clearfix">
-        <div className="disp-ib">
+      <div className="mb-10">
+        <div style={{ display: "flex" }}>
           <DelayedSearchInput
+            searchRef={searchRef}
             onSearch={(val) => {
-              setData(
-                dataTemp.filter(
-                  (a) =>
-                    a.serial_number.toLowerCase().includes(val) ||
-                    a.brand.toLowerCase().includes(val)
-                )
-              );
+              setData(dataTemp.filter(filterData));
             }}
           />
-        </div>
-        <div className="float-r disp-ib">
-          <Button
-            size="small"
-            icon
-            labelPosition="left"
-            onClick={() => {
-              downloadBase64File(transferRepairForm, "request_form.docx");
+          <span style={{ width: "1em" }}></span>
+          <Select
+            search
+            value={selectedStatus}
+            options={[
+              { text: "All Status", value: "All" },
+              ...itemStatusOptions,
+            ]}
+            onChange={(e, data) => {
+              setSelectedStatus(data.value);
             }}
-          >
-            <Icon name="cloud download" />
-            Download Request Form
-          </Button>
+          />
+          <div style={{ marginLeft: "auto" }}>
+            <Button
+              size="small"
+              icon
+              labelPosition="left"
+              onClick={() => {
+                downloadBase64File(transferRepairForm, "request_form.docx");
+              }}
+            >
+              <Icon name="cloud download" />
+              Download Request Form
+            </Button>
+          </div>
         </div>
       </div>
       <DataTable columns={columns} data={data} pagination striped />
