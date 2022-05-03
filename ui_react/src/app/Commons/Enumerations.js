@@ -23,6 +23,6 @@ export const itemStatusOptions = [
   { value: "Transferring", text: "Transferring" },
   { value: "Pending for repair", text: "Pending for repair" },
   { value: "Repairing", text: "Repairing" },
-  { value: "Pending for borrow", text: "Pending for borrow" },
+  // { value: "Pending for borrow", text: "Pending for borrow" },
   { value: "Borrowed", text: "Borrowed" },
 ];

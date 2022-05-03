@@ -58,6 +58,7 @@ const Building = {
   create: (request) => requests.post("/buildings", request),
   update: (request, id) => requests.put(`/buildings/${id}`, request),
   delete: (id) => requests.delete(`/buildings/${id}`),
+  items: (id) => requests.get(`/buildings/${id}/items`),
 };
 
 const Room = {

@@ -23,14 +23,25 @@ export const BuildingGenerateReportComponent = ({
   const loadItems = async () => {
     modalActions.setLoading(dispatch, true);
 
-    const response = await agent.Inventory.parentList();
+    // const response = await agent.Inventory.parentList();
+    const response = await agent.Building.items(buildingID);
+
+    var _items = [];
+    response.forEach((i) => {
+      const parentItem = i.inventory_parent_item;
+
+      const exists = _items.find((j) => j.id === parentItem.id);
+
+      if (!exists) {
+        _items.push(parentItem);
+      }
+    });
 
     setItems(
-      response.map((a) => {
+      _items.map((a) => {
         return {
           text: a.name,
           value: a.id,
-          key: a.id,
         };
       })
     );
