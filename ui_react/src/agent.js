@@ -248,6 +248,7 @@ const PurchaseItemRequests = {
     });
     return requests.post(`/purchase-item-requests`, formData);
   },
+  processAbles: () => requests.get(`/purchase-item-requests/processAbles`)
 };
 
 const agent = {
