@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -14,6 +14,7 @@ import {
   Select,
 } from "semantic-ui-react";
 import { history } from "../..";
+import modalActions from "../../actions/modalActions";
 import agent from "../../agent";
 import { dateStringToLocal } from "../../helpers";
 import { DelayedSearchInput } from "../Commons/DelayedSearchInput";
@@ -23,9 +24,12 @@ import {
   roomTypeOptions,
 } from "../Commons/Enumerations";
 import { ErrorMessage } from "../Commons/ErrorMessage";
+import { ReportForInventory } from "../Reports/ReportForInventory";
 
 export const InventoryContent = () => {
   const searchRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   const columns = [
     {
@@ -295,6 +299,26 @@ export const InventoryContent = () => {
             }}
           />
           <div className="float-r disp-ib" style={{ marginLeft: "auto" }}>
+            <Button
+              size="small"
+              color="blue"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Inventory Report",
+                  <ReportForInventory
+                    items={dataTemp.map((a) => {
+                      return {
+                        text: a.name,
+                        value: a.id,
+                      };
+                    })}
+                  />
+                );
+              }}
+            >
+              <Icon name="file" /> REPORTS
+            </Button>
             <Button
               size="small"
               color="green"

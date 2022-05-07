@@ -3,7 +3,9 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, Form, Modal, Select } from "semantic-ui-react";
+import { history } from "../..";
 import modalActions from "../../actions/modalActions";
+import reportActions from "../../actions/reportActions";
 import agent from "../../agent";
 
 export const BuildingGenerateReportComponent = ({
@@ -88,22 +90,27 @@ export const BuildingGenerateReportComponent = ({
           positive
           loading={modal.loading}
           disabled={modal.loading}
-          onClick={async () => {
-            modalActions.setLoading(dispatch, true);
-
-            const req = {
-              date: moment().format("LLL"),
-              building_id: buildingID,
-              items_to_generate: [...selectedItems],
-            };
-            const response = await agent.Reports.buildingReport(req);
-
-            saveAs(
-              response,
-              buildingName + "-" + moment().format("L") + ".csv"
-            );
-
+          onClick={() => {
+            reportActions.setSelectedItems(dispatch, [...selectedItems]);
             modalActions.closeModal(dispatch);
+            history.push(
+              `/buildings/${buildingID}/reports?name=${buildingName}&type=building`
+            );
+            // modalActions.setLoading(dispatch, true);
+
+            // const req = {
+            //   date: moment().format("LLL"),
+            //   building_id: buildingID,
+            //   items_to_generate: [...selectedItems],
+            // };
+            // const response = await agent.Reports.buildingReport(req);
+
+            // saveAs(
+            //   response,
+            //   buildingName + "-" + moment().format("L") + ".csv"
+            // );
+
+            // modalActions.closeModal(dispatch);
           }}
         >
           Generate Report

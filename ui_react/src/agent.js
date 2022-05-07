@@ -200,11 +200,12 @@ const ActivityLogs = {
 };
 
 const Reports = {
-  roomReport: (req) => requests.postBlob(`/reports/room`, req),
-  buildingReport: (req) => requests.postBlob(`/reports/building`, req),
-  transferReport: (req) => requests.postBlob(`/reports/transfer`, req),
-  repairReport: (req) => requests.postBlob(`/reports/repair`, req),
-  borrowReport: (req) => requests.postBlob(`/reports/borrow`, req),
+  roomReport: (req) => requests.post(`/reports/room`, req),
+  buildingReport: (req) => requests.post(`/reports/building`, req),
+  inventoryReport: (req) => requests.post(`/reports/inventory`, req),
+  transferReport: (req) => requests.post(`/reports/transfer`, req),
+  repairReport: (req) => requests.post(`/reports/repair`, req),
+  borrowReport: (req) => requests.post(`/reports/borrow`, req),
 };
 
 const Notes = {
@@ -238,6 +239,17 @@ const Borrow = {
   },
 };
 
+const PurchaseItemRequests = {
+  create: (req, file) => {
+    const formData = new FormData();
+    if (file) formData.append("file", file);
+    Object.entries(req).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    return requests.post(`/purchase-item-requests`, formData);
+  },
+};
+
 const agent = {
   User,
   Building,
@@ -257,6 +269,7 @@ const agent = {
   ActivityLogs,
   Reports,
   Notes,
+  PurchaseItemRequests,
 };
 
 export default agent;

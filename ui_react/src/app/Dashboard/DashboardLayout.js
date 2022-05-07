@@ -27,6 +27,9 @@ import { PurchaseOrderComponent } from "../PurchaseOrders/PurchaseOrderComponent
 import { DisposedItemsComponent } from "../DisposedItems/DisposedItemsComponent";
 import { ActivityLogComponent } from "../ActivityLog/ActivityLogComponent";
 import { ProcessBorrow } from "../Borrow/ProcessBorrow";
+import { Report } from "../Reports/Report";
+import { ReportForRequests } from "../Reports/ReportForRequests";
+import { PurchaseItemRequestComponent } from "../PurchaseItemRequests/PurchaseItemRequestComponent";
 
 export const DashboardLayout = () => {
   const { user } = useSelector((state) => state.auth);
@@ -209,6 +212,16 @@ export const DashboardLayout = () => {
               </NavLink>
             </Menu.Item>
 
+            <Menu.Item>
+              <NavLink
+                to="/purchase-item-requests"
+                activeClassName="link-active"
+              >
+                <Icon name="money" />
+                Purchase Item Requests
+              </NavLink>
+            </Menu.Item>
+
             {/* {["admin"].includes(user.role) && (
               <Menu.Item>
                 <NavLink to="/pc-components" activeClassName="link-active">
@@ -281,6 +294,14 @@ export const DashboardLayout = () => {
 
       <div style={{ marginLeft: "16rem", paddingRight: "1em" }}>
         <Switch>
+          <Route path="/buildings/:id/reports" component={Report} />
+          <Route path="/rooms/:id/reports" component={Report} />
+          <Route path="/inventory/reports" component={Report} />
+
+          <Route path="/transfers/reports" component={ReportForRequests} />
+          <Route path="/repairs/reports" component={ReportForRequests} />
+          <Route path="/borrows/reports" component={ReportForRequests} />
+
           <Route path="/dashboard" component={DashboardContent} />
           <Route path="/users" component={UserComponent} />
           <Route path="/buildings" component={BuildingComponent} />
@@ -318,6 +339,11 @@ export const DashboardLayout = () => {
 
           <Route path="/borrows/:id" component={ProcessBorrow} />
           <Route path="/borrows" component={BorrowComponent} />
+
+          <Route
+            path="/purchase-item-requests"
+            component={PurchaseItemRequestComponent}
+          />
 
           <Route path="/purchase-orders" component={PurchaseOrderComponent} />
 

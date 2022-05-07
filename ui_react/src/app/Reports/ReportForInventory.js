@@ -1,53 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown, Form, Modal, Select } from "semantic-ui-react";
-import modalActions from "../../actions/modalActions";
-import agent from "../../agent";
 import { saveAs } from "file-saver";
 import moment from "moment";
-import reportActions from "../../actions/reportActions";
 import { history } from "../..";
+import modalActions from "../../actions/modalActions";
+import reportActions from "../../actions/reportActions";
 
-export const RoomGenerateReportComponent = ({ roomId, roomName }) => {
+export const ReportForInventory = ({ items }) => {
   const modal = useSelector((state) => state.modal);
   const dispatch = useDispatch();
 
-  const [items, setItems] = useState([]);
+//   const [items, setItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-
-  useEffect(() => {
-    loadItems();
-  }, []);
-
-  const loadItems = async () => {
-    modalActions.setLoading(dispatch, true);
-
-    // const response = await agent.Inventory.parentList();
-    let response = await agent.Room.allItems(roomId);
-
-    var _items = [];
-    response.inventory_items.forEach((i) => {
-      const parentItem = i.inventory_parent_item;
-
-      const exists = _items.find((j) => j.id === parentItem.id);
-
-      if (!exists) {
-        _items.push(parentItem);
-      }
-    });
-
-    setItems(
-      _items.map((a) => {
-        return {
-          text: a.name,
-          value: a.id,
-        };
-      })
-    );
-
-    modalActions.setLoading(dispatch, false);
-  };
-
   return (
     <>
       <Modal.Content>
@@ -89,7 +54,7 @@ export const RoomGenerateReportComponent = ({ roomId, roomName }) => {
           onClick={() => {
             reportActions.setSelectedItems(dispatch, [...selectedItems]);
             modalActions.closeModal(dispatch);
-            history.push(`/rooms/${roomId}/reports?name=${roomName}&type=room`);
+            history.push(`/inventory/reports?type=inventory`);
             // modalActions.setLoading(dispatch, true);
 
             // const req = {
