@@ -207,6 +207,7 @@ const Reports = {
   transferReport: (req) => requests.post(`/reports/transfer`, req),
   repairReport: (req) => requests.post(`/reports/repair`, req),
   borrowReport: (req) => requests.post(`/reports/borrow`, req),
+  purchaseReport: (req) => requests.post(`/reports/purchase`, req),
 };
 
 const Notes = {
@@ -241,6 +242,7 @@ const Borrow = {
 };
 
 const PurchaseItemRequests = {
+  list: () => requests.get(`/purchase-item-requests`),
   create: (req, file) => {
     const formData = new FormData();
     if (file) formData.append("file", file);

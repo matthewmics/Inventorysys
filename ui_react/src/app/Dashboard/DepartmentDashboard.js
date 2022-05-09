@@ -22,6 +22,7 @@ import { DetailsModal } from "../Commons/DetailsModal";
 import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
 import { BorrowRequestSummary } from "./Department/BorrowRequestSummary";
 import { NotesList } from "../Notes/NotesList";
+import { PIRSummary } from "../PurchaseItemRequests/PIRSummary";
 
 export const DepartmentDashboard = () => {
   const dispatch = useDispatch();
@@ -286,6 +287,20 @@ export const DepartmentDashboard = () => {
               </Segment>
               <Segment>
                 <BorrowRequestSummary />
+              </Segment>
+            </Segment.Group>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column computer={10} mobile={16}>
+            <Segment.Group>
+              <Segment className="bg-gradient-1">
+                <Icon name="money" />
+                Purchase Requests
+              </Segment>
+              <Segment>
+                <PIRSummary />
               </Segment>
             </Segment.Group>
           </Grid.Column>

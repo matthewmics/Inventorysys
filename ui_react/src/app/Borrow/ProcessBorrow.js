@@ -138,8 +138,10 @@ export const ProcessBorrow = () => {
   const [dtAvailableItems, setDtAvailableItems] = useState([]);
   const [dtCart, setDtCart] = useState([]);
 
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
-    loadRequest();
+    if (!loaded) loadRequest();
   }, []);
 
   const addToCart = (id) => {
@@ -152,6 +154,28 @@ export const ProcessBorrow = () => {
     const item = dtCart.find((a) => a.id === id);
     setDtCart(dtCart.filter((a) => a.id !== id));
     setDtAvailableItems([item, ...dtAvailableItems]);
+  };
+
+  const addMultipleToCart = (qty) => {
+    const lenght = dtAvailableItems.length;
+
+    let ids = [];
+
+    if (qty > 0) {
+      for (var i = 0; i < qty && i < lenght; i++) {
+        const e = dtAvailableItems[i];
+        ids.push(e.id);
+      }
+    } else {
+      for (var i = 0; i < lenght; i++) {
+        const e = dtAvailableItems[i];
+        ids.push(e.id);
+      }
+    }
+
+    const items = dtAvailableItems.filter((a) => ids.includes(a.id));
+    setDtAvailableItems(dtAvailableItems.filter((a) => !ids.includes(a.id)));
+    setDtCart([...items, ...dtCart]);
   };
 
   const clearCart = () => {
@@ -231,6 +255,7 @@ export const ProcessBorrow = () => {
   };
 
   const loadRequest = async () => {
+    setLoaded(true);
     setLoading(true);
     const response = await agent.Borrow.show(id);
     setData(response);
@@ -362,6 +387,48 @@ export const ProcessBorrow = () => {
                 >
                   <Icon name="search" /> Search
                 </Button>
+                <Button.Group floated="right">
+                  <Button
+                    size="tiny"
+                    onClick={() => {
+                      addMultipleToCart(5);
+                    }}
+                  >
+                    5
+                  </Button>
+                  <Button
+                    size="tiny"
+                    onClick={() => {
+                      addMultipleToCart(10);
+                    }}
+                  >
+                    10
+                  </Button>
+                  <Button
+                    size="tiny"
+                    onClick={() => {
+                      addMultipleToCart(15);
+                    }}
+                  >
+                    15
+                  </Button>
+                  <Button
+                    size="tiny"
+                    onClick={() => {
+                      addMultipleToCart(20);
+                    }}
+                  >
+                    20
+                  </Button>
+                  <Button
+                    size="tiny"
+                    onClick={() => {
+                      addMultipleToCart(0);
+                    }}
+                  >
+                    All
+                  </Button>
+                </Button.Group>
               </Segment>
               <Segment style={{ height: "305px", overflowX: "auto" }}>
                 <DataTable

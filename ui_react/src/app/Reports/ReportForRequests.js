@@ -15,6 +15,15 @@ const transferHeaders = [
   "From",
   "To",
 ];
+
+const pirHeaders = [
+  "Status",
+  "Date",
+  "Requestor",
+  "Item",
+  "For",
+  "Worked On by",
+];
 const repairHeaders = [
   "Status",
   "Date",
@@ -52,6 +61,8 @@ export const ReportForRequests = () => {
 
   const [headers, setHeaders] = useState([]);
 
+  const [reportName, setReportName] = useState("");
+
   const getReportType = () => {
     return query.get("type");
   };
@@ -60,12 +71,19 @@ export const ReportForRequests = () => {
     switch (getReportType()) {
       case "transfers":
         setHeaders(transferHeaders);
+        setReportName("Transfer Requests");
         break;
       case "repairs":
         setHeaders(repairHeaders);
+        setReportName("Repair Requests");
+        break;
+      case "pirs":
+        setHeaders(pirHeaders);
+        setReportName("Purchase Item Requests");
         break;
       default:
         setHeaders(borrowHeaders);
+        setReportName("Borrow Requests");
     }
 
     loadReport();
@@ -87,6 +105,9 @@ export const ReportForRequests = () => {
         break;
       case "repairs":
         response = await agent.Reports.repairReport(req);
+        break;
+      case "pirs":
+        response = await agent.Reports.purchaseReport(req);
         break;
       default:
         response = await agent.Reports.borrowReport(req);
@@ -123,7 +144,7 @@ export const ReportForRequests = () => {
       <div id="container">
         {/* HEADER TEXT */}
         <div style={{ fontSize: "10px" }}>
-          {true ? "Building" : "Room"}: <b>{query.get("name")}</b>
+          {reportName}: <b>{query.get("name")}</b>
           <span style={{ marginRight: "50px" }}> </span>
           As of: <b>{moment().format("LLL")}</b>
         </div>

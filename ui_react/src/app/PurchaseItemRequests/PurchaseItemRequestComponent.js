@@ -13,6 +13,7 @@ import { downloadBase64File } from "../../libs/download";
 import { ProcessPIRDetails } from "./PIRHelper";
 import { PIRReject } from "./PIRReject";
 import { PIRCreatePO } from "./PIRCreatePO";
+import { NotesForm } from "../Notes/NotesForm";
 
 export const PurchaseItemRequestComponent = () => {
   const {
@@ -59,24 +60,38 @@ export const PurchaseItemRequestComponent = () => {
       format: (row) => (
         <>
           {userRole !== "department" && (
-            <PopupButton
-              disabled={row.status === "PO created"}
-              content="Create Purchase Order"
-              color="green"
-              iconName="file excel"
-              onClick={() => {
-                modalActions.openModal(
-                  dispatch,
-                  "Create PO",
-                  <PIRCreatePO
-                    id={row.id}
-                    onSave={() => {
-                      loadData();
-                    }}
-                  />
-                );
-              }}
-            />
+            <>
+              <PopupButton
+                content="Create Note"
+                iconName="sticky note"
+                color="green"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Note",
+                    <NotesForm name="pir_id" id={row.id} />
+                  );
+                }}
+              />
+              <PopupButton
+                disabled={row.status === "PO created"}
+                content="Create Purchase Order"
+                color="yellow"
+                iconName="file excel"
+                onClick={() => {
+                  modalActions.openModal(
+                    dispatch,
+                    "Create PO",
+                    <PIRCreatePO
+                      id={row.id}
+                      onSave={() => {
+                        loadData();
+                      }}
+                    />
+                  );
+                }}
+              />
+            </>
           )}
 
           <PopupButton

@@ -301,6 +301,7 @@ export const DashboardLayout = () => {
           <Route path="/transfers/reports" component={ReportForRequests} />
           <Route path="/repairs/reports" component={ReportForRequests} />
           <Route path="/borrows/reports" component={ReportForRequests} />
+          <Route path="/pirs/reports" component={ReportForRequests} />
 
           <Route path="/dashboard" component={DashboardContent} />
           <Route path="/users" component={UserComponent} />

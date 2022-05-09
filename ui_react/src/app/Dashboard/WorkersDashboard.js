@@ -27,6 +27,8 @@ import { NotesList } from "../Notes/NotesList";
 import { TransferReport } from "./TransferReport";
 import { BorrowReport } from "./BorrowReport";
 import { RepairReport } from "./RepairReport";
+import { PIRSummary } from "../PurchaseItemRequests/PIRSummary";
+import { PIRReport } from "./PIRReport";
 
 export const WorkersDashboard = () => {
   const { user } = useSelector((state) => state.auth);
@@ -343,6 +345,36 @@ export const WorkersDashboard = () => {
               </Segment>
               <Segment>
                 <BorrowRequestSummary />
+              </Segment>
+            </Segment.Group>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column computer={10} mobile={16}>
+            <Segment.Group>
+              <Segment className="bg-gradient-1">
+                <Icon name="money" />
+                Purchase Requests
+                {user.role === "admin" && (
+                  <div style={{ float: "right" }}>
+                    <PopupButton
+                      content="Generate Report"
+                      iconName="file excel"
+                      color="blue"
+                      onClick={() => {
+                        modalActions.openModal(
+                          dispatch,
+                          "Generate Borrow Report",
+                          <PIRReport />
+                        );
+                      }}
+                    />
+                  </div>
+                )}
+              </Segment>
+              <Segment>
+                <PIRSummary />
               </Segment>
             </Segment.Group>
           </Grid.Column>
