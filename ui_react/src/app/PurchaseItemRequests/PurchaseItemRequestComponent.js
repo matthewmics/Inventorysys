@@ -6,6 +6,13 @@ import modalActions from "../../actions/modalActions";
 import agent from "../../agent";
 import { PurchaseItemRequestForm } from "./PurchaseItemRequestForm";
 import { LabelRepairStatus } from "../Commons/LabelRepairStatus";
+import { PopupButton } from "../Commons/PopupButton";
+import { DetailsModal } from "../Commons/DetailsModal";
+import { dateStringToLocal } from "../../helpers";
+import { downloadBase64File } from "../../libs/download";
+import { ProcessPIRDetails } from "./PIRHelper";
+import { PIRReject } from "./PIRReject";
+import { PIRCreatePO } from "./PIRCreatePO";
 
 export const PurchaseItemRequestComponent = () => {
   const {
@@ -47,8 +54,76 @@ export const PurchaseItemRequestComponent = () => {
     },
     {
       name: "Actions",
+      wrap: true,
       selector: (row) => "NA",
-      format: (row) => <>test</>,
+      format: (row) => (
+        <>
+          {userRole !== "department" && (
+            <PopupButton
+              disabled={row.status === "PO created"}
+              content="Create Purchase Order"
+              color="green"
+              iconName="file excel"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Create PO",
+                  <PIRCreatePO
+                    id={row.id}
+                    onSave={() => {
+                      loadData();
+                    }}
+                  />
+                );
+              }}
+            />
+          )}
+
+          <PopupButton
+            color="blue"
+            iconName="book"
+            content="Details"
+            onClick={() => {
+              modalActions.openModal(
+                dispatch,
+                "Details",
+                <DetailsModal data={ProcessPIRDetails(row)} />
+              );
+            }}
+          />
+          <PopupButton
+            content="Download Attached"
+            iconName="cloud download"
+            onClick={async () => {
+              const response = await agent.FileStorage.get(
+                row.attached_file_id
+              );
+              downloadBase64File(response.base64, response.name);
+            }}
+          />
+
+          {userRole !== "department" && (
+            <PopupButton
+              disabled={row.status === "PO created"}
+              content="Reject"
+              color="red"
+              iconName="close"
+              onClick={() => {
+                modalActions.openModal(
+                  dispatch,
+                  "Reject",
+                  <PIRReject
+                    id={row.id}
+                    onSave={() => {
+                      loadData();
+                    }}
+                  />
+                );
+              }}
+            />
+          )}
+        </>
+      ),
       right: true,
     },
   ];

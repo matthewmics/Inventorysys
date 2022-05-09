@@ -174,6 +174,7 @@ const JobOrders = {
 
 const PurchaseOrders = {
   list: () => requests.get(`/purchase-orders`),
+  complete: (id) => requests.post(`/purchase-orders/${id}/complete`, {}),
 };
 
 const PCComponent = {
@@ -248,7 +249,14 @@ const PurchaseItemRequests = {
     });
     return requests.post(`/purchase-item-requests`, formData);
   },
-  processAbles: () => requests.get(`/purchase-item-requests/processAbles`)
+  processAbles: () => requests.get(`/purchase-item-requests/processAbles`),
+  reject: (id, req) =>
+    requests.post(`/purchase-item-requests/${id}/reject`, req),
+  createPo: (id, file) => {
+    const formData = new FormData();
+    if (file) formData.append("file", file);
+    return requests.post(`/purchase-item-requests/${id}/create-po`, formData);
+  },
 };
 
 const agent = {
