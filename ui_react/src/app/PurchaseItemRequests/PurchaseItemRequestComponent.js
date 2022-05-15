@@ -83,6 +83,7 @@ export const PurchaseItemRequestComponent = () => {
                     dispatch,
                     "Create PO",
                     <PIRCreatePO
+                      itemType={row.item_type}
                       id={row.id}
                       onSave={() => {
                         loadData();

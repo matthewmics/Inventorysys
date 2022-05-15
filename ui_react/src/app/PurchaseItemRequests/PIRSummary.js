@@ -75,7 +75,7 @@ export const PIRSummary = () => {
             }}
           />
           <PopupButton
-            content="Download PO"
+            content="Download Attached"
             iconName="download"
             onClick={async () => {
               const response = await agent.FileStorage.get(

@@ -365,7 +365,7 @@ export const WorkersDashboard = () => {
                       onClick={() => {
                         modalActions.openModal(
                           dispatch,
-                          "Generate Borrow Report",
+                          "Generate Purchase Item Request Report",
                           <PIRReport />
                         );
                       }}

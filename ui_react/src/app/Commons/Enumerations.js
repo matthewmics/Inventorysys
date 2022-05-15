@@ -15,6 +15,7 @@ export const itemTypeOptions = [
   { value: "Fixture", text: "Fixture" },
   { value: "Electrical", text: "Electrical" },
   { value: "Toiletry", text: "Toiletry" },
+  { value: "Aircondition", text: "Aircondition" },
 ];
 
 export const itemStatusOptions = [

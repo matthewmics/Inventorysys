@@ -254,8 +254,11 @@ const PurchaseItemRequests = {
   processAbles: () => requests.get(`/purchase-item-requests/processAbles`),
   reject: (id, req) =>
     requests.post(`/purchase-item-requests/${id}/reject`, req),
-  createPo: (id, file) => {
+  createPo: (id, file, req) => {
     const formData = new FormData();
+    Object.entries(req).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
     if (file) formData.append("file", file);
     return requests.post(`/purchase-item-requests/${id}/create-po`, formData);
   },
